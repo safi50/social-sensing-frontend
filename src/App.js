@@ -1,5 +1,8 @@
 import React from "react";
 import Navbar from "./components/navbar/Navbar.component";
+import Footer from "./components/footer/Footer.component";
+import SearchBar from "./components/searchBar/SearchBar.component";
+import SavedSearches from "./components/savedsearches/SavedSearches.component";
 import styled from "styled-components";
 import TrendingTable from "./components/trending_table/trending_table.component";
 
@@ -36,8 +39,11 @@ const App = () => {
           Get a 360 degree holistic view of each Happening, Brand or Event in
           the world
         </SecondaryHeading>
-        <TrendingTable />
+        <SearchBar style={{ marginTop: '30px' }}/>
+        <SavedSearches style={{ marginTop: '40px' }}/>
+        <TrendingTable style={{ marginTop: '40px' }}/>
       </Content>
+      <Footer />
     </>
   );
 };

@@ -12,7 +12,7 @@ import {
   TrendIcon,
 } from "./trending_table.styles";
 
-const TrendingTable = () => {
+const TrendingTable = ({style}) => {
   const hashtags = [
     { tag: "#PakvsBan", percentage: "30%", isNew: true },
     { tag: "#PakvsBan", percentage: "30%", isNew: false },
@@ -21,7 +21,7 @@ const TrendingTable = () => {
   ];
 
   return (
-    <Table>
+    <Table style={style}>
       <TableHeader>
         <HeaderRow>
           <TableHeaderCellPrimary>
