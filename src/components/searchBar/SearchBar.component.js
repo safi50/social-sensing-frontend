@@ -4,14 +4,11 @@ import {SearchBarContainer,
     SearchInput,
     SearchIcon
 } from './SearchBar.styles'
-
+import WorldwideDropdown from '../worldwideDropdown/worldwideDropdown.component';
 const SearchBar = ({style}) => {
     return (
         <SearchBarContainer style={style}>
-            <Dropdown>
-                <option>Worldwide</option>
-                // Add more options as needed
-            </Dropdown>
+            <WorldwideDropdown></WorldwideDropdown>
             <SearchInput placeholder="Search Hashtag, Brand or Event" />
             <SearchIcon src="/search-btn-purple.svg"/>
         </SearchBarContainer>

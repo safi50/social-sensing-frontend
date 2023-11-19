@@ -5,6 +5,7 @@ import SearchBar from "./components/searchBar/SearchBar.component";
 import SavedSearches from "./components/savedsearches/SavedSearches.component";
 import styled from "styled-components";
 import TrendingTable from "./components/trending_table/trending_table.component";
+import WorldwideDropdown from "./components/worldwideDropdown/worldwideDropdown.component";
 
 const Content = styled.div`
   display: flex;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const SearchBarContainer = styled.div`
   display: flex;
   align-items: center;
-  background-color: #FFF; // Placeholder color, replace with actual color code
+  background-color: #FFF;
   padding: 10px;
   border-radius: 5px;
 `;
@@ -14,7 +14,7 @@ export const Dropdown = styled.select`
   border: none;
   border-radius: 5px;
   color: #6937F2;
-  background-color: #E8DEFE; // Placeholder color, replace with actual color code
+  background-color: #E8DEFE;
 `;
 
 export const SearchInput = styled.input`
