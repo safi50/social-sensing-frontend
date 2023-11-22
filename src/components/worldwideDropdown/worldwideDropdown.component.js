@@ -1,13 +1,13 @@
 import React from 'react';
 import Dropdown from 'react-multilevel-dropdown';
-import { PrimaryListHeading, CountryListElement,  SecondaryListHeading, ContinentName, CountryList, ContinentListElement,ContinentCheckbox, DropdownIcon, SearchBarContainer, SearchIcon, SearchInput, CountryCheckbox, CountryFlag, DropdownTitle, StyledDropdown } from './worldwideDropdown.styles';
+import {StyledNumberBox,StyledNumberBoxDiv, PrimaryListHeading, CountryListElement,  SecondaryListHeading, ContinentName, CountryList, ContinentListElement,ContinentCheckbox, DropdownIcon, SearchBarContainer, SearchIcon, SearchInput, CountryCheckbox, CountryFlag, DropdownTitle, StyledDropdown } from './worldwideDropdown.styles';
 
 const OneCountry = ({country, code}) =>{
     return (
         <CountryListElement>
             <CountryCheckbox />
             <CountryFlag code={code}/>
-            {country}
+            <span>{country}</span>
         </CountryListElement>
     )
 }
@@ -69,7 +69,12 @@ const WorldwideDropdown = () => {
                             <ContinentName>{continent}</ContinentName>
                         </div>
                     </div>
+                    <div>
+                    <StyledNumberBoxDiv>
+                    <StyledNumberBox>3</StyledNumberBox>
                     <DropdownIcon src='/dropdown-arrow-svgrepo-com.svg' style={{ transform: 'rotate(-90deg)', marginTop: '8px' }} />
+                    </StyledNumberBoxDiv>
+                    </div>
                     <CountryList position='right'>
                         <SecondaryListHeading>{continent}</SecondaryListHeading>
                         {renderCountryCheckboxes(continent, `${continent}Code`)}

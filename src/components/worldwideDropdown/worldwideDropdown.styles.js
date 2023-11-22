@@ -59,9 +59,9 @@ export const ContinentCheckbox = styled.input.attrs({type: 'checkbox'})`
 export const CountryFlag = styled(Flag)`
   width: 15px;
   height: 15px;
-  border-radius: 0%;
+  border-radius: 50%;
   margin-right: 5px;
-  padding-top: 3px;
+  object-fit: cover;
 `;
 
 export const DropdownTitle = styled.div`
@@ -105,7 +105,7 @@ export const ContinentListElement = styled(Dropdown.Item)`
 `;
 
 export const CountryListElement = styled.div`
-padding-bottom: 5px
+padding-bottom: 10px
 `
 
 export const CountryList = styled(Dropdown.Submenu)`
@@ -115,3 +115,21 @@ color: black;
 export const ContinentName = styled.span`
 padding-left: 10px
 `
+
+export const StyledNumberBox = styled.div`
+  width: 20px;
+  height: 20px;
+  background-color: #6937F2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border-radius: 5px;
+  margin-right: 10px
+`;
+
+export const StyledNumberBoxDiv = styled.div`
+  display: flex;
+  justifyContent: flex-end;
+`;
