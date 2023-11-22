@@ -1,28 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Dropdown from 'react-multilevel-dropdown';
+import ColoredCheckbox from '../coloredCheckbox/ColoredCheckbox.component'
 import {StyledNumberBox,StyledNumberBoxDiv, PrimaryListHeading, CountryListElement,  SecondaryListHeading, ContinentName, CountryList, ContinentListElement,ContinentCheckbox, DropdownIcon, SearchBarContainer, SearchIcon, SearchInput, CountryCheckbox, CountryFlag, DropdownTitle, StyledDropdown } from './worldwideDropdown.styles';
-
-const OneCountry = ({country, code}) =>{
-    return (
-        <CountryListElement>
-            <CountryCheckbox />
-            <CountryFlag code={code}/>
-            <span>{country}</span>
-        </CountryListElement>
-    )
-}
-
-const RegionSearchBar = () =>{
-    return (
-        <SearchBarContainer>
-            <SearchIcon src="/search-btn-purple.svg"/>
-            <SearchInput placeholder="Search regions / Countries" />
-        </SearchBarContainer>
-    )
-}
 
 
 const WorldwideDropdown = () => {
+
+    const [checkedStates, setCheckedStates] = useState({});
+
+    const handleCheckboxChange = (event, key) => {
+    setCheckedStates({
+        ...checkedStates,
+        [key]: event.target.checked,
+      });
+    };
+
     const continents = {
         Africa: ['Moroco', 'South Africa'],
         AfricaCode: ['MA', 'ZA'],
@@ -39,6 +31,25 @@ const WorldwideDropdown = () => {
     };
 
     const continentNames = Object.keys(continents).filter(key => !key.includes('Code'));
+
+    const OneCountry = ({country, code}) =>{
+    return (
+        <CountryListElement >
+            <ColoredCheckbox checked={checkedStates[country]} onChange={(event) => handleCheckboxChange(event, country)}/>
+            <CountryFlag code={code}/>
+            <span>{country}</span>
+        </CountryListElement>
+    )
+}
+
+const RegionSearchBar = () =>{
+    return (
+        <SearchBarContainer>
+            <SearchIcon src="/search-btn-purple.svg"/>
+            <SearchInput placeholder="Search regions / Countries" />
+        </SearchBarContainer>
+    )
+}
 
     const renderCountryCheckboxes = (continent, continentCode) => {
         return continents[continent].map((country, index) => {
@@ -65,7 +76,7 @@ const WorldwideDropdown = () => {
                 <ContinentListElement key={continent}>
                     <div>
                         <div>
-                            <ContinentCheckbox type='checkbox' />
+                            <ColoredCheckbox checked={checkedStates[continent]} onChange={(event) => handleCheckboxChange(event, continent)}/>
                             <ContinentName>{continent}</ContinentName>
                         </div>
                     </div>

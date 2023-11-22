@@ -54,6 +54,13 @@ export const CountryCheckbox = styled.input.attrs({type: 'checkbox'})`
 `
 
 export const ContinentCheckbox = styled.input.attrs({type: 'checkbox'})`
+
+  // Styles for when the checkbox is checked
+  &:checked {
+    background-color: purple;
+    // appearance: none;
+    // Add any other custom styles for the checked state
+  }
 `
 
 export const CountryFlag = styled(Flag)`
@@ -61,6 +68,7 @@ export const CountryFlag = styled(Flag)`
   height: 15px;
   border-radius: 50%;
   margin-right: 5px;
+  margin-left: 5px;
   object-fit: cover;
 `;
 
@@ -105,7 +113,7 @@ export const ContinentListElement = styled(Dropdown.Item)`
 `;
 
 export const CountryListElement = styled.div`
-padding-bottom: 10px
+padding: 10px
 `
 
 export const CountryList = styled(Dropdown.Submenu)`
