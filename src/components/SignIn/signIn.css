@@ -1,0 +1,135 @@
+h1 {
+    font-size: 2.5rem;
+    font-weight: 400;
+    margin-top: 20vh;
+}
+
+.text {
+    margin-top: 2vh;
+    font-size: 1.4rem;
+    color: #777777;
+    font-weight: 300;
+    text-align: left;
+    width: 80%;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center the content */
+    width: 100%;
+    margin-top: 5rem;
+}
+
+.content h1 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+    /* Space between each form field */
+}
+
+/* Styles for individual labels */
+.form-field label {
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    color: #111111;
+}
+
+/* Styles for individual input fields */
+.form-field input {
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #DCDCDC;
+    background: #FFFFFF;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding: 15px;
+    padding-right: 40px;
+    border-radius: 8px;
+    border: 1px solid #DCDCDC;
+}
+
+.toggle-icon {
+    position: absolute;
+    right: 15px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.bottomText {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.form-field input::placeholder {
+    color: #BBBBBB;
+}
+
+.form-field input.input-warning {
+    border-color: red;
+}
+
+.form-field .warning-text {
+    color: red;
+    font-size: 1.2rem;
+    align-self: flex-start;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+.checkbox-label {
+    text-align: center;
+    margin-left: 7px;
+    color: #111111;
+    font-weight: 300;
+}
+
+.bottom-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.forgot-password {
+    color: #6631F7;
+    font-weight: 500;
+    font-size: 1.4rem;
+    cursor: pointer;
+    text-decoration: none;
+
+}
+
+.bottomText {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.4rem;
+    color: #333;
+    margin-top: auto;
+}
