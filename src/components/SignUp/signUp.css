@@ -1,0 +1,138 @@
+h1 {
+  margin-top: 7vh !important;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the content */
+    width: 100%;
+    margin-top: 2rem; 
+  }
+  
+  .content h1 {
+    font-size: 2.5rem; 
+    font-weight: 500;
+    margin-bottom: 2rem; 
+  }
+  
+  /* Styles for the form field container */
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    width: 100%; 
+    margin-bottom: 1rem; 
+  }
+  
+  .form-field label {
+    align-self: flex-start; 
+    margin-bottom: 0.5rem; 
+    font-size: 1.2rem;
+    color: #111111;
+  }
+  
+  /* Styles for individual input fields */
+  .form-field input {
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #DCDCDC;
+    background: #FFFFFF;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  
+  /* Styles for the side-by-side input fields */
+  .side-by-side {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; 
+  }
+  
+  /* Individual input fields within the .side-by-side container */
+  .side-by-side .form-field {
+    width: calc(50% - 10px); /* Adjusting the width to account for the gap */
+  }
+  
+  .form-field input::placeholder {
+    color: #BBBBBB;
+  }
+  
+  /* styles for input fields that have a warning */
+  .form-field input.input-warning {
+    border-color: red;
+  }
+  
+  /* Styles for the warning text */
+  .form-field .warning-text {
+    color: red;
+    font-size: 1.2rem;
+    align-self: flex-start; 
+  }
+  
+.password-validation-messages {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
+    color: #909090;
+  }
+  
+  .validation-message {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    margin-top: 2px;
+  }
+  
+  .validation-message .valid {
+    color: #6631F7; /* Purple color for valid condition */
+  }
+  
+  .validation-message .invalid {
+    color: red; /* Red color for invalid condition */
+  }
+  
+  .validation-message span {
+    margin-right: 5px; /* Space between icon and text */
+  }
+  
+
+  .input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-with-icon input {
+    width: 100%;
+    padding: 15px;
+    padding-right: 40px;
+    border-radius: 8px;
+    border: 1px solid #DCDCDC;
+  }
+  
+  .toggle-icon {
+    position: absolute;
+    right: 15px;
+    height: 18px; 
+    cursor: pointer;
+  }
+
+  .bottomText {
+    text-align: center;
+    margin-top: auto;
+    font-size: 1.4rem; 
+    color: #333; 
+  }
+  
+  .textButton {
+    color: #6631F7;
+    margin-left: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .textButton:hover {
+    color: #5829d9;
+    text-decoration: none; 
+  }

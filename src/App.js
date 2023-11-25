@@ -5,7 +5,10 @@ import SearchBar from "./components/searchBar/SearchBar.component";
 import SavedSearches from "./components/savedsearches/SavedSearches.component";
 import styled from "styled-components";
 import TrendingTable from "./components/trending_table/trending_table.component";
-
+import OnboardingCard from "./components/onBoardingCard/onBoardingCard.component";
+import { BrowserRouter as Router, Route, Routes,  Switch } from 'react-router-dom';
+import SignUp from "./components/SignUp/signUp.component";
+import SignIn from "./components/SignIn/signIn.component";
 const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -30,8 +33,16 @@ const SecondaryHeading = styled.h2`
 `;
 const App = () => {
   return (
-    <>
-      <Navbar />
+    <> 
+    <Router>
+      <Routes>
+        <Route path="/onboarding" element={<OnboardingCard />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
+      </Routes>
+    </Router>
+
+     {/* <Navbar />
       <Content>
         <PrimaryHeading>Ask Walee!</PrimaryHeading>
         <div></div>
@@ -41,9 +52,9 @@ const App = () => {
         </SecondaryHeading>
         <SearchBar style={{ marginTop: '30px' }}/>
         <SavedSearches style={{ marginTop: '40px' }}/>
-        <TrendingTable style={{ marginTop: '40px' }}/>
+        <TrendingTable style={{ marginTop: '40px' }}/> 
       </Content>
-      <Footer />
+      <Footer />  */}
     </>
   );
 };
