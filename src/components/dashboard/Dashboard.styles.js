@@ -4,7 +4,7 @@ import styled from "styled-components";
 const sizes = {
     desktop: '992px',
     tablet: '768px',
-    phone: '576px',
+    phone: '630px',
   };
 
 const media = {
@@ -75,3 +75,113 @@ export const DownloadIcon = styled.img`
     object-fit: cover;
     margin-right: 5px
   `
+
+export const SubHeadingContainer = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 5px 30px;
+
+@media ${media.phone} {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+`
+
+export const HashtagContainer = styled.div`
+    background-color: white;
+    padding: 10px;
+    // padding-right: 40%;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+`
+
+export const PurpleCircle = styled.img`
+    height: 1rem;
+    width: 1rem;
+    object-fit: cover;
+  `
+
+export const HashtagText = styled.span`
+    font-size: 12px;
+    padding-left: 10px;
+    margin-right: 10px;
+    
+    @media ${media.desktop} {
+        margin-right: 300px;
+    }
+`
+
+export const CompareContainer =styled.div`
+    background-color: white;
+    color: #6937F2;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+`
+
+export const PurplePlus = styled.img`
+    height: 1.5rem;
+    width: 1.5rem;
+    object-fit: cover;
+    margin-left: 10px;
+    margin-right: 5px;
+  `
+
+export const CompareKeywordText = styled.span`
+    font-size: 14px;
+    margin-right: 10px;
+    
+    @media ${media.desktop} {
+        margin-right: 50px;
+    }
+    @media ${media.phone} {
+        font-size: 12px;
+    }
+`
+
+export const RightContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const SaveSearchContainer = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+export const HeartIcon = styled.img`
+    height: 2rem;
+    width: 2rem;
+    object-fit: cover;
+    margin-right: 5px;
+  `
+
+export const SaveSerchText = styled.span`
+    font-size: 14px;
+`
+
+export const BarIcon = styled.img`
+    height: 2rem;
+    width: 1.5rem;
+    object-fit: cover;
+  `
+
+export const DisabledContainer = styled.div`
+    display: flex;
+    align-items: center;
+`
+export const FolderIcon = styled.img`
+    height: 2rem;
+    width: 2rem;
+    object-fit: cover;
+    margin-right: 5px;
+  `
+
+export const DisabledText = styled.span`
+color: #b8b8b8;
+font-size: 14px;
+`
