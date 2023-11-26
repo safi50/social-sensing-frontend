@@ -9,6 +9,8 @@ import OnboardingCard from "./components/onBoardingCard/onBoardingCard.component
 import { BrowserRouter as Router, Route, Routes,  Switch } from 'react-router-dom';
 import SignUp from "./components/SignUp/signUp.component";
 import SignIn from "./components/SignIn/signIn.component";
+import SearchPage from "./components/SearchPage/SearchPage.component";
+import Dashboard from "./components/dashboard/Dashboard.component";
 const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -39,9 +41,11 @@ const App = () => {
         <Route path="/onboarding" element={<OnboardingCard />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/searchPage" element={<SearchPage />}/>
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
-
+    <Footer />
      {/* <Navbar />
       <Content>
         <PrimaryHeading>Ask Walee!</PrimaryHeading>

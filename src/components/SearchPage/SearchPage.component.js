@@ -3,11 +3,12 @@ import SearchBar from "../searchBar/SearchBar.component";
 import SavedSearches from "../savedsearches/SavedSearches.component";
 import TrendingTable from "../trending_table/trending_table.component";
 import {Content, PrimaryHeading, SecondaryHeading} from "./SearchPage.styles"
-
+import Navbar from "../navbar/Navbar.component";
 
 const SearchPage = () => {
     return (
-      <>
+      <div style={{backgroundColor: '#6937F2'}}>
+        <Navbar />
       <Content>
         <PrimaryHeading>Ask Walee!</PrimaryHeading>
         <div></div>
@@ -19,7 +20,7 @@ const SearchPage = () => {
         <SavedSearches style={{ marginTop: '40px' }}/>
         <TrendingTable style={{ marginTop: '40px' }}/>
       </Content>
-      </>
+      </div>
     )
 }
 
