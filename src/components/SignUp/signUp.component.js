@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import OnboardingCard from "../onBoardingCard/onBoardingCard.component";
 import "./signUp.css";
 import CustomButton from "../customButton/customButtom.component";
@@ -27,6 +27,7 @@ const SignUpContent = () => {
   const [formErrors, setFormErrors] = useState({});
   const [password, setPassword] = useState("");
   const [passwordFocused, setPasswordFocused] = useState(false);
+  const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
@@ -35,6 +36,7 @@ const SignUpContent = () => {
     hasNumber: false,
     hasSpecialChar: false,
   });
+  const [iscapslock, setIsCapsLock] = useState(false);
 
   // Validating Fields of Sign Up Form
   const validateForm = (name, value) => {
@@ -107,6 +109,23 @@ const SignUpContent = () => {
   const toggleConfirmPasswordVisibility = () => {
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
   };
+
+  useEffect(() => {
+    const handleCapsLock = (e) => {
+      const isCapsLockOn = e.getModifierState("CapsLock");
+      setIsCapsLock(isCapsLockOn);
+    };
+
+    // Add event listeners for keydown and keyup
+    document.addEventListener("keydown", handleCapsLock);
+    document.addEventListener("keyup", handleCapsLock);
+
+    // Remove the event listeners when the component unmounts
+    return () => {
+      document.removeEventListener("keydown", handleCapsLock);
+      document.removeEventListener("keyup", handleCapsLock);
+    };
+  }, []);
 
   return (
     <>
@@ -227,7 +246,10 @@ const SignUpContent = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               className={formErrors.confirmPassword ? "input-warning" : ""}
+              onFocus={() => setConfirmPasswordFocused(true)}
+              onBlur={() => setConfirmPasswordFocused(false)}
             />
+
             <img
               src={isConfirmPasswordVisible ? HideIcon : ViewIcon}
               alt="Toggle Confirm Password"
@@ -235,6 +257,11 @@ const SignUpContent = () => {
               onClick={toggleConfirmPasswordVisibility}
             />
           </div>
+
+          {iscapslock && (confirmPasswordFocused || passwordFocused) && (
+            <span className="capslock-message">Caps lock is on</span>
+          )}
+
           {formErrors.confirmPassword && (
             <small className="warning-text">{formErrors.confirmPassword}</small>
           )}

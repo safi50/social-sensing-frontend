@@ -11,6 +11,10 @@ import SignUp from "./components/SignUp/signUp.component";
 import SignIn from "./components/SignIn/signIn.component";
 import SearchPage from "./components/SearchPage/SearchPage.component";
 import Dashboard from "./components/dashboard/Dashboard.component";
+import VerifyEmail from "./components/VerifyEmail/VerifyEmail";
+import CheckEmail from "./components/CheckEmail/CheckEmail";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+
 const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,6 +45,9 @@ const App = () => {
         <Route path="/onboarding" element={<OnboardingCard />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/verifyemail" element={<VerifyEmail />} />
+        <Route path="/checkemail" element={<CheckEmail />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/searchPage" element={<SearchPage />}/>
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
