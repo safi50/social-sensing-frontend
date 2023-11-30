@@ -20,7 +20,7 @@
   /* height: auto; */
   min-height: 100vh;
   max-height: 100vh;
-  object-fit: fill;
+  object-fit: cover;
 }
 
 .header {
@@ -96,8 +96,8 @@
   }
 }
 
-/* Styles for Mobile Screens */
-@media screen and (max-width: 600px) {
+/* Styles for Tablet Screens */
+@media screen and (max-width: 1024px) {
   .onboarding-container {
     flex-direction: column; /* Stack vertically */
     height: auto; 
@@ -109,11 +109,36 @@
 
   .right-side {
     width: 100%; /* Take up the full width */
-    padding: 10px;
+    padding: 10px 25vw;
   }
 
   .side-by-side {
-    flex-direction: column; /* Stack form fields vertically */
+    flex-direction: row; /* Stack form fields vertically */
+  }
+
+  .side-by-side .form-field {
+    width: 100%; /* Full width for form fields */
+  }
+}
+
+/* Styles for Mobile Screens */
+@media screen and (max-width: 426px) {
+  .onboarding-container {
+    flex-direction: column; /* Stack vertically */
+    height: auto; 
+  }
+
+  .left-side {
+    display: none; /* Hide the left side with the image */
+  }
+
+  .right-side {
+    width: 100%; /* Take up the full width */
+    padding: 10px 10vw;
+  }
+
+  .side-by-side {
+    flex-direction: row; /* Stack form fields vertically */
   }
 
   .side-by-side .form-field {
