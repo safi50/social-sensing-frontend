@@ -26,7 +26,7 @@ Chart.register(
 const ChartContainer = styled.div`
   margin-top: 2rem;
   width: 45%;
-  min-width: 500px;
+  min-width: 300px;
   padding: 2rem;
   flex-grow: 1;
   background-color: #fff;
