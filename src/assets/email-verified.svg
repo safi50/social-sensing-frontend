@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="136.559" height="136" viewBox="0 0 136.559 136">
+  <g id="Group_8874" data-name="Group 8874" transform="translate(-1094 -223)">
+    <circle id="Ellipse_2157" data-name="Ellipse 2157" cx="68" cy="68" r="68" transform="translate(1094 223)" fill="#f5f2ff"/>
+    <g id="Iconly_Bold_Message" data-name="Iconly/Bold/Message" transform="translate(1132 264)">
+      <g id="Message">
+        <path id="Message-2" data-name="Message" d="M45.565,54H15.433A15.31,15.31,0,0,1,0,38.85V15.15A15.31,15.31,0,0,1,15.433,0H45.565a15.661,15.661,0,0,1,10.92,4.444A14.912,14.912,0,0,1,61,15.15v23.7A15.312,15.312,0,0,1,45.565,54ZM12.305,15.737a2.3,2.3,0,0,0-1.847,3.674l.4.389L24.735,30.451a9.644,9.644,0,0,0,5.948,2.038,9.8,9.8,0,0,0,5.973-2.038l13.761-10.83.244-.24a2.293,2.293,0,0,0-.036-3,2.551,2.551,0,0,0-1.611-.78q-.065,0-.129,0a2.339,2.339,0,0,0-1.584.6L33.55,27a4.822,4.822,0,0,1-3.039,1.081A4.906,4.906,0,0,1,27.45,27L13.725,16.2A2.4,2.4,0,0,0,12.305,15.737Z" fill="#6631f7"/>
+      </g>
+    </g>
+    <g id="Group_8625" data-name="Group 8625" transform="translate(1196.295 233.869)">
+      <ellipse id="Ellipse_1887" data-name="Ellipse 1887" cx="17.132" cy="17.131" rx="17.132" ry="17.131" transform="translate(0 0)" fill="#70b22e" opacity="0.286"/>
+    </g>
+    <ellipse id="Ellipse_2233" data-name="Ellipse 2233" cx="13.759" cy="13.758" rx="13.759" ry="13.758" transform="translate(1199.68 237.122)" fill="#70b22e"/>
+    <path id="Path_25431" data-name="Path 25431" d="M13331.42-2314.391l3.583,3.1,7-8.781" transform="translate(-12123.32 2566.189)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <g id="Ellipse_2234" data-name="Ellipse 2234" transform="translate(1095 239)" fill="#fff" stroke="#6631f7" stroke-width="2">
+      <circle cx="9" cy="9" r="9" stroke="none"/>
+      <circle cx="9" cy="9" r="8" fill="none"/>
+    </g>
+    <circle id="Ellipse_2235" data-name="Ellipse 2235" cx="3.5" cy="3.5" r="3.5" transform="translate(1125 244)" fill="#a989ff"/>
+    <g id="x" transform="translate(1202.427 326.5)">
+      <line id="Line_2822" data-name="Line 2822" x1="10" y2="10" transform="translate(6 6)" fill="none" stroke="#6631f7" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+      <line id="Line_2823" data-name="Line 2823" x2="10" y2="10" transform="translate(6 6)" fill="none" stroke="#6631f7" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+    </g>
+  </g>
+</svg>
