@@ -14,6 +14,9 @@ import Dashboard from "./components/dashboard/Dashboard.component";
 import VerifyEmail from "./components/VerifyEmail/VerifyEmail";
 import CheckEmail from "./components/CheckEmail/CheckEmail";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import ChangePassword from "./components/ChangePassword/ChangePassword";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
+import EmailVerified from "./components/EmailVerified/EmailVerified";
 
 const Content = styled.div`
   display: flex;
@@ -46,8 +49,11 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/verifyemail" element={<VerifyEmail />} />
-        <Route path="/checkemail" element={<CheckEmail />} />
+        <Route path="/emailverified" element={<EmailVerified />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/checkemail" element={<CheckEmail />} />
+        <Route path="/changepassword" element={<ChangePassword />} />
+        <Route path="/reset" element={<ResetPassword />} />
         <Route path="/searchPage" element={<SearchPage />}/>
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>

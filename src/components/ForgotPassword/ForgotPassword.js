@@ -2,6 +2,7 @@ import { useState, React } from "react";
 import OnboardingCard from "../onBoardingCard/onBoardingCard.component";
 import CustomButton from "../customButton/customButtom.component";
 import ForgotPasswordIcon from "../../assets/forgot-password.svg";
+import styles from "./forgotpassword.module.css";
 
 const ForgotPassword = () => (
   <OnboardingCard>
@@ -13,7 +14,7 @@ export default ForgotPassword;
 
 const ForgotPasswordContent = () => {
   const [formData, setFormData] = useState({
-    email: ""
+    email: "",
   });
   const [formErrors, setFormErrors] = useState({});
 
@@ -42,16 +43,21 @@ const ForgotPasswordContent = () => {
 
   return (
     <>
-    <img src={ForgotPasswordIcon} className="email-logo" alt="logo for email" />
-    <h1 className="main-heading">Forgot Password?</h1>
-    <p className="lighttext">
+      <img
+        src={ForgotPasswordIcon}
+        className={styles.forgot_logo}
+        alt="logo for forgot password"
+      />
+      <h1 className={styles.forgot_main_heading}>Forgot Password?</h1>
+      <p className={styles.lighttext}>
         {" "}
         No worries, we'll send you reset instructions.
       </p>
-
-      <div className="content" style={{ marginBottom: '1rem' }}>
-        <div className="form-field">
-          <label htmlFor="email" style={{ marginBottom: '1rem' }}>Email</label>
+      <div className={styles.content} style={{ marginBottom: "1rem" }}>
+        <div className={styles.form_field}>
+          <label htmlFor="email" style={{ marginBottom: "1rem" }}>
+            Email
+          </label>
           <input
             name="email"
             id="email"
@@ -59,18 +65,18 @@ const ForgotPasswordContent = () => {
             placeholder="Enter your email"
             value={formData.email}
             onChange={handleChange}
-            className={formErrors.email ? "input-warning" : ""}
+            className={formErrors.email ? styles.input_warning : ""}
           />
           {formErrors.email && (
-            <small className="warning-text">{formErrors.email}</small>
+            <small className={styles.warning_text}>{formErrors.email}</small>
           )}
         </div>
       </div>
-      
+
       <CustomButton className="customButton" text="Reset Password" />
-      <div className="bottomText">
-        Back to 
-        <span className="textButton">Sign in</span>
+      <div className={styles.bottomText}>
+        Back to
+        <span className={styles.textButton}>Sign in</span>
       </div>
     </>
   );

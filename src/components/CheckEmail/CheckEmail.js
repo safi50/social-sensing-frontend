@@ -1,6 +1,6 @@
 import { React } from "react";
 import OnboardingCard from "../onBoardingCard/onBoardingCard.component";
-import "../VerifyEmail/verifyEmail.css";
+import styles from "./checkemail.module.css";
 import CustomButton from "../customButton/customButtom.component";
 import EmailIcon from "../../assets/email-logo.svg";
 
@@ -14,23 +14,23 @@ export default CheckEmail;
 const CheckEmailContent = () => {
   return (
     <>
-      <img src={EmailIcon} className="email-logo" alt="logo for email" />
-      <h1 className="main-heading">Check your email</h1>
-      <p className="lighttext">
+      <img src={EmailIcon} className={styles.email_logo} alt="logo for email" />
+      <h1 className={styles.check_main_heading}>Check your email</h1>
+      <p className={styles.lighttext}>
         {" "}
         We sent a password reset link to
-        <span className="textButton">john@gmail.com</span> 
+        <span className={styles.textButton}>john@gmail.com</span> 
       </p>
-      <div className="btn-div">
+      <div className={styles.btn_div}>
         <CustomButton className="customButton" text="Open email" />
       </div>
-      <p className="plaintext">
+      <p className={styles.plaintext}>
         Didn't receive the email?
-        <span className="textButton">Click to resend</span>
+        <span className={styles.textButton}>Click to resend</span>
       </p>
-      <div className="bottomText">
+      <div className={styles.bottomText}>
         Back to
-        <span className="textButton">Sign in</span>
+        <span className={styles.textButton}>Sign in</span>
       </div>
     </>
   );
