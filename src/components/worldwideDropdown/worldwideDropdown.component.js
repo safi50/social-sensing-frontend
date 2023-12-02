@@ -76,7 +76,7 @@ const RegionSearchBar = () =>{
                 <ContinentListElement key={continent}>
                     <div>
                         <div>
-                            <ColoredCheckbox checked={checkedStates[continent]} onChange={(event) => handleCheckboxChange(event, continent)}/>
+                            {/* <ColoredCheckbox checked={checkedStates[continent]} onChange={(event) => handleCheckboxChange(event, continent)}/> */}
                             <ContinentName>{continent}</ContinentName>
                         </div>
                     </div>

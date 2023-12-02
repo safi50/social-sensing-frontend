@@ -13,6 +13,8 @@ import SearchPage from "./components/SearchPage/SearchPage.component";
 import Dashboard from "./components/dashboard/Dashboard.component";
 import WordCloudComponent from "./components/top-themes/wordcloud";
 import EmojiCloudComponent from "./components/top-themes/emojicloud";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 const Content = styled.div`
   display: flex;
   flex-direction: column;

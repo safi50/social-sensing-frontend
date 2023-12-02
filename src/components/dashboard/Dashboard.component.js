@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
   DashboardContainer,
   HeaderContainer,
@@ -48,6 +48,11 @@ import Card from "../card/Card";
 import SentimentsCard from "../sentiments-card/SentimentsCard";
 import ChartComponent from "../chart/Chart";
 import TopThemes from "../top-themes/TopThemes";
+import SaveSearchModal from "../saveSearchModal/SaveSearchModal.component";
+
+
+const saveSearches = [{name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad'},
+                        {name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore'}]
 
 const Dashboard = () => {
   const data1 = {
@@ -126,6 +131,29 @@ const Dashboard = () => {
       },
     ],
   };
+
+  const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
+
+
+  function formatDate(date) {
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  }
+
+  function addToDataset(name, region) {
+    const newEntry = {
+      name: name,
+      date: formatDate(new Date()), // Gets today's date in the specified format
+      region: region
+    };
+  
+    saveSearches.push(newEntry); // Adds the new entry to the dataset
+    console.log("dataset:", saveSearches)
+  }
+
+  const handleSaveSearchClose = () => setShowSaveSearchModal(false)
+  const handleSaveSearchShow = () => setShowSaveSearchModal(true)
+
   return (
     <div style={{ backgroundColor: "#6937F2" }}>
       <Navbar />
@@ -154,10 +182,11 @@ const Dashboard = () => {
             </CompareContainer>
           </LeftContainer>
           <RightContainer>
-            <SaveSearchContainer>
+            <SaveSearchContainer onClick={handleSaveSearchShow}>
               <HeartIcon src="/heart-svgrepo-com.svg" />
               <SaveSerchText>Save Search</SaveSerchText>
             </SaveSearchContainer>
+            <SaveSearchModal show={showSaveSearchModal} handleClose={handleSaveSearchClose} addToDataset={addToDataset}/>
             <BarIcon src="/bar-svgrepo-com.svg" />
             <DisabledContainer>
               <FolderIcon src="/folder-svgrepo-com.svg" />
@@ -172,15 +201,17 @@ const Dashboard = () => {
               <FilterItem>
                 Sentiments <CountBox>2</CountBox>
               </FilterItem>
-              <FilterItem>
+             
+              {/* <FilterItem>
                 Media type <CountBox>2</CountBox>
-              </FilterItem>
+              </FilterItem> */}
               <FilterItem>
                 Language <CountBox>3</CountBox>
               </FilterItem>
               <FilterItem>
-                Country/Region <CountBox>2</CountBox>
+                Pakistan <CountBox>1</CountBox>
               </FilterItem>
+             
               <MoreItem>
                 <PurplePlus src="/plus-large-svgrepo-com.svg" />
                 More
