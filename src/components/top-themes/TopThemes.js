@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import WordCloudComponent from "./wordcloud";
+import EmojiCloudComponent from "./emojicloud";
 
 const Container = styled.div`
   display: flex;
@@ -14,11 +16,13 @@ const OuterRow = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 2rem;
+
 `;
 const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
 `;
 const Img = styled.img`
   width: 2rem;
@@ -43,9 +47,16 @@ const Placeholder = styled.p`
   font-weight: 400;
   color: #888888;
 `;
-const WordCloud = styled.img`
+
+const WordCloudStyle = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden; 
+
 `;
+
 export default function TopThemes() {
   return (
     <Container>
@@ -60,7 +71,10 @@ export default function TopThemes() {
           </Options>
         </Row>
       </OuterRow>
-      <WordCloud src="/word-cloud.png" />
+      <WordCloudStyle>
+        <WordCloudComponent />
+        {/* <EmojiCloudComponent /> */}
+      </WordCloudStyle>
     </Container>
   );
 }
