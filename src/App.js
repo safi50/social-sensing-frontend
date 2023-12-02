@@ -11,6 +11,8 @@ import SignUp from "./components/SignUp/signUp.component";
 import SignIn from "./components/SignIn/signIn.component";
 import SearchPage from "./components/SearchPage/SearchPage.component";
 import Dashboard from "./components/dashboard/Dashboard.component";
+import WordCloudComponent from "./components/top-themes/wordcloud";
+import EmojiCloudComponent from "./components/top-themes/emojicloud";
 const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -43,9 +45,11 @@ const App = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/searchPage" element={<SearchPage />}/>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/wordcloud" element={<WordCloudComponent />} />
+        <Route path="/emojicloud" element={<EmojiCloudComponent />} />
       </Routes>
     </Router>
-    <Footer />
+    {/* <Footer /> */}
      {/* <Navbar />
       <Content>
         <PrimaryHeading>Ask Walee!</PrimaryHeading>
