@@ -1,5 +1,5 @@
 h1 {
-  margin-top: 7vh !important;
+  margin-top: 6vh !important;
 }
 
 .content {
@@ -88,7 +88,7 @@ h1 {
     color: #6631F7; /* Purple color for valid condition */
   }
   
-  .validation-message .invalid {
+  .validation-message .invalid, .capslock-message {
     color: red; /* Red color for invalid condition */
   }
   
@@ -136,3 +136,5 @@ h1 {
     color: #5829d9;
     text-decoration: none; 
   }
+
+  
