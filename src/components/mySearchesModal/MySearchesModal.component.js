@@ -1,17 +1,37 @@
 import React, {useState} from "react";
 import Modal from 'react-bootstrap/Modal';
-import { ModalDialog, ModalHeader, ModalFooter, ModalBody } from "./MySearchesModal.styles";
+import Dropdown from "react-multilevel-dropdown";
+import { ModalDialog, ModalHeader, ModalFooter, ModalBody, DropdownTitle, FooterContainer, StyledDropdown } from "./MySearchesModal.styles";
 import { Pagination } from "@mui/material";
 import MySearchesItem from "../MySearchesItem/MySearchesItem.component";
+import { DropdownIcon } from "../worldwideDropdown/worldwideDropdown.styles";
+
+
 
 const MySearchModal = ({show, handleClose, saveSearches}) =>{
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [totalPages, setTotalPages] = useState(parseInt((saveSearches.length-1) / rowsPerPage)+1)
     const [searchView, setSearchView] = useState(saveSearches.slice(0,rowsPerPage))
-    console.log("length:", saveSearches)
+
     const handlePageChange = (newPage)=>{
         setSearchView(saveSearches.slice((newPage-1)*rowsPerPage, (newPage*rowsPerPage)))
     }
+
+    const handleRowsPerPageChange = (number)=>{
+        setRowsPerPage(number)
+        setTotalPages(parseInt((saveSearches.length-1) / number)+1)
+        setSearchView(saveSearches.slice(0,number))
+    }
+
+    const RowsPerPageDropdown = () => (
+        <StyledDropdown title={
+                <DropdownTitle>Rows per page {rowsPerPage}<DropdownIcon src="/dropdown-arrow-svgrepo-com.svg"/></DropdownTitle> 
+        } position="right">
+           {[2, 5, 10, 15].map((number) => (
+            <Dropdown.Item key={number} onClick={() => handleRowsPerPageChange(number)}>{number}</Dropdown.Item>
+           ))}
+        </StyledDropdown>
+    )
 
     return(
         <>
@@ -30,9 +50,12 @@ const MySearchModal = ({show, handleClose, saveSearches}) =>{
                     {searchView.map((item) => (
                         <MySearchesItem item={item}/>
                     ))}
+                <FooterContainer>
+                <RowsPerPageDropdown />
+                <Pagination count={totalPages} color="primary" onChange={(event, value)=> {handlePageChange(value)}}/>
+                </FooterContainer>
                 </ModalBody>
                 <ModalFooter>
-                    <Pagination count={totalPages} color="primary" onChange={(event, value)=> {handlePageChange(value)}}/>
                 </ModalFooter>
                 </ModalDialog>
             </Modal>
