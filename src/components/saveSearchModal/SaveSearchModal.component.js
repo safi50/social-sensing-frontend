@@ -1,5 +1,3 @@
-import styled from "styled-components";
-
 import React, {useState} from "react";
 import { ModalTitle, ModalHeader, ModalBody, SaveSearchBarContainer, SaveSearchInput, CompareQuery, ComparedQueriesContainer, CircleContainer, ModalFooter, SaveBtn } from "./SaveSearchModal.styles";
 import Modal from 'react-bootstrap/Modal';

@@ -49,10 +49,29 @@ import SentimentsCard from "../sentiments-card/SentimentsCard";
 import ChartComponent from "../chart/Chart";
 import TopThemes from "../top-themes/TopThemes";
 import SaveSearchModal from "../saveSearchModal/SaveSearchModal.component";
+import MySearchModal from "../mySearchesModal/MySearchesModal.component";
 
-
-const saveSearches = [{name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad'},
-                        {name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore'}]
+const saveSearches = [  {id: '0', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
+                        {id: '1', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
+                        {id: '2', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
+                        {id: '3', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
+                        {id: '4', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
+                        {id: '5', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
+                        {id: '6', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
+                        {id: '7', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
+                        {id: '8', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
+                        {id: '9', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
+                        {id: '10', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
+                        {id: '11', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
+                        {id: '12', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
+                        {id: '13', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
+                        {id: '14', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
+                        {id: '15', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
+                        {id: '16', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
+                        {id: '17', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
+                        {id: '18', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
+                        {id: '19', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']}
+                      ]
 
 const Dashboard = () => {
   const data1 = {
@@ -133,7 +152,7 @@ const Dashboard = () => {
   };
 
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
-
+  const [showMySeachesModal, setShowMySearchesModal] = useState(false);
 
   function formatDate(date) {
     const options = { day: '2-digit', month: 'short', year: 'numeric' };
@@ -142,9 +161,11 @@ const Dashboard = () => {
 
   function addToDataset(name, region) {
     const newEntry = {
+      id: String(Math.floor(Date.now() / 1000)),
       name: name,
       date: formatDate(new Date()), // Gets today's date in the specified format
-      region: region
+      region: region,
+      hashtags: ['#Islamabad']
     };
   
     saveSearches.push(newEntry); // Adds the new entry to the dataset
@@ -153,6 +174,9 @@ const Dashboard = () => {
 
   const handleSaveSearchClose = () => setShowSaveSearchModal(false)
   const handleSaveSearchShow = () => setShowSaveSearchModal(true)
+
+  const handleMySearchesClose = () => setShowMySearchesModal(false)
+  const handleMySearchesShow = () => setShowMySearchesModal(true)
 
   return (
     <div style={{ backgroundColor: "#6937F2" }}>
@@ -188,10 +212,11 @@ const Dashboard = () => {
             </SaveSearchContainer>
             <SaveSearchModal show={showSaveSearchModal} handleClose={handleSaveSearchClose} addToDataset={addToDataset}/>
             <BarIcon src="/bar-svgrepo-com.svg" />
-            <DisabledContainer>
+            <DisabledContainer onClick={handleMySearchesShow}>
               <FolderIcon src="/folder-svgrepo-com.svg" />
               <DisabledText>My Searches</DisabledText>
             </DisabledContainer>
+            <MySearchModal show={showMySeachesModal} handleClose={handleMySearchesClose} saveSearches={saveSearches}/>
           </RightContainer>
         </SubHeadingContainer>
         <SelectionContainer>
