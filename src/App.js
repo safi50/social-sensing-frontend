@@ -63,8 +63,7 @@ const App = () => {
         
         <Route path="/searchPage" element={<SearchPage />}/>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/wordcloud" element={<WordCloudComponent />} />
-        <Route path="/emojicloud" element={<EmojiCloudComponent />} />
+        
       </Routes>
     </Router>
     {/* <Footer /> */}

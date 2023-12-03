@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import WordCloudComponent from "./wordcloud";
 import EmojiCloudComponent from "./emojicloud";
+import { useState } from "react";
 
 const Container = styled.div`
+  font-family: "Poppins", sans-serif;
   display: flex;
   flex-direction: column;
   margin-top: 2rem;
@@ -16,36 +18,38 @@ const OuterRow = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 2rem;
-
 `;
+
 const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-
 `;
+
 const Img = styled.img`
   width: 2rem;
 `;
+
 const Title = styled.p`
   font-size: 1.6rem;
   font-weight: 700;
   margin-right: 1rem;
   color: #000;
 `;
-const Options = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+const CustomSelect = styled.select`
   height: 40px;
   width: 200px;
   border-radius: 0.6rem;
   border: 0.8px solid #888888;
-`;
-const Placeholder = styled.p`
-  font-size: 1.5rem;
-  font-weight: 400;
+  padding: 5px;
+  font-size: 1.35rem;
   color: #888888;
+
+  option:hover {
+    background-color: #F1EBFF; 
+    color: #6631F7; 
+  }
 `;
 
 const WordCloudStyle = styled.div`
@@ -53,11 +57,16 @@ const WordCloudStyle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden; 
-
+  overflow: hidden;
 `;
 
 export default function TopThemes() {
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
   return (
     <Container>
       <OuterRow>
@@ -66,14 +75,19 @@ export default function TopThemes() {
           <Img src="/danger-circle.svg" />
         </Row>
         <Row>
-          <Options>
-            <Placeholder>Select Theme type</Placeholder>
-          </Options>
+          <CustomSelect onChange={handleSelectChange} value={selectedOption}>
+            <option>Select theme type</option>
+            <option value="TopTheme">☆ Top Theme</option>
+            <option value="Hashtags"># Hashtags</option>
+            <option value="Account">@ Account</option>
+            <option value="Bio">𝐓 Bio</option>
+            <option value="Emojis">☺ Emojis</option>
+          </CustomSelect>
         </Row>
       </OuterRow>
       <WordCloudStyle>
-        <WordCloudComponent />
-        {/* <EmojiCloudComponent /> */}
+        {selectedOption === "Bio" && <WordCloudComponent />}
+        {selectedOption === "Emojis" && <EmojiCloudComponent />}
       </WordCloudStyle>
     </Container>
   );
