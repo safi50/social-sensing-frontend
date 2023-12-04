@@ -194,6 +194,26 @@ const savedSearches = [
   },
 ];
 
+const generateMockData = (numberOfPosts) => {
+  const mockData = [];
+  for (let i = 0; i < numberOfPosts; i++) {
+    mockData.push({
+      id: i,
+      content: `Post content ${i}`,
+      sentiment: ["positive", "negative", "neutral"][
+        Math.floor(Math.random() * 3)
+      ],
+      language: ["English", "Spanish", "French"][Math.floor(Math.random() * 3)],
+      date: new Date(
+        2023,
+        Math.floor(Math.random() * 12),
+        Math.floor(Math.random() * 28)
+      ),
+    });
+  }
+  return mockData;
+};
+
 const Dashboard = () => {
   const data1 = {
     labels: [
@@ -275,6 +295,46 @@ const Dashboard = () => {
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
   const [showMySeachesModal, setShowMySearchesModal] = useState(false);
   const [saveSearches, setSaveSearches] = useState(savedSearches);
+  const [posts, setPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [filters, setFilters] = useState({
+    sentiment: "",
+    language: "",
+    date: "",
+  });
+
+  useEffect(() => {
+    const mockPosts = generateMockData(50); // Generate 50 mock posts
+    setPosts(mockPosts);
+    setFilteredPosts(mockPosts);
+  }, []);
+
+  useEffect(() => {
+    console.log("================================filters=====================");
+    console.log(filters);
+    console.log(
+      "================================filteredPosts====================="
+    );
+    console.log(filteredPosts);
+    console.log("=====================================================");
+  }, [filters, filteredPosts]);
+
+  useEffect(() => {
+    const filtered = posts.filter((post) => {
+      return (
+        (filters.sentiment ? post.sentiment === filters.sentiment : true) &&
+        (filters.language ? post.language === filters.language : true) &&
+        (filters.date
+          ? post.date.toISOString().split("T")[0] === filters.date
+          : true)
+      );
+    });
+    setFilteredPosts(filtered);
+  }, [filters, posts]);
+
+  const handleFilterChange = (e) => {
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
 
   function formatDate(date) {
     const options = { day: "2-digit", month: "short", year: "numeric" };
