@@ -26,6 +26,7 @@ const MySearchModal = ({
   const [totalPages, setTotalPages] = useState(
     parseInt((saveSearches.length - 1) / rowsPerPage) + 1
   );
+
   const [searchView, setSearchView] = useState(
     saveSearches.slice(0, rowsPerPage)
   );
@@ -75,12 +76,15 @@ const MySearchModal = ({
   useEffect(() => {
     console.log("================saveSearches==================");
     console.log(saveSearches);
+    setTotalPages(parseInt((saveSearches.length - 1) / rowsPerPage) + 1)
+    
     console.log("===========================================");
   }, [saveSearches]);
 
   useEffect(() => {
     updateSearchView();
   }, [saveSearches, rowsPerPage]);
+  
   return (
     <>
       <Modal
