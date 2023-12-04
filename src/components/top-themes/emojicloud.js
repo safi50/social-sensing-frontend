@@ -13,6 +13,22 @@ const emojis = [
   { text: '🌈', value: 85 },
   { text: '🐱', value: 95 },
   { text: '🐶', value: 88 },
+  { text: '😎', value: 85 },
+  { text: '😂', value: 82 },
+  { text: '🤣', value: 80 },
+  { text: '😁', value: 65 },
+  { text: '😆', value: 75 },
+  { text: '👍', value: 62 },
+  { text: '🙏', value: 73 },
+  { text: '😝', value: 89 },
+  { text: '👏', value: 91 },
+  { text: '🙌', value: 52 },
+  { text: '💔', value: 66 },
+  { text: '💕', value: 77 },
+  { text: '‼️', value: 83 },
+  { text: '💓', value: 81 },
+  { text: '❗', value: 85 },
+  { text: '😘', value: 88 },
 ];
 
 const EmojiCloudComponent = () => {
@@ -25,8 +41,11 @@ const EmojiCloudComponent = () => {
       // For smaller screens
       setSvgWidth(300); 
       setSvgHeight(600); 
-    } else {
+    } else if (windowWidth < 630) {
       // For larger screens
+      setSvgWidth(400); 
+      setSvgHeight(600); 
+    } else {
       setSvgWidth(700); 
       setSvgHeight(600); 
     }
