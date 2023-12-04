@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   DashboardContainer,
   HeaderContainer,
@@ -51,27 +51,148 @@ import TopThemes from "../top-themes/TopThemes";
 import SaveSearchModal from "../saveSearchModal/SaveSearchModal.component";
 import MySearchModal from "../mySearchesModal/MySearchesModal.component";
 
-const saveSearches = [  {id: '0', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
-                        {id: '1', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
-                        {id: '2', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
-                        {id: '3', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
-                        {id: '4', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
-                        {id: '5', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
-                        {id: '6', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
-                        {id: '7', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
-                        {id: '8', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
-                        {id: '9', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
-                        {id: '10', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
-                        {id: '11', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
-                        {id: '12', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
-                        {id: '13', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
-                        {id: '14', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
-                        {id: '15', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
-                        {id: '16', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
-                        {id: '17', name: 'car show', date: 'Jan 02, 2022', region: 'Islamabad', hashtags:['#Islamabad', '#Lahore']},
-                        {id: '18', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']},
-                        {id: '19', name: 'fast food', date: 'Jan 09, 2022', region: 'Lahore', hashtags:['#Islamabad']}
-                      ]
+const savedSearches = [
+  {
+    id: "0",
+    name: "car show",
+    date: "Jan 02, 2022",
+    region: "Islamabad",
+    hashtags: ["#Islamabad", "#Lahore"],
+  },
+  {
+    id: "1",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+  {
+    id: "2",
+    name: "car show",
+    date: "Jan 02, 2022",
+    region: "Islamabad",
+    hashtags: ["#Islamabad", "#Lahore"],
+  },
+  {
+    id: "3",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+  {
+    id: "4",
+    name: "car show",
+    date: "Jan 02, 2022",
+    region: "Islamabad",
+    hashtags: ["#Islamabad", "#Lahore"],
+  },
+  {
+    id: "5",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+  {
+    id: "6",
+    name: "car show",
+    date: "Jan 02, 2022",
+    region: "Islamabad",
+    hashtags: ["#Islamabad", "#Lahore"],
+  },
+  {
+    id: "7",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+  {
+    id: "8",
+    name: "car show",
+    date: "Jan 02, 2022",
+    region: "Islamabad",
+    hashtags: ["#Islamabad", "#Lahore"],
+  },
+  {
+    id: "9",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+  {
+    id: "10",
+    name: "car show",
+    date: "Jan 02, 2022",
+    region: "Islamabad",
+    hashtags: ["#Islamabad", "#Lahore"],
+  },
+  {
+    id: "11",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+  {
+    id: "12",
+    name: "car show",
+    date: "Jan 02, 2022",
+    region: "Islamabad",
+    hashtags: ["#Islamabad", "#Lahore"],
+  },
+  {
+    id: "13",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+  {
+    id: "14",
+    name: "car show",
+    date: "Jan 02, 2022",
+    region: "Islamabad",
+    hashtags: ["#Islamabad", "#Lahore"],
+  },
+  {
+    id: "15",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+  {
+    id: "16",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+  {
+    id: "17",
+    name: "car show",
+    date: "Jan 02, 2022",
+    region: "Islamabad",
+    hashtags: ["#Islamabad", "#Lahore"],
+  },
+  {
+    id: "18",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+  {
+    id: "19",
+    name: "fast food",
+    date: "Jan 09, 2022",
+    region: "Lahore",
+    hashtags: ["#Islamabad"],
+  },
+];
 
 const Dashboard = () => {
   const data1 = {
@@ -153,10 +274,11 @@ const Dashboard = () => {
 
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
   const [showMySeachesModal, setShowMySearchesModal] = useState(false);
+  const [saveSearches, setSaveSearches] = useState(savedSearches);
 
   function formatDate(date) {
-    const options = { day: '2-digit', month: 'short', year: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    const options = { day: "2-digit", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
   }
 
   function addToDataset(name, region) {
@@ -165,18 +287,35 @@ const Dashboard = () => {
       name: name,
       date: formatDate(new Date()), // Gets today's date in the specified format
       region: region,
-      hashtags: ['#Islamabad']
+      hashtags: ["#Islamabad"],
     };
-  
-    saveSearches.push(newEntry); // Adds the new entry to the dataset
-    console.log("dataset:", saveSearches)
+    setSaveSearches([...saveSearches, newEntry]); // Adds the new entry to the dataset
+    handleSaveSearchClose(); // Closes the modal
   }
 
-  const handleSaveSearchClose = () => setShowSaveSearchModal(false)
-  const handleSaveSearchShow = () => setShowSaveSearchModal(true)
+  const handleSaveSearchClose = () => setShowSaveSearchModal(false);
+  const handleSaveSearchShow = () => setShowSaveSearchModal(true);
 
-  const handleMySearchesClose = () => setShowMySearchesModal(false)
-  const handleMySearchesShow = () => setShowMySearchesModal(true)
+  const handleMySearchesClose = () => setShowMySearchesModal(false);
+  const handleMySearchesShow = () => setShowMySearchesModal(true);
+
+  const handleEditSearch = (id, name) => {
+    setSaveSearches(
+      saveSearches.map((search) => {
+        if (search.id === id) {
+          return {
+            ...search,
+            name: name,
+          };
+        }
+        return search;
+      })
+    );
+  };
+
+  const handleDeleteSearch = (id) => {
+    setSaveSearches(saveSearches.filter((search) => search.id !== id));
+  };
 
   return (
     <div style={{ backgroundColor: "#6937F2" }}>
@@ -210,13 +349,23 @@ const Dashboard = () => {
               <HeartIcon src="/heart-svgrepo-com.svg" />
               <SaveSerchText>Save Search</SaveSerchText>
             </SaveSearchContainer>
-            <SaveSearchModal show={showSaveSearchModal} handleClose={handleSaveSearchClose} addToDataset={addToDataset}/>
+            <SaveSearchModal
+              show={showSaveSearchModal}
+              handleClose={handleSaveSearchClose}
+              addToDataset={addToDataset}
+            />
             <BarIcon src="/bar-svgrepo-com.svg" />
             <DisabledContainer onClick={handleMySearchesShow}>
               <FolderIcon src="/folder-svgrepo-com.svg" />
               <DisabledText>My Searches</DisabledText>
             </DisabledContainer>
-            <MySearchModal show={showMySeachesModal} handleClose={handleMySearchesClose} saveSearches={saveSearches}/>
+            <MySearchModal
+              show={showMySeachesModal}
+              handleClose={handleMySearchesClose}
+              saveSearches={saveSearches}
+              handleEditSearch={handleEditSearch}
+              handleDeleteSearch={handleDeleteSearch}
+            />
           </RightContainer>
         </SubHeadingContainer>
         <SelectionContainer>
@@ -226,7 +375,7 @@ const Dashboard = () => {
               <FilterItem>
                 Sentiments <CountBox>2</CountBox>
               </FilterItem>
-             
+
               {/* <FilterItem>
                 Media type <CountBox>2</CountBox>
               </FilterItem> */}
@@ -236,7 +385,7 @@ const Dashboard = () => {
               <FilterItem>
                 Pakistan <CountBox>1</CountBox>
               </FilterItem>
-             
+
               <MoreItem>
                 <PurplePlus src="/plus-large-svgrepo-com.svg" />
                 More
