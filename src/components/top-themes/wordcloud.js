@@ -4,52 +4,29 @@ import ResizeDetector from "react-resize-detector";
 
 //  data
 const words = [
-  { text: "react", value: 100 },
-  { text: "javascript", value: 100 },
+  { text: "Test", value: 500 },
   { text: "web", value: 100 },
-  { text: "programming", value: 100 },
-  { text: "coding", value: 100 },
-  { text: "visualisation", value: 100 },
-  { text: "data", value: 100 },
-  { text: "design", value: 100 },
+  { text: "Test", value: 10 },
+  { text: "Walee", value: 500 },
+  { text: "Inspired", value: 350 },
+  { text: "visualisation", value: 180 },
+  { text: "data", value: 200 },
+  { text: "imagine", value: 100 },
+  { text: "css", value: 100 },
+  { text: "html", value: 100 },
+  { text: "python", value: 100 },
+  { text: "influence", value: 100 },
+  { text: "Inspired", value: 350 },
+  { text: "Data Moderation", value: 200 },
   { text: "analytics", value: 100 },
   { text: "css", value: 100 },
   { text: "html", value: 100 },
   { text: "python", value: 100 },
   { text: "java", value: 100 },
-  // Add more words
-
-  { text: "Hello", value: 300 },
-  { text: "World", value: 200 },
-  { text: "Mr. Robot", value: 250 },
-  // Add more data
-
-  { text: "Test", value: 10 },
-  { text: "Walee", value: 500 },
-  { text: "Inspired", value: 350 },
-  { text: "visualisation", value: 100 },
-  { text: "data", value: 100 },
-  { text: "design", value: 100 },
-  { text: "analytics", value: 100 },
-  { text: "css", value: 100 },
-  { text: "html", value: 100 },
-  { text: "python", value: 100 },
-  { text: "java", value: 100 },
-  { text: "Test", value: 10 },
-  { text: "Walee", value: 500 },
-  { text: "Inspired", value: 350 },
-  { text: "design", value: 100 },
-  { text: "analytics", value: 100 },
-  { text: "css", value: 100 },
-  { text: "html", value: 100 },
-  { text: "python", value: 100 },
-  { text: "java", value: 100 },
-  { text: "Hello", value: 300 },
-  { text: "World", value: 200 },
-  { text: "Mr. Robot", value: 250 },
-  { text: "Test", value: 10 },
-  { text: "Walee", value: 500 },
-  { text: "Inspired", value: 350 },
+  { text: "innovate", value: 300 },
+  { text: "go Walee!", value: 200 },
+  { text: "In-app Currencies", value: 250 },
+  { text: "Inspired", value: 450 },
 ];
 
 // map the word data
@@ -71,10 +48,9 @@ const getRandomColor = () => {
 };
 
 const WordCloudComponent = () => {
-  const [svgWidth, setSvgWidth] = useState(600);
+  const [svgWidth, setSvgWidth] = useState(800);
   const [svgHeight, setSvgHeight] = useState(500);
 
-  // Update SVG size based on window width
   const updateSvgSize = () => {
     const windowWidth = window.innerWidth;
     if (windowWidth < 426) {

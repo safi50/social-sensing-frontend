@@ -61,7 +61,7 @@ const WordCloudStyle = styled.div`
 `;
 
 export default function TopThemes() {
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState("Bio");
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);

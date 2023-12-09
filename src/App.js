@@ -17,8 +17,7 @@ import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import EmailVerified from "./components/EmailVerified/EmailVerified";
-import WordCloudComponent from "./components/top-themes/wordcloud";
-import EmojiCloudComponent from "./components/top-themes/emojicloud";
+import TopResults  from "./components/Results/topResults.component"; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Content = styled.div`
@@ -63,6 +62,7 @@ const App = () => {
         
         <Route path="/searchPage" element={<SearchPage />}/>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/topResults" element={<TopResults />} />
         
       </Routes>
     </Router>
