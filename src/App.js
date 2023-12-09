@@ -6,7 +6,12 @@ import SavedSearches from "./components/savedsearches/SavedSearches.component";
 import styled from "styled-components";
 import TrendingTable from "./components/trending_table/trending_table.component";
 import OnboardingCard from "./components/onBoardingCard/onBoardingCard.component";
-import { BrowserRouter as Router, Route, Routes,  Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Switch,
+} from "react-router-dom";
 import SignUp from "./components/SignUp/signUp.component";
 import SignIn from "./components/SignIn/signIn.component";
 import SearchPage from "./components/SearchPage/SearchPage.component";
@@ -17,8 +22,10 @@ import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import EmailVerified from "./components/EmailVerified/EmailVerified";
-import TopResults  from "./components/Results/topResults.component"; 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import TopResults from "./components/Results/topResults.component";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { SentimentResults } from "./components/sentiment-results/SentimentResults";
+import { CompareKeyword } from "./components/compare-keywords/CompareKeyword";
 
 const Content = styled.div`
   display: flex;
@@ -43,31 +50,35 @@ const SecondaryHeading = styled.h2`
   color: #fff;
 `;
 
-
 const App = () => {
   return (
-    <> 
-    <Router>
-      <Routes>
-        <Route path="/onboarding" element={<OnboardingCard />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
-        {/* extra screens of onboarding  */}
-        <Route path="/verifyemail" element={<VerifyEmail />} />
-        <Route path="/emailverified" element={<EmailVerified />} />
-        <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/checkemail" element={<CheckEmail />} />
-        <Route path="/changepassword" element={<ChangePassword />} />
-        <Route path="/reset" element={<ResetPassword />} />
-        
-        <Route path="/searchPage" element={<SearchPage />}/>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/topResults" element={<TopResults />} />
-        
-      </Routes>
-    </Router>
-    {/* <Footer /> */}
-     {/* <Navbar />
+    <>
+      <Router>
+        <Routes>
+          <Route path="/onboarding" element={<OnboardingCard />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+          {/* extra screens of onboarding  */}
+          <Route path="/verifyemail" element={<VerifyEmail />} />
+          <Route path="/emailverified" element={<EmailVerified />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/checkemail" element={<CheckEmail />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
+          <Route path="/reset" element={<ResetPassword />} />
+
+          <Route path="/searchPage" element={<SearchPage />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="/dashboard" element={<SentimentResults />} />
+            <Route
+              path="/dashboard/compare-keyword"
+              element={<CompareKeyword />}
+            />
+          </Route>
+          <Route path="/topResults" element={<TopResults />} />
+        </Routes>
+      </Router>
+      {/* <Footer /> */}
+      {/* <Navbar />
       <Content>
         <PrimaryHeading>Ask Walee!</PrimaryHeading>
         <div></div>
