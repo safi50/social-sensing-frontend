@@ -1,8 +1,43 @@
 import React from "react";
 import styled from "styled-components";
 import twitterIcon from "../../assets/heart.svg";
+import shareIcon from "../../assets/share.svg";
+
+const IconsContainer = styled.div`
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: none;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  margin: 0 4px;
+`;
+
+const HoverIcon = styled.img`
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  padding: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
+`;
 
 const StoryContainer = styled.div`
+position: relative;
   width: 17%; // Adjust the width as needed
   height: 150px;
   border-radius: 8px;
@@ -10,6 +45,14 @@ const StoryContainer = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   font-family: "Arial", sans-serif;
   margin: 1rem;
+  transition: all 0.3s;
+  &:hover {
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+
+    ${IconsContainer} {
+      display: flex;
+    }
+  }
 `;
 
 const Reach = styled.div`
@@ -42,6 +85,9 @@ const ImageSection = styled.div`
   height: 150px;
 `;
 
+
+
+
 const data = {
   imageUrl: "https://picsum.photos/300/150",
   mainText:
@@ -60,6 +106,9 @@ const ResultCardGrid = ({ imageUrl, mainText, publishedInfo, handleName }) => {
           <ReachLabel> Reach</ReachLabel>
         </Reach>
       </ImageSection>
+      <IconsContainer>
+        <HoverIcon src={shareIcon} alt="Share" />
+      </IconsContainer>
     </StoryContainer>
   );
 };
