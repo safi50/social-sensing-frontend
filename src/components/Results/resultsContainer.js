@@ -57,7 +57,7 @@ const Tab = styled.div`
 
   &.active {
     border-color: #6631f7;
-    color: #6631f7
+    color: #6631f7;
   }
 `;
 
@@ -146,6 +146,7 @@ const ResultsCard = () => {
             </Tab>
           </TabsContainer>
         </Row>
+        
         {activeTab === "topResults" ? (
           <Row>
             <CustomSelect onChange={handleSelectChange} value={selectedOption}>
@@ -170,7 +171,7 @@ const ResultsCard = () => {
 
             <CustomSelect onChange={handleLayoutChange} value={selectedLayout}>
               <option>Select layout</option>
-              <option value="Normal"> Normal</option>
+              <option value="Normal">Normal</option>
               <option value="Compact">Compact</option>
               <option value="Stories">Stories</option>
               <option>Images</option>

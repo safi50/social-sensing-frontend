@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import heartIcon from '../../assets/heart.svg';
-import locationIcon from '../../assets/heart.svg';
-import webIcon from '../../assets/heart.svg';
+import locationIcon from '../../assets/location.svg';
+import webIcon from '../../assets/global.svg';
 import profileImage from '../../assets/profile-pic.jpeg';
 import sharedImage from '../../assets/cool-profile-picture.jpeg';
-import shareIcon from '../../assets/heart.svg';
+import shareIcon from '../../assets/share.svg';
+import retweetIcon from '../../assets/repeat.svg';
 import sentimentIcon from '../../assets/frown.svg';
-import userIcon from '../../assets/heart.svg';
+import userIcon from '../../assets/users.svg';
 // Styled components
 const CardContainer = styled.div`
   display: flex;
@@ -271,7 +272,7 @@ const ResultCard = () => {
                 </MetricRow>
                 <SmallMetricsContainer>
                     <SmallMetric>
-                        <img src={shareIcon} alt="Shares" />
+                        <img src={retweetIcon} alt="Retweet" />
                         <SmallMetricValue>{additionalMetrics.shares}</SmallMetricValue>
                     </SmallMetric>
                     <SmallMetric>
