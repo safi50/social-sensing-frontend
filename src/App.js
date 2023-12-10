@@ -26,6 +26,7 @@ import TopResults from "./components/Results/topResults.component";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SentimentResults } from "./components/sentiment-results/SentimentResults";
 import { CompareKeyword } from "./components/compare-keywords/CompareKeyword";
+import { CompareKeywordProvider } from "./contexts/CompareKeyword.context";
 
 const Content = styled.div`
   display: flex;
@@ -53,30 +54,34 @@ const SecondaryHeading = styled.h2`
 const App = () => {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/onboarding" element={<OnboardingCard />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          {/* extra screens of onboarding  */}
-          <Route path="/verifyemail" element={<VerifyEmail />} />
-          <Route path="/emailverified" element={<EmailVerified />} />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/checkemail" element={<CheckEmail />} />
-          <Route path="/changepassword" element={<ChangePassword />} />
-          <Route path="/reset" element={<ResetPassword />} />
+      <CompareKeywordProvider>
+        <Router>
+          <Routes>
+            <Route path="/onboarding" element={<OnboardingCard />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
+            {/* extra screens of onboarding  */}
+            <Route path="/verifyemail" element={<VerifyEmail />} />
+            <Route path="/emailverified" element={<EmailVerified />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/checkemail" element={<CheckEmail />} />
+            <Route path="/changepassword" element={<ChangePassword />} />
+            <Route path="/reset" element={<ResetPassword />} />
 
-          <Route path="/searchPage" element={<SearchPage />} />
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="/dashboard" element={<SentimentResults />} />
-            <Route
-              path="/dashboard/compare-keyword"
-              element={<CompareKeyword />}
-            />
-          </Route>
-          <Route path="/topResults" element={<TopResults />} />
-        </Routes>
-      </Router>
+            <Route path="/searchPage" element={<SearchPage />} />
+
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="/dashboard" element={<SentimentResults />} />
+              <Route
+                path="/dashboard/compare-keyword"
+                element={<CompareKeyword />}
+              />
+            </Route>
+
+            <Route path="/topResults" element={<TopResults />} />
+          </Routes>
+        </Router>
+      </CompareKeywordProvider>
       {/* <Footer /> */}
       {/* <Navbar />
       <Content>
