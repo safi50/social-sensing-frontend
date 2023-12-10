@@ -216,6 +216,7 @@ const ResultCard = () => {
         hearts: '31K',
         users: '32K'
     };
+    
     return (
         <CardContainer>
             <ProfileSection>

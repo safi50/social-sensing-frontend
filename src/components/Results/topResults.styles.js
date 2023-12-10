@@ -29,6 +29,7 @@ export const HeaderContainer = styled.div`
 `;
 
 export const Header = styled.p`
+font-family: "Poppins", sans-serif;
   font-size: 18px;
   font-weight: 500;
 `;

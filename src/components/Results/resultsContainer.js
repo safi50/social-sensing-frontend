@@ -1,9 +1,11 @@
-import styled from 'styled-components';
-import { useState } from 'react';
-import ResultCard from './resultCard';
-import ResultCardCompact from './resultCardCompact';
-import ResultCardStory from './resultCardStory';
-import ResultCardGrid from './resultCardGrid';
+import styled from "styled-components";
+import { useState } from "react";
+import ResultCard from "./resultCard";
+import ResultCardCompact from "./resultCardCompact";
+import ResultCardStory from "./resultCardStory";
+import ResultCardGrid from "./resultCardGrid";
+import WordCloudComponent from "../top-themes/wordcloud";
+import EmojiCloudComponent from "../top-themes/emojicloud";
 
 // Existing Container
 const Container = styled.div`
@@ -26,12 +28,12 @@ const CustomSelect = styled.select`
   font-size: 1.35rem;
   color: #888888;
   font-weight: 300;
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 
   option:hover {
-    background-color: #F1EBFF; 
-    color: #6631F7; 
+    background-color: #f1ebff;
+    color: #6631f7;
   }
 `;
 
@@ -49,12 +51,13 @@ const Tab = styled.div`
   padding-right: 1.5rem;
   cursor: pointer;
   border-bottom: 3px solid transparent; // Invisible border for layout consistency
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: #111111;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #111111;
 
   &.active {
-    border-color: #6631F7;
+    border-color: #6631f7;
+    color: #6631f7
   }
 `;
 
@@ -77,111 +80,151 @@ const Img = styled.img`
 const CardRow = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem; 
+  gap: 1rem;
   justify-content: flex-start;
   margin-bottom: 1rem; // Space below each row of cards
 `;
 const ExportButton = styled.button`
-    background-color: #6937f2;
-    color: white;   
-    border: none;
-    border-radius: 5px;
-    padding: 8px 20px;
-    margin-left: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.5rem;
-    font-weight: 300;
+  background-color: #6937f2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 20px;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 300;
 `;
 
-
-
+const WordCloudStyle = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+`;
 
 const ResultsCard = () => {
-  const [activeTab, setActiveTab] = useState('topResults');
+  const [activeTab, setActiveTab] = useState("topResults");
   const [selectedOption, setSelectedOption] = useState("");
+  const [selectedLayout, setSelectedLayout] = useState("Normal");
+  const [selectedTheme, setSelectedTheme] = useState("");
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
   };
 
+  const handleLayoutChange = (event) => {
+    setSelectedLayout(event.target.value);
+  };
+
+  const handleThemeChange = (event) => {
+    setSelectedTheme(event.target.value);
+  };
 
   return (
-
-
     <Container>
-        <OuterRow>
-            <Row>
-      <TabsContainer>
-        <Tab
-          className={activeTab === 'topResults' ? 'active' : ''}
-          onClick={() => setActiveTab('topResults')}
-        >
-         Top Themes&nbsp;
-          <Img src="/danger-circle.svg" />
-                  </Tab>
-        <Tab
-          className={activeTab === 'topThemes' ? 'active' : ''}
-          onClick={() => setActiveTab('topThemes')}
-        >
-        Themes&nbsp;
-        <Img src="/danger-circle.svg" />
-        </Tab>
-        </TabsContainer>
-
-       </Row>
+      <OuterRow>
         <Row>
-        <CustomSelect onChange={handleSelectChange} value={selectedOption}>
-            <option>Sort By</option>
-            <option value="Engagement">Engagement</option>
-            <option value="PotentialReach">Potential Reach</option>
-            <option value="TrendingScore">Trending Score</option>
-            <option value="Random">Random</option>
-            <option value="CommentCount">Comment Count</option>
-            <option value="Published">Published</option>
-            <option value="Found">Found</option>
-            <option value="Alexa">Alexa</option>
-            <option value="ReviewRating">Review Rating</option>
-            <option >Social Channels</option>
-            <option value="facebook"> &nbsp;&nbsp;Facebook</option>
-            <option value="twitter">&nbsp;&nbsp;Twitter</option>
-            <option value="vine">&nbsp;&nbsp;Vine</option>
-            <option value="youtube">&nbsp;&nbsp;Youtube</option>
-            <option value="tiktok">&nbsp;&nbsp;Tiktok</option>
-            <option value="disqus">&nbsp;&nbsp;Disqus</option>
-
-          </CustomSelect>
-
-          <CustomSelect  onChange={handleSelectChange} value={selectedOption}>
-            <option>Select layout</option>
-            <option value="Normal"> Normal</option>
-            <option value="Compact">Compact</option>
-            <option value="Stories">Stories</option>
-            <option >Images</option>
-            <option value="grid">&nbsp;&nbsp;- Grid</option>
-            <option value="treemap">&nbsp;&nbsp;- Tree Map</option>
-          </CustomSelect>
-          <ExportButton>Export</ExportButton>
+          <TabsContainer>
+            <Tab
+              className={activeTab === "topResults" ? "active" : ""}
+              onClick={() => setActiveTab("topResults")}
+            >
+              Top Results&nbsp;
+              <Img src="/danger-circle.svg" />
+            </Tab>
+            <Tab
+              className={activeTab === "topThemes" ? "active" : ""}
+              onClick={() => setActiveTab("topThemes")}
+            >
+              Themes&nbsp;
+              <Img src="/danger-circle.svg" />
+            </Tab>
+          </TabsContainer>
         </Row>
-      </OuterRow>
-     <ResultCardCompact />  
-     <ResultCardCompact />  
-     <ResultCardCompact />  
-     <ResultCardCompact />  
-      
-       {/* <CardRow>
-        <ResultCardStory />
-        <ResultCardStory />
-        <ResultCardStory />
-        <ResultCardStory />
-        <ResultCardStory />
-        <ResultCardStory />
-        <ResultCardStory />
-        <ResultCardStory />
+        {activeTab === "topResults" ? (
+          <Row>
+            <CustomSelect onChange={handleSelectChange} value={selectedOption}>
+              <option>Sort By</option>
+              <option value="Engagement">Engagement</option>
+              <option value="PotentialReach">Potential Reach</option>
+              <option value="TrendingScore">Trending Score</option>
+              <option value="Random">Random</option>
+              <option value="CommentCount">Comment Count</option>
+              <option value="Published">Published</option>
+              <option value="Found">Found</option>
+              <option value="Alexa">Alexa</option>
+              <option value="ReviewRating">Review Rating</option>
+              <option>Social Channels</option>
+              <option value="facebook"> &nbsp;&nbsp;Facebook</option>
+              <option value="twitter">&nbsp;&nbsp;Twitter</option>
+              <option value="vine">&nbsp;&nbsp;Vine</option>
+              <option value="youtube">&nbsp;&nbsp;Youtube</option>
+              <option value="tiktok">&nbsp;&nbsp;Tiktok</option>
+              <option value="disqus">&nbsp;&nbsp;Disqus</option>
+            </CustomSelect>
 
-      </CardRow> */}
+            <CustomSelect onChange={handleLayoutChange} value={selectedLayout}>
+              <option>Select layout</option>
+              <option value="Normal"> Normal</option>
+              <option value="Compact">Compact</option>
+              <option value="Stories">Stories</option>
+              <option>Images</option>
+              <option value="grid">&nbsp;&nbsp;- Grid</option>
+              <option value="treemap">&nbsp;&nbsp;- Tree Map</option>
+            </CustomSelect>
+            <ExportButton>Export</ExportButton>
+          </Row>
+        ) : (
+          <Row>
+            <CustomSelect onChange={handleThemeChange} value={selectedTheme}>
+              <option>Select theme type</option>
+              <option value="TopTheme">☆ Top Theme</option>
+              <option value="Hashtags"># Hashtags</option>
+              <option value="Account">@ Account</option>
+              <option value="Bio">𝐓 Bio</option>
+              <option value="Emojis">☺ Emojis</option>
+            </CustomSelect>
+          </Row>
+        )}
+      </OuterRow>
+
+      {activeTab === "topResults" && (
+        <div>
+          {selectedLayout === "Normal" && <ResultCard />}
+          {selectedLayout === "Compact" && <ResultCardCompact />}
+          {selectedLayout === "Stories" && (
+            <CardRow>
+              <ResultCardStory />
+              <ResultCardStory />
+              <ResultCardStory />
+              <ResultCardStory />
+              <ResultCardStory />
+              <ResultCardStory />
+            </CardRow>
+          )}
+          {selectedLayout === "grid" && (
+            <CardRow>
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
+            </CardRow>
+          )}
+        </div>
+      )}
+      {activeTab === "topThemes" && (
+        <WordCloudStyle>
+          {selectedTheme === "Bio" && <WordCloudComponent />}
+          {selectedTheme === "Emojis" && <EmojiCloudComponent />}
+        </WordCloudStyle>
+      )}
     </Container>
   );
 };

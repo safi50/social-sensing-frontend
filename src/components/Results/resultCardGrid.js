@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import twitterIcon from '../../assets/heart.svg'; 
+import React from "react";
+import styled from "styled-components";
+import twitterIcon from "../../assets/heart.svg";
 
 const StoryContainer = styled.div`
   width: 17%; // Adjust the width as needed
@@ -8,14 +8,14 @@ const StoryContainer = styled.div`
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   margin: 1rem;
 `;
 
 const Reach = styled.div`
   position: absolute;
-  bottom: 12px; 
-  left: 8px; 
+  bottom: 12px;
+  left: 8px;
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
@@ -27,39 +27,39 @@ const Reach = styled.div`
 `;
 
 const ReachLabel = styled.span`
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 300;
-    text-align: center;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 300;
+  text-align: center;
 `;
-
 
 const ImageSection = styled.div`
   position: relative; // Needed to position the ReachLabel absolutely within
-  background-image: url(${props => props.imgUrl});
+  background-image: url(${(props) => props.imgUrl});
   background-size: cover;
   background-position: center;
   object-fit: cover;
-  height: 150px; 
+  height: 150px;
 `;
 
-const data = 
-  {
-    imageUrl: 'https://picsum.photos/300/150',
-    mainText: "🤝🎯TARGET COMPLETED 🔥🔥 HERE'S 10U #NBA MAX BET 👀⚠️💵 🏀 Heat vs Celtics 🎯 OVER (216.5) @ 1.5",
-    publishedInfo: 'Published 11 hours ago',
-    handleName: '@JohnDoe',
-    reach: '2.1K'
-  };
+const data = {
+  imageUrl: "https://picsum.photos/300/150",
+  mainText:
+    "🤝🎯TARGET COMPLETED 🔥🔥 HERE'S 10U #NBA MAX BET 👀⚠️💵 🏀 Heat vs Celtics 🎯 OVER (216.5) @ 1.5",
+  publishedInfo: "Published 11 hours ago",
+  handleName: "@JohnDoe",
+  reach: "2.1K",
+};
 
 const ResultCardGrid = ({ imageUrl, mainText, publishedInfo, handleName }) => {
   return (
     <StoryContainer>
-<ImageSection imgUrl={data.imageUrl}>
-        <Reach>{data.reach}
-        <ReachLabel> Reach</ReachLabel>
-        </Reach> 
-      </ImageSection>     
+      <ImageSection imgUrl={data.imageUrl}>
+        <Reach>
+          {data.reach}
+          <ReachLabel> Reach</ReachLabel>
+        </Reach>
+      </ImageSection>
     </StoryContainer>
   );
 };

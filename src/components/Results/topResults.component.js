@@ -51,6 +51,10 @@ import TopThemes from "../top-themes/TopThemes";
 import SaveSearchModal from "../saveSearchModal/SaveSearchModal.component";
 import MySearchModal from "../mySearchesModal/MySearchesModal.component";
 import ResultsCard from "./resultsContainer";
+import ResultCardCompact from "./resultCardCompact";
+import ResultCardStory from "./resultCardStory";
+import ResultCardGrid from "./resultCardGrid";
+import ResultCard from "./resultCard";
 
 const savedSearches = [
   {
@@ -474,6 +478,10 @@ const TopResults = () => {
         </SelectionContainer>
         <ResultsContainer>
           <ResultsCard  />
+          {/* <ResultCardCompact  /> */}
+          {/* <ResultCardStory  /> */}
+          {/* <ResultCardGrid  /> */}
+          {/* <ResultCard  /> */}
         </ResultsContainer>
 
       </DashboardContainer>
