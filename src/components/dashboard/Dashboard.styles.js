@@ -92,10 +92,12 @@ export const SubHeadingContainer = styled.div`
 export const HashtagContainer = styled.div`
   background-color: white;
   padding: 10px;
-  // padding-right: 40%;
   border-radius: 5px;
   display: flex;
   align-items: center;
+  display: flex;
+  flex-direction: row;
+  max-width: 170px;
 `;
 
 export const PurpleCircle = styled.img`
@@ -150,6 +152,8 @@ export const LeftContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-grow: 1;
+  flex-wrap: wrap;
 `;
 
 export const RightContainer = styled.div`

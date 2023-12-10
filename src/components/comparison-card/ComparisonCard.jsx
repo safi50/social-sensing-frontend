@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 
 // Styled-component for the card container
 const CardContainer = styled.div`
@@ -67,7 +68,8 @@ const CompareItem = styled.div`
 `;
 const infoTextColors = ["#6631F7", "#F3B03D", "#E60000", "#EE8733"];
 
-export const ComparisonCard = ({ image, title, infoText, percentage }) => {
+export const ComparisonCard = ({ title }) => {
+  const { data } = useContext(CompareKeywordContext);
   return (
     <CardContainer>
       <TopRow>
@@ -75,14 +77,10 @@ export const ComparisonCard = ({ image, title, infoText, percentage }) => {
         <Img src="/danger-circle.svg" />
       </TopRow>
       <BottomRow>
-        {Array.from({ length: 4 }, (_, index) => (
+        {data.map((item, index) => (
           <CompareItem key={index}>
-            <InfoText
-              style={{ color: infoTextColors[index % infoTextColors.length] }}
-            >
-              Info Text
-            </InfoText>
-            <MutedText>Lahore Car Show</MutedText>
+            <InfoText style={{ color: item.color }}>{item.infoText}</InfoText>
+            <MutedText>{item.name}</MutedText>
           </CompareItem>
         ))}
       </BottomRow>

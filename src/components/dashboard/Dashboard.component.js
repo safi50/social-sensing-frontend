@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   DashboardContainer,
   HeaderContainer,
@@ -46,6 +46,7 @@ import SaveSearchModal from "../saveSearchModal/SaveSearchModal.component";
 import MySearchModal from "../mySearchesModal/MySearchesModal.component";
 import { Outlet } from "react-router-dom";
 import TopThemes from "../top-themes/TopThemes";
+import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 
 const savedSearches = [
   {
@@ -211,6 +212,7 @@ const generateMockData = (numberOfPosts) => {
 };
 
 const Dashboard = () => {
+  const { data } = useContext(CompareKeywordContext);
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
   const [showMySeachesModal, setShowMySearchesModal] = useState(false);
   const [saveSearches, setSaveSearches] = useState(savedSearches);
@@ -227,16 +229,6 @@ const Dashboard = () => {
     setPosts(mockPosts);
     setFilteredPosts(mockPosts);
   }, []);
-
-  useEffect(() => {
-    console.log("================================filters=====================");
-    console.log(filters);
-    console.log(
-      "================================filteredPosts====================="
-    );
-    console.log(filteredPosts);
-    console.log("=====================================================");
-  }, [filters, filteredPosts]);
 
   useEffect(() => {
     const filtered = posts.filter((post) => {
@@ -314,10 +306,13 @@ const Dashboard = () => {
         </HeaderContainer>
         <SubHeadingContainer>
           <LeftContainer>
-            <HashtagContainer>
-              <PurpleCircle src="/purple-circle-svgrepo-com.svg" />
-              <HashtagText>#lahorecarshow</HashtagText>
-            </HashtagContainer>
+            {data.map((item) => (
+              <HashtagContainer>
+                <PurpleCircle src="/purple-circle-svgrepo-com.svg" />
+                <HashtagText>{item.name}</HashtagText>
+              </HashtagContainer>
+            ))}
+
             <CompareContainer>
               <PurplePlus src="/plus-large-svgrepo-com.svg" />
               <CompareKeywordText>Compare keyword</CompareKeywordText>

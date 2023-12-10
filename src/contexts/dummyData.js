@@ -14,8 +14,9 @@ export function generateData() {
     "#sargodhacarshow",
     "#karachicarshow",
     "#faisalabadcarshow",
-    "#islamabadcarshow",
+    // "#islamabadcarshow",
   ];
+  const infos = ["526.5K", "176.5K", "676.5K", "376.5K", "576.2K"];
 
   const colors = [
     "rgba(255, 99, 132)", // Pink
@@ -36,7 +37,8 @@ export function generateData() {
   let data = eventNames.map((name, index) => {
     return {
       name: name,
-      infoText: name + " info",
+      infoText: infos[index],
+      color: colors[index],
       totalEngagement: {
         labels: [name],
         datasets: [
@@ -173,10 +175,6 @@ export function mergeData(data, key) {
       });
     });
   });
-
-  console.log("================mergedData================");
-  console.log(mergedData);
-  console.log("================mergedData================");
 
   return mergedData;
 }
