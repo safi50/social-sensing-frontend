@@ -45,6 +45,7 @@ import Navbar from "../navbar/Navbar.component";
 import SaveSearchModal from "../saveSearchModal/SaveSearchModal.component";
 import MySearchModal from "../mySearchesModal/MySearchesModal.component";
 import { Outlet } from "react-router-dom";
+import TopThemes from "../top-themes/TopThemes";
 
 const savedSearches = [
   {
@@ -391,6 +392,7 @@ const Dashboard = () => {
         </SelectionContainer>
 
         <Outlet />
+        <TopThemes />
       </DashboardContainer>
     </div>
   );

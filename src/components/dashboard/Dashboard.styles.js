@@ -340,9 +340,8 @@ export const CardsContainer = styled.div`
 `;
 
 export const ChartsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
   justify-content: space-between;
 `;

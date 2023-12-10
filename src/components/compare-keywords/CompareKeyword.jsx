@@ -1,10 +1,15 @@
+import ChartComponent from "../chart/Chart";
 import { ComparisonCard } from "../comparison-card/ComparisonCard";
 import { HorizontalBarChartComponent } from "../horizontal-bar/HorizontalBarChart";
 import VerticalBarChart from "../refreshBtn/vertical-bar/VerticalBarChart";
+import {
+  ChartsContainer,
+  CompareKeywordWrapper,
+} from "./CompareKeyword.styles";
 
 export const CompareKeyword = () => {
   const dummyData = {
-    labels: ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"],
+    labels: ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "6"],
     datasets: [
       {
         label: "Sample Dataset",
@@ -30,13 +35,17 @@ export const CompareKeyword = () => {
     ],
   };
   return (
-    <div>
-      <HorizontalBarChartComponent
-        title="My Horizontal Bar Chart"
-        data={dummyData}
-      />
-      <VerticalBarChart title="My Vertical Bar Chart" data={dummyData} />
+    <CompareKeywordWrapper>
       <ComparisonCard title={"Total Results"} />
-    </div>
+      <ChartsContainer>
+        <VerticalBarChart title="Total Engagement" data={dummyData} />
+        <HorizontalBarChartComponent title="Reach" data={dummyData} />
+      </ChartsContainer>
+      <ChartComponent title="Results over time" data={dummyData} />
+      <ChartsContainer>
+        <VerticalBarChart title="Sentiments" data={dummyData} />
+        <ChartComponent title="Net Sentiment over time" data={dummyData} />
+      </ChartsContainer>
+    </CompareKeywordWrapper>
   );
 };

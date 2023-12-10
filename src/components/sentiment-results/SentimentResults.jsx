@@ -6,8 +6,6 @@ import {
   ResultsContainer,
 } from "../dashboard/Dashboard.styles";
 import SentimentsCard from "../sentiments-card/SentimentsCard";
-import TopThemes from "../top-themes/TopThemes";
-
 export const SentimentResults = () => {
   const data1 = {
     labels: [
@@ -112,7 +110,6 @@ export const SentimentResults = () => {
         <ChartComponent title={"Results over time"} data={data1} />
         <ChartComponent title={"Net sentiment over time"} data={data2} />
       </ChartsContainer>
-      <TopThemes />
     </ResultsContainer>
   );
 };
