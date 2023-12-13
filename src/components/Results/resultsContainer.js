@@ -6,8 +6,8 @@ import ResultCardStory from "./resultCardStory";
 import ResultCardGrid from "./resultCardGrid";
 import WordCloudComponent from "../top-themes/wordcloud";
 import EmojiCloudComponent from "../top-themes/emojicloud";
+import Select from "react-select";
 
-// Existing Container
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
   display: flex;
@@ -50,7 +50,7 @@ const Tab = styled.div`
   padding-bottom: 2rem;
   padding-right: 1.5rem;
   cursor: pointer;
-  border-bottom: 3px solid transparent; // Invisible border for layout consistency
+  border-bottom: 3px solid transparent;
   font-size: 1.5rem;
   font-weight: 400;
   color: #111111;
@@ -82,8 +82,9 @@ const CardRow = styled.div`
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: flex-start;
-  margin-bottom: 1rem; // Space below each row of cards
+  margin-bottom: 1rem; 
 `;
+
 const ExportButton = styled.button`
   background-color: #6937f2;
   color: white;
@@ -107,10 +108,67 @@ const WordCloudStyle = styled.div`
   overflow: hidden;
 `;
 
+const ExportDropdown = styled(CustomSelect)`
+  position: absolute;
+  top: 48%;
+  left: 84%;
+  margin-top: 5px;
+`;
+
+// Define custom styles
+const customStyles = {
+  control: (provided) => ({
+    ...provided,
+    backgroundColor: "#6937f2",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    padding: "2px 20px",
+    marginLeft: "5px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    fontSize: "1.5rem",
+    fontWeight: "300",
+  }),
+  indicatorSeparator: () => {},
+  dropdownIndicator: (defaultStyles) => ({
+    ...defaultStyles,
+    "& svg": { display: "none" },
+  }),
+  option: (provided, {isFocused}) => ({
+    ...provided,
+    backgroundColor: isFocused ? "#F1EBFF" : "white",
+    fontSize: "1.25rem",
+    fontWeight: "500",
+    color: isFocused ? "#6631F7" : "#888888",
+    margin: "0"
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: "white",
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: "white",
+  }),
+};
+
+const exportOptions = [
+  { value: "Normal", label: "Normal" },
+  { value: "PDF", label: "PDF" },
+  { value: "XLS", label: "XLS" },
+  { value: "CSV", label: "CSV" },
+  { value: "PPT Landscape", label: "PPT Landscape" },
+  { value: "PPT Portrait", label: "PPT Portrait" },
+];
+
 const ResultsCard = () => {
   const [activeTab, setActiveTab] = useState("topResults");
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedLayout, setSelectedLayout] = useState("Normal");
+  const [selectedExport, setSelectedExport] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("");
 
   const handleSelectChange = (event) => {
@@ -119,6 +177,10 @@ const ResultsCard = () => {
 
   const handleLayoutChange = (event) => {
     setSelectedLayout(event.target.value);
+  };
+
+  const handleExportChange = (event) => {
+    setSelectedExport(event.target.value);
   };
 
   const handleThemeChange = (event) => {
@@ -146,7 +208,7 @@ const ResultsCard = () => {
             </Tab>
           </TabsContainer>
         </Row>
-        
+
         {activeTab === "topResults" ? (
           <Row>
             <CustomSelect onChange={handleSelectChange} value={selectedOption}>
@@ -178,7 +240,14 @@ const ResultsCard = () => {
               <option value="grid">&nbsp;&nbsp;- Grid</option>
               <option value="treemap">&nbsp;&nbsp;- Tree Map</option>
             </CustomSelect>
-            <ExportButton>Export</ExportButton>
+            {/* <ExportButton onClick={handleExportButton}>Export</ExportButton> */}
+            <Select
+              options={exportOptions}
+              styles={customStyles}
+              placeholder="Export"
+              onChange={handleExportChange}
+              value={selectedExport}
+            />
           </Row>
         ) : (
           <Row>
