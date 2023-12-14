@@ -50,6 +50,7 @@ import MySearchModal from "../mySearchesModal/MySearchesModal.component";
 import { Outlet } from "react-router-dom";
 import TopThemes from "../top-themes/TopThemes";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
+import EditCompareKeywordModal from "../editCompareKeywordModal/EditCompareKeywordModal.component";
 
 const savedSearches = [
   {
@@ -218,6 +219,7 @@ const Dashboard = () => {
   const { data } = useContext(CompareKeywordContext);
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
   const [showMySeachesModal, setShowMySearchesModal] = useState(false);
+  const [showCompareKeywordEditModal, setShowCompareKeywordEditModal] = useState(false);
   const [saveSearches, setSaveSearches] = useState(savedSearches);
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -267,6 +269,9 @@ const Dashboard = () => {
     handleSaveSearchClose(); // Closes the modal
   }
 
+  const handleCompareKeywordEditClose = () => setShowCompareKeywordEditModal(false);
+  const handleCompareKeywordEditShow = () => setShowCompareKeywordEditModal(true);
+
   const handleSaveSearchClose = () => setShowSaveSearchModal(false);
   const handleSaveSearchShow = () => setShowSaveSearchModal(true);
 
@@ -290,6 +295,8 @@ const Dashboard = () => {
   const handleDeleteSearch = (id) => {
     setSaveSearches(saveSearches.filter((search) => search.id !== id));
   };
+
+
 
   return (
     <div style={{ backgroundColor: "#6937F2" }}>
@@ -315,7 +322,8 @@ const Dashboard = () => {
                 <HashtagText>{item.name}
                 </HashtagText>
                 <IconContainer className="icon-container">
-                  <EditIcon/>
+                  <EditIcon onClick={handleCompareKeywordEditShow}/>
+                  <EditCompareKeywordModal show={showCompareKeywordEditModal} handleClose={handleCompareKeywordEditClose} currentHashtag={item.name}/>
                   <DeleteIcon/>
                 </IconContainer>
               </HashtagContainer>
