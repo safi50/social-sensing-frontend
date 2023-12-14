@@ -96,8 +96,18 @@ export const HashtagContainer = styled.div`
   display: flex;
   align-items: center;
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
-  max-width: 170px;
+  max-width: 270px;
+  border: 1px solid transparent; // Add a transparent border
+
+  &:hover {
+    border-color: #6937f2; // Change border color on hover
+
+    .icon-container {
+      display: flex; // Show the icon container on hover
+    }
+  }
 `;
 
 export const PurpleCircle = styled.img`
@@ -111,9 +121,14 @@ export const HashtagText = styled.span`
   padding-left: 10px;
   margin-right: 10px;
 
-  @media ${media.desktop} {
-    margin-right: 300px;
-  }
+  // @media ${media.desktop} {
+  //   margin-right: 300px;
+  // }
+`;
+
+export const IconContainer = styled.div`
+  display: none; // Initially hide the icon container
+  align-items: center;
 `;
 
 export const CompareContainer = styled.div`
@@ -349,3 +364,19 @@ export const ChartsContainer = styled.div`
   gap: 20px;
   justify-content: space-between;
 `;
+
+
+export const EditIcon = styled.img.attrs({
+  src: "/edit.svg"
+})`
+margin-right: 5px;
+width: 15px;
+height: 15px;
+`
+
+export const DeleteIcon = styled.img.attrs({
+  src: "/trash-2.svg"
+})`
+width: 15px;
+height: 15px;
+`

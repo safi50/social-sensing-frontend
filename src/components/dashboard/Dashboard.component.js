@@ -38,7 +38,10 @@ import {
   DateInputContainer,
   DateInput,
   CrossIcon,
-  CrossBtn,
+  CrossBtn, 
+  IconContainer,
+  EditIcon,
+  DeleteIcon
 } from "./Dashboard.styles";
 import Navbar from "../navbar/Navbar.component";
 
@@ -309,7 +312,12 @@ const Dashboard = () => {
             {data.map((item) => (
               <HashtagContainer>
                 <PurpleCircle src="/purple-circle-svgrepo-com.svg" />
-                <HashtagText>{item.name}</HashtagText>
+                <HashtagText>{item.name}
+                </HashtagText>
+                <IconContainer className="icon-container">
+                  <EditIcon/>
+                  <DeleteIcon/>
+                </IconContainer>
               </HashtagContainer>
             ))}
 
