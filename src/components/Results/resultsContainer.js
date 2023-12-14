@@ -169,7 +169,7 @@ const ResultsCard = () => {
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedLayout, setSelectedLayout] = useState("Normal");
   const [selectedExport, setSelectedExport] = useState("");
-  const [selectedTheme, setSelectedTheme] = useState("");
+  const [selectedTheme, setSelectedTheme] = useState("Bio");
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
@@ -265,10 +265,16 @@ const ResultsCard = () => {
 
       {activeTab === "topResults" && (
         <div>
-          {selectedLayout === "Normal" && <ResultCard />}
-          {selectedLayout === "Compact" && <ResultCardCompact />}
+         {[...Array(3)].map((_, index) => (
+                <div key={index}>
+                    {selectedLayout === "Normal" && <ResultCard />}
+                    {selectedLayout === "Compact" && <ResultCardCompact />}
+                </div>
+            ))}
           {selectedLayout === "Stories" && (
             <CardRow>
+              <ResultCardStory />
+              <ResultCardStory />
               <ResultCardStory />
               <ResultCardStory />
               <ResultCardStory />
@@ -279,6 +285,15 @@ const ResultsCard = () => {
           )}
           {selectedLayout === "grid" && (
             <CardRow>
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
+              <ResultCardGrid />
               <ResultCardGrid />
               <ResultCardGrid />
               <ResultCardGrid />
