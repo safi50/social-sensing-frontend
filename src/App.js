@@ -27,6 +27,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { SentimentResults } from "./components/sentiment-results/SentimentResults";
 import { CompareKeyword } from "./components/compare-keywords/CompareKeyword";
 import { CompareKeywordProvider } from "./contexts/CompareKeyword.context";
+import { Confirm } from "./components/confirm/confirm";
+import { NewPassword } from "./components/confirm/resetPassword";
 
 const Content = styled.div`
   display: flex;
@@ -60,6 +62,8 @@ const App = () => {
             <Route path="/onboarding" element={<OnboardingCard />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route path="/confirm-email" element={<Confirm />} />
+            <Route path="/reset-password" element={<NewPassword />} />
             {/* extra screens of onboarding  */}
             <Route path="/verifyemail" element={<VerifyEmail />} />
             <Route path="/emailverified" element={<EmailVerified />} />
