@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   NavbarContainer,
   Logo,
@@ -11,8 +11,22 @@ import {
   NameIcon,
   DropIcon,
 } from "./Navbar.styles";
+import Filters from "../filters/Filters.component";
 
 const Navbar = () => {
+  const [showFilters, setShowFilters] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+
+  const toggleFilters = () => {
+    setShowFilters(prevShowFilters => !prevShowFilters);
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(prevShowNotifications => !prevShowNotifications);
+  };
+
+
   return (
     <NavbarContainer>
       <Logo
@@ -33,10 +47,11 @@ const Navbar = () => {
             <BellIconBadge>1</BellIconBadge>
           </BellIconContainer>
         </NavLinkContainer>
-        <NavLinkContainer>
+        <NavLinkContainer onClick={toggleFilters}>
           <NameIcon>IH</NameIcon>
           <DropIcon src="/dropdown.svg" />
         </NavLinkContainer>
+        {showFilters && <Filters />}
       </NavLinks>
     </NavbarContainer>
   );
