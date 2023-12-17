@@ -12,6 +12,7 @@ import {
   DropIcon,
 } from "./Navbar.styles";
 import Filters from "../filters/Filters.component";
+import Notifications from "../notifications/Notifications.component";
 
 const Navbar = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -19,10 +20,12 @@ const Navbar = () => {
 
 
   const toggleFilters = () => {
+    setShowNotifications(false)
     setShowFilters(prevShowFilters => !prevShowFilters);
   };
 
   const toggleNotifications = () => {
+    setShowFilters(false)
     setShowNotifications(prevShowNotifications => !prevShowNotifications);
   };
 
@@ -42,7 +45,7 @@ const Navbar = () => {
         </NavLinkContainer>
         <NavLinkContainer>
           ENG
-          <BellIconContainer>
+          <BellIconContainer onClick={toggleNotifications}>
             <BellIcon src="/notification-bell.svg" />
             <BellIconBadge>1</BellIconBadge>
           </BellIconContainer>
@@ -52,6 +55,7 @@ const Navbar = () => {
           <DropIcon src="/dropdown.svg" />
         </NavLinkContainer>
         {showFilters && <Filters />}
+        {showNotifications && <Notifications />}
       </NavLinks>
     </NavbarContainer>
   );
