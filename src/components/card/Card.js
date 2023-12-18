@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+const HoverImage = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 1rem;
+  display: none; // Initially hidden
+`;
 
-// Styled-component for the card container
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -15,11 +20,14 @@ const CardContainer = styled.div`
   transition: 0.3s;
   &:hover {
     box-shadow: 0 0.8rem 1.6rem 0 rgba(0, 0, 0, 0.2);
+    ${HoverImage} {
+      display: block;
+    }
   }
 `;
 const TopRow = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
 `;
 const BottomRow = styled.div`
   display: flex;
@@ -48,9 +56,17 @@ const Card = ({ image, title, infoText, percentage }) => {
   return (
     <CardContainer>
       <TopRow>
-        <Img src={image} />
-        <Title>{title}</Title>
-        <Img src="/danger-circle.svg" />
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Img src={image} />
+          <Title>{title}</Title>
+          <Img src="/danger-circle.svg" />
+        </div>
+
+        <div style={{ display: "flex", justifySelf: "flex-end" }}>
+          <HoverImage src="maximize-2.svg" />
+          <HoverImage src="log-out.svg" />
+          <HoverImage src="more-vertical.svg" />
+        </div>
       </TopRow>
       <BottomRow>
         <InfoText>{infoText}</InfoText>
