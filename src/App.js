@@ -29,6 +29,7 @@ import { CompareKeyword } from "./components/compare-keywords/CompareKeyword";
 import { CompareKeywordProvider } from "./contexts/CompareKeyword.context";
 import { Confirm } from "./components/confirm/confirm";
 import { NewPassword } from "./components/confirm/resetPassword";
+import { Error } from "./components/error-404/Error";
 
 const Content = styled.div`
   display: flex;
@@ -64,6 +65,7 @@ const App = () => {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/confirm-email" element={<Confirm />} />
             <Route path="/reset-password" element={<NewPassword />} />
+            <Route path="/404" element={<Error />} />
             {/* extra screens of onboarding  */}
             <Route path="/verifyemail" element={<VerifyEmail />} />
             <Route path="/emailverified" element={<EmailVerified />} />
