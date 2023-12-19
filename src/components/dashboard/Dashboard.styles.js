@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { StyledNumberBox } from "../worldwideDropdown/worldwideDropdown.styles";
+import { ApplyBtn } from "../filters/Filters.styles";
 
 const sizes = {
   desktop: "992px",
@@ -379,4 +380,48 @@ export const DeleteIcon = styled.img.attrs({
 })`
 width: 15px;
 height: 15px;
+`
+
+export const FilterCheckbox = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  label {
+    margin-left: 5px;
+  }
+`;
+
+export const CheckBoxLabel = styled.label`
+  font-size: 12px
+`
+
+export const FilterItemContainer = styled.div`
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+`;
+
+export const FilterItemDropdown = styled.div`
+position: absolute;
+  top: 100%; // Position the dropdown right below the filter item
+  left: 0;
+  z-index: 10; // Ensure it's above other items
+  background: white; // Or any other background
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); // Shadow as border
+  border-radius: 5px;
+  width: 100%;
+  padding: 10px 5px;
+`
+
+export const ApplyBtnMedium = styled(DownloadButton)`
+width: 50%;
+height: 30px;
+maxWidth: 200px
+`
+
+export const SentimentFilterFooterContainer = styled.div`
+display: flex;
+padding-top: 10px;
+justify-content: right;
 `

@@ -41,16 +41,22 @@ import {
   CrossBtn, 
   IconContainer,
   EditIcon,
-  DeleteIcon
+  DeleteIcon,
+  FilterCheckbox,
+  CheckBoxLabel,
+  FilterItemContainer,
+  FilterItemDropdown,
+  ApplyBtnMedium,
+  SentimentFilterFooterContainer
 } from "./Dashboard.styles";
 import Navbar from "../navbar/Navbar.component";
-
 import SaveSearchModal from "../saveSearchModal/SaveSearchModal.component";
 import MySearchModal from "../mySearchesModal/MySearchesModal.component";
 import { Outlet } from "react-router-dom";
 import TopThemes from "../top-themes/TopThemes";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 import EditCompareKeywordModal from "../editCompareKeywordModal/EditCompareKeywordModal.component";
+import zIndex from "@mui/material/styles/zIndex";
 
 const savedSearches = [
   {
@@ -215,11 +221,35 @@ const generateMockData = (numberOfPosts) => {
   return mockData;
 };
 
+
+
+
+
 const Dashboard = () => {
+
+  const FilterApplicationFooter = ({filterType})=>{
+    let togglefnc = null
+    if (filterType == 'sentiment') togglefnc = toggleSentimentCheckboxes
+    else if (filterType == 'language') togglefnc = toggleLanguageCheckboxes
+    return(
+      <SentimentFilterFooterContainer>
+        <CrossBtn onClick={togglefnc}>
+          <CrossIcon src="/cross-svgrepo-com.svg" />
+        </CrossBtn>
+        <ApplyBtnMedium>Apply</ApplyBtnMedium>
+      </SentimentFilterFooterContainer>
+    )
+  }
+
+
+
   const { data } = useContext(CompareKeywordContext);
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
   const [showMySeachesModal, setShowMySearchesModal] = useState(false);
   const [showCompareKeywordEditModal, setShowCompareKeywordEditModal] = useState(false);
+  const [showSentimentCheckboxes, setShowSentimentCheckboxes] = useState(false);
+  const [showLanguageCheckboxes, setShowLanguageCheckboxes] = useState(false);
+
   const [saveSearches, setSaveSearches] = useState(savedSearches);
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -277,6 +307,14 @@ const Dashboard = () => {
 
   const handleMySearchesClose = () => setShowMySearchesModal(false);
   const handleMySearchesShow = () => setShowMySearchesModal(true);
+
+  const toggleSentimentCheckboxes = () => {
+    setShowSentimentCheckboxes(!showSentimentCheckboxes);
+  };
+
+  const toggleLanguageCheckboxes = () => {
+    setShowLanguageCheckboxes(!showLanguageCheckboxes);
+  };
 
   const handleEditSearch = (id, name) => {
     setSaveSearches(
@@ -362,16 +400,54 @@ const Dashboard = () => {
           <FiltersContainer>
             <SelectionHeading>Filters</SelectionHeading>
             <FilterItemsRow>
-              <FilterItem>
+              <FilterItemContainer>
+                <FilterItem onClick={toggleSentimentCheckboxes}>
                 Sentiments <CountBox>2</CountBox>
               </FilterItem>
+              {showSentimentCheckboxes && <FilterItemDropdown>
+              <FilterCheckbox>
+              <input type="checkbox" id="positive"/>
+              <CheckBoxLabel htmlFor="positive">Positive</CheckBoxLabel>
+              </FilterCheckbox>
+              <FilterCheckbox>
+              <input type="checkbox" id="negative"/>
+              <CheckBoxLabel htmlFor="negative">Negative</CheckBoxLabel>
+              </FilterCheckbox>
+              <FilterCheckbox>
+              <input type="checkbox" id="neutral"/>
+              <CheckBoxLabel htmlFor="neutral">Neutral</CheckBoxLabel>
+              </FilterCheckbox>
+              <FilterCheckbox>
+              <input type="checkbox" id="important"/>
+              <CheckBoxLabel htmlFor="important">Important</CheckBoxLabel>
+              </FilterCheckbox>
+              <FilterApplicationFooter filterType={"sentiment"}/>
+              </FilterItemDropdown>}
+              </FilterItemContainer>
+              
 
               {/* <FilterItem>
                 Media type <CountBox>2</CountBox>
               </FilterItem> */}
-              <FilterItem>
+
+              <FilterItemContainer>
+              <FilterItem onClick={toggleLanguageCheckboxes}>
                 Language <CountBox>3</CountBox>
               </FilterItem>
+              {showLanguageCheckboxes && <FilterItemDropdown>
+              <FilterCheckbox>
+              <input type="checkbox" id="urdu"/>
+              <CheckBoxLabel htmlFor="urdu">Urdu</CheckBoxLabel>
+              </FilterCheckbox>
+              <FilterCheckbox>
+              <input type="checkbox" id="english"/>
+              <CheckBoxLabel htmlFor="english">English</CheckBoxLabel>
+              </FilterCheckbox>
+              <FilterApplicationFooter filterType={"language"}/>
+              </FilterItemDropdown>}
+              </FilterItemContainer>
+
+
               <FilterItem>
                 Pakistan <CountBox>1</CountBox>
               </FilterItem>
