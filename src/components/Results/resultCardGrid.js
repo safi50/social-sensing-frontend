@@ -85,9 +85,6 @@ const ImageSection = styled.div`
   height: 150px;
 `;
 
-
-
-
 const data = {
   imageUrl: "https://picsum.photos/300/150",
   mainText:
