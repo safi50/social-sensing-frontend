@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Card from "../card/Card";
 import ChartComponent from "../chart/Chart";
 import {
@@ -6,7 +7,41 @@ import {
   ResultsContainer,
 } from "../dashboard/Dashboard.styles";
 import SentimentsCard from "../sentiments-card/SentimentsCard";
+import Papa from "papaparse";
+
 export const SentimentResults = () => {
+  const [sentimentResults, setSentimentResults] = useState();
+  const [positiveResults, setPositiveResults] = useState();
+  const [negativeResults, setNegativeResults] = useState();
+
+  useEffect(() => {
+    const csvFilePath = "./sentiment_results.csv";
+
+    Papa.parse(csvFilePath, {
+      header: true,
+      download: true,
+      complete: (result) => {
+        // console.log('CSV Data:', result.data);
+        setSentimentResults(result.data);
+        // console.log(sentimentResults);
+      },
+      error: (error) => {
+        console.error("Error reading CSV file:", error.message);
+      },
+    });
+    if (sentimentResults) {
+      const positive = sentimentResults.find(
+        (item) => item.Label === "positive"
+      );
+      setPositiveResults(positive.Score)
+  
+      const negative = sentimentResults.find(
+        (item) => item.Label === "negative"
+      );
+      setNegativeResults(negative?.Score)
+    }
+  }, [sentimentResults]);
+
   const data1 = {
     labels: [
       "Jan",
@@ -40,26 +75,17 @@ export const SentimentResults = () => {
   };
   const data2 = {
     labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
     ],
     datasets: [
       {
         label: "Positive",
-        data: [
-          15000, 10000, 25000, 20000, 30000, 20000, 35000, 25000, 40000, 30000,
-          45000, 35000,
-        ],
+        data: [0, positiveResults/8, positiveResults/4, positiveResults/2, positiveResults],
         fill: false,
         borderColor: "#4FA531",
         tension: 0.1,
@@ -67,13 +93,9 @@ export const SentimentResults = () => {
         pointBackgroundColor: "#4FA531",
         pointBorderColor: "#4FA531",
       },
-
       {
         label: "Negative",
-        data: [
-          -15000, -10000, -25000, -20000, -30000, -20000, -35000, -25000,
-          -40000, -30000, -45000, -35000,
-        ],
+        data: [0, negativeResults/8, negativeResults/4, negativeResults/2, negativeResults],
         fill: false,
         borderColor: "#E60000",
         tension: 0.1,
@@ -83,6 +105,7 @@ export const SentimentResults = () => {
       },
     ],
   };
+
   return (
     <ResultsContainer>
       <CardsContainer>
