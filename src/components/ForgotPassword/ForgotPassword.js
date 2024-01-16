@@ -3,6 +3,7 @@ import OnboardingCard from "../onBoardingCard/onBoardingCard.component";
 import CustomButton from "../customButton/customButtom.component";
 import ForgotPasswordIcon from "../../assets/forgot-password.svg";
 import styles from "./forgotpassword.module.css";
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => (
   <OnboardingCard>
@@ -18,6 +19,7 @@ const ForgotPasswordContent = () => {
   });
   const [formErrors, setFormErrors] = useState({});
 
+  const navigate = useNavigate();
   // Validating Fields of Sign In Form
   const ValidateForm = (name, value) => {
     let errors = { ...formErrors };
@@ -73,10 +75,10 @@ const ForgotPasswordContent = () => {
         </div>
       </div>
 
-      <CustomButton className="customButton" text="Reset Password" />
+      <CustomButton className="customButton" text="Reset Password" onClick={() => {navigate('/reset')}}/>
       <div className={styles.bottomText}>
         Back to
-        <span className={styles.textButton}>Sign in</span>
+        <span className={styles.textButton} onClick={() => {navigate('/signin')}}>Sign in</span>
       </div>
     </>
   );

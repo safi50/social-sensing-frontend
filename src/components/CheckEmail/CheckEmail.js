@@ -3,6 +3,7 @@ import OnboardingCard from "../onBoardingCard/onBoardingCard.component";
 import styles from "./checkemail.module.css";
 import CustomButton from "../customButton/customButtom.component";
 import EmailIcon from "../../assets/email-logo.svg";
+import { useNavigate } from 'react-router-dom';
 
 const CheckEmail = () => (
   <OnboardingCard>
@@ -12,6 +13,7 @@ const CheckEmail = () => (
 export default CheckEmail;
 
 const CheckEmailContent = () => {
+  const navigate = useNavigate();
   return (
     <>
       <img src={EmailIcon} className={styles.email_logo} alt="logo for email" />
@@ -22,7 +24,7 @@ const CheckEmailContent = () => {
         <span className={styles.textButton}>john@gmail.com</span> 
       </p>
       <div className={styles.btn_div}>
-        <CustomButton className="customButton" text="Open email" />
+        <CustomButton className="customButton" text="Open email" onClick={()=>{navigate('/emailverified')}}/>
       </div>
       <p className={styles.plaintext}>
         Didn't receive the email?
@@ -30,7 +32,7 @@ const CheckEmailContent = () => {
       </p>
       <div className={styles.bottomText}>
         Back to
-        <span className={styles.textButton}>Sign in</span>
+        <span className={styles.textButton} onClick={()=>{navigate('/signin')}}>Sign in</span>
       </div>
     </>
   );

@@ -57,8 +57,9 @@ import TopThemes from "../top-themes/TopThemes";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 import EditCompareKeywordModal from "../editCompareKeywordModal/EditCompareKeywordModal.component";
 import zIndex from "@mui/material/styles/zIndex";
+import { useNavigate } from 'react-router-dom';
 
-const savedSearches = [
+export const savedSearches = [
   {
     id: "0",
     name: "car show",
@@ -259,6 +260,8 @@ const Dashboard = () => {
     date: "",
   });
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const mockPosts = generateMockData(50); // Generate 50 mock posts
     setPosts(mockPosts);
@@ -367,7 +370,7 @@ const Dashboard = () => {
               </HashtagContainer>
             ))}
 
-            <CompareContainer>
+            <CompareContainer onClick={()=>{navigate('compare-keyword')}}>
               <PurplePlus src="/plus-large-svgrepo-com.svg" />
               <CompareKeywordText>Compare keyword</CompareKeywordText>
             </CompareContainer>

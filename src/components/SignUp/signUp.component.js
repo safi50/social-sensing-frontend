@@ -7,6 +7,7 @@ import TickIcon from "../../assets/tick.svg";
 import CrossIcon from "../../assets/cross.svg";
 import HideIcon from "../../assets/hidePassword.svg";
 import ViewIcon from "../../assets/showPassword.svg";
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => (
   <OnboardingCard>
@@ -37,6 +38,7 @@ const SignUpContent = () => {
     hasSpecialChar: false,
   });
   const [iscapslock, setIsCapsLock] = useState(false);
+  const navigate = useNavigate();
 
   // Validating Fields of Sign Up Form
   const validateForm = (name, value) => {
@@ -267,10 +269,10 @@ const SignUpContent = () => {
           )}
         </div>
       </div>
-      <CustomButton text="Sign Up" />
+      <CustomButton text="Sign Up" onClick={() => {navigate('/dashboard')}}/>
       <div className="bottomText">
         Already have an account?
-        <span className="textButton">Sign In</span>
+        <span className="textButton" onClick={() => {navigate('/signin')}}>Sign In</span>
       </div>
     </>
   );

@@ -3,8 +3,10 @@ import styles from "./resetpassword.module.css";
 import CustomButton from "../customButton/customButtom.component";
 import resetpasswordlogo from "../../assets/reset-password.svg";
 import waleeLogo from "../../assets/walee-logo.png";
+import { useNavigate } from 'react-router-dom';
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className={styles.resetpass_div}>
@@ -31,7 +33,7 @@ const ResetPassword = () => {
         </p>
         <div style={{margin: "25px 25px"}} className={styles.bottom_container}></div>
         <div style={{textAlign: "center"}} >
-        <CustomButton className="customButton" text="Sign in" />
+        <CustomButton className="customButton" text="Sign in" onClick={()=>{navigate('/signin')}}/>
         </div>
       </div>
     </>

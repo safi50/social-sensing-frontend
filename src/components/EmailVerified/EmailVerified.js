@@ -3,8 +3,10 @@ import styles from "./emailverified.module.css";
 import CustomButton from "../customButton/customButtom.component";
 import emailverifiedlogo from "../../assets/email-verified.svg";
 import waleeLogo from "../../assets/walee-logo.png";
+import { useNavigate } from 'react-router-dom';
 
 const EmailVerified = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className={styles.verified_div}>
@@ -29,7 +31,7 @@ const EmailVerified = () => {
         </p>
         <div style={{margin: "25px 25px"}} className={styles.bottom_container}></div>
         <div style={{textAlign: "center"}} >
-        <CustomButton className="customButton" text="Continue" />
+        <CustomButton className="customButton" text="Continue" onClick={()=>{navigate('/dashboard')}}/>
         </div>
       </div>
     </>

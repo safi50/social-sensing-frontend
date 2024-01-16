@@ -4,6 +4,7 @@ import "./signIn.css";
 import CustomButton from "../customButton/customButtom.component";
 import HideIcon from "../../assets/hidePassword.svg";
 import ViewIcon from "../../assets/showPassword.svg";
+import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => (
   <OnboardingCard>
@@ -20,6 +21,8 @@ const SignInContent = () => {
   });
   const [formErrors, setFormErrors] = useState({});
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const navigate = useNavigate();
 
   // Validating Fields of Sign In Form
   const ValidateForm = (name, value) => {
@@ -114,14 +117,14 @@ const SignInContent = () => {
             Remember me
           </label>
         </div>
-        <a href="/" className="forgot-password">
+        <a href="/forgotpassword" className="forgot-password">
           Forgot Password?
         </a>
       </div>
-      <CustomButton className="customButton" text="Sign In" />
+      <CustomButton className="customButton" text="Sign In" onClick={() => {navigate('/dashboard')}}/>
       <div className="bottomText">
         Need a new account?
-        <span className="textButton">Sign Up</span>
+        <span className="textButton" onClick={()=>{navigate('/signup')}}>Sign Up</span>
       </div>
     </>
   );
