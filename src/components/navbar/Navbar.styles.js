@@ -75,3 +75,8 @@ export const DropIcon = styled.img`
   margin-left: 0.5rem;
   filter: invert(1);
 `;
+
+export const LogoutIcon = styled.img`
+  height: 2.5rem;
+  margin-left: 0.5rem;
+`

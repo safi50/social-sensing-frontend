@@ -10,14 +10,18 @@ import {
   BellIconBadge,
   NameIcon,
   DropIcon,
+  LogoutIcon,
 } from "./Navbar.styles";
 import Filters from "../filters/Filters.component";
 import Notifications from "../notifications/Notifications.component";
+import { useNavigate } from 'react-router-dom';
+import Tooltip from '@mui/material/Tooltip';
+
 
 const Navbar = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-
+  const navigate = useNavigate();
 
   const toggleFilters = () => {
     setShowNotifications(false)
@@ -45,17 +49,27 @@ const Navbar = () => {
         </NavLinkContainer>
         <NavLinkContainer>
           ENG
+          <Tooltip title={<span style={{ fontSize: '10px' }}>Notifications</span>}>
           <BellIconContainer onClick={toggleNotifications}>
             <BellIcon src="/notification-bell.svg" />
             <BellIconBadge>1</BellIconBadge>
           </BellIconContainer>
+          </Tooltip>
         </NavLinkContainer>
+        <Tooltip title={<span style={{ fontSize: '10px' }}>Filters</span>}>
         <NavLinkContainer onClick={toggleFilters}>
-          <NameIcon>IH</NameIcon>
-          <DropIcon src="/dropdown.svg" />
+            <NameIcon>IH</NameIcon>
+            <DropIcon src="/dropdown.svg" />         
         </NavLinkContainer>
+        </Tooltip>
         {showFilters && <Filters />}
         {showNotifications && <Notifications />}
+        <NavLinkContainer>
+          <Tooltip title={<span style={{ fontSize: '10px' }}>Log Out</span>}>
+            <LogoutIcon src="/logout-svgrepo-com.svg" onClick={() => {navigate('/signin')}}/>
+          </Tooltip>
+          
+        </NavLinkContainer>
       </NavLinks>
     </NavbarContainer>
   );
