@@ -47,7 +47,10 @@ import {
   FilterItemContainer,
   FilterItemDropdown,
   ApplyBtnMedium,
-  SentimentFilterFooterContainer
+  SentimentFilterFooterContainer,
+  BackIcon,
+  BackContainer,
+  BackText
 } from "./Dashboard.styles";
 import Navbar from "../navbar/Navbar.component";
 import SaveSearchModal from "../saveSearchModal/SaveSearchModal.component";
@@ -57,7 +60,7 @@ import TopThemes from "../top-themes/TopThemes";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 import EditCompareKeywordModal from "../editCompareKeywordModal/EditCompareKeywordModal.component";
 import zIndex from "@mui/material/styles/zIndex";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const savedSearches = [
   {
@@ -261,6 +264,7 @@ const Dashboard = () => {
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const mockPosts = generateMockData(50); // Generate 50 mock posts
@@ -342,8 +346,15 @@ const Dashboard = () => {
   return (
     <div style={{ backgroundColor: "#6937F2" }}>
       <Navbar />
+      
       <DashboardContainer>
+        <BackContainer>
+        <BackIcon src="/back-svgrepo-com.svg" onClick={() => {location.pathname == '/dashboard' ? navigate('/searchPage'): navigate('/dashboard')}}/>
+        <BackText onClick={() => {location.pathname == '/dashboard' ? navigate('/searchPage'): navigate('/dashboard')}}>{location.pathname == '/dashboard' ? "Search": "Dashboard"}</BackText>
+        </BackContainer>
+        
         <HeaderContainer>
+          
           <Header>Listening Analysis</Header>
           <ButtonsContainer>
             <RefreshButton>
