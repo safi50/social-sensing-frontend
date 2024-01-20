@@ -14,7 +14,7 @@ import {
 } from "./Navbar.styles";
 import Filters from "../filters/Filters.component";
 import Notifications from "../notifications/Notifications.component";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 
 
@@ -22,6 +22,7 @@ const Navbar = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const toggleFilters = () => {
     setShowNotifications(false)
@@ -41,6 +42,16 @@ const Navbar = () => {
         alt="Walee Logo"
       />
       <NavLinks>
+      <NavLinkContainer to="/dashboard" onClick={() => {navigate('/searchPage')}}>
+      <span style={{ opacity: location.pathname === '/searchPage' ? 1 : 0.5 }}>Home</span>
+
+        </NavLinkContainer>
+        <NavLinkContainer to="/dashboard" onClick={() => {navigate('/dashboard')}}>
+          <span style={{ opacity: location.pathname === '/dashboard' ? 1 : 0.5 }}>Listening Analysis</span>
+        </NavLinkContainer>
+        <NavLinkContainer to="/dashboard" onClick={() => {navigate('/topResults')}}>
+          <span style={{ opacity: location.pathname === '/topResults' ? 1 : 0.5 }}>Results</span>
+        </NavLinkContainer>
         <NavLinkContainer to="/">
           <PakLogo
             src="https://iopproduction.s3.eu-central-1.amazonaws.com/flags/pakistan.png"

@@ -348,10 +348,10 @@ const Dashboard = () => {
       <Navbar />
       
       <DashboardContainer>
-        <BackContainer>
+        {/* <BackContainer>
         <BackIcon src="/back-svgrepo-com.svg" onClick={() => {location.pathname == '/dashboard' ? navigate('/searchPage'): navigate('/dashboard')}}/>
         <BackText onClick={() => {location.pathname == '/dashboard' ? navigate('/searchPage'): navigate('/dashboard')}}>{location.pathname == '/dashboard' ? "Search": "Dashboard"}</BackText>
-        </BackContainer>
+        </BackContainer> */}
         
         <HeaderContainer>
           

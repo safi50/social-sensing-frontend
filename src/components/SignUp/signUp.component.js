@@ -269,7 +269,7 @@ const SignUpContent = () => {
           )}
         </div>
       </div>
-      <CustomButton text="Sign Up" onClick={() => {navigate('/dashboard')}}/>
+      <CustomButton text="Sign Up" onClick={() => {navigate('/searchPage')}}/>
       <div className="bottomText">
         Already have an account?
         <span className="textButton" onClick={() => {navigate('/signin')}}>Sign In</span>
