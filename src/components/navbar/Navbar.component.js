@@ -47,7 +47,7 @@ const Navbar = () => {
 
         </NavLinkContainer>
         <NavLinkContainer to="/dashboard" onClick={() => {navigate('/dashboard')}}>
-          <span style={{ opacity: location.pathname === '/dashboard' ? 1 : 0.5 }}>Listening Analysis</span>
+          <span style={{ opacity: location.pathname.includes('/dashboard') ? 1 : 0.5 }}>Listening Analysis</span>
         </NavLinkContainer>
         <NavLinkContainer to="/dashboard" onClick={() => {navigate('/topResults')}}>
           <span style={{ opacity: location.pathname === '/topResults' ? 1 : 0.5 }}>Results</span>
