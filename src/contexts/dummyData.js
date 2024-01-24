@@ -66,7 +66,11 @@ export function generateData({
         datasets: [
           {
             label: name,
-            data: randomData(0, timeRangeValues[timeRange].upper, 1),
+            data: randomData(
+              timeRangeValues[timeRange].lower,
+              timeRangeValues[timeRange].upper,
+              1
+            ),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -74,41 +78,51 @@ export function generateData({
         ],
       },
       resultsOverTime: {
-        labels: [
-          "00",
-          "01",
-          "02",
-          "03",
-          "04",
-          "04",
-          "05",
-          "06",
-          "07",
-          "08",
-          "09",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-        ],
+        labels:
+          timeRange === "1d"
+            ? [
+                "00",
+                "01",
+                "02",
+                "03",
+                "04",
+                "04",
+                "05",
+                "06",
+                "07",
+                "08",
+                "09",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+              ]
+            : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         datasets: [
           {
             label: name,
-            data: randomData(
-              timeRangeValues[timeRange].lower,
-              timeRangeValues[timeRange].upper,
-              24
-            ),
+            data:
+              timeRange === "1d"
+                ? randomData(
+                    timeRangeValues[timeRange].lower,
+                    timeRangeValues[timeRange].upper,
+                    24
+                  )
+                : randomData(
+                    timeRangeValues[timeRange].lower,
+                    timeRangeValues[timeRange].upper,
+                    7
+                  ),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -143,41 +157,51 @@ export function generateData({
         ],
       },
       netSentimentsOverTime: {
-        labels: [
-          "00",
-          "01",
-          "02",
-          "03",
-          "04",
-          "04",
-          "05",
-          "06",
-          "07",
-          "08",
-          "09",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-        ],
+        labels:
+          timeRange === "1d"
+            ? [
+                "00",
+                "01",
+                "02",
+                "03",
+                "04",
+                "04",
+                "05",
+                "06",
+                "07",
+                "08",
+                "09",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+              ]
+            : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         datasets: [
           {
-            label: "Positive",
-            data: randomData(
-              timeRangeValues[timeRange].lower,
-              timeRangeValues[timeRange].upper,
-              24
-            ),
+            label: name,
+            data:
+              timeRange === "1d"
+                ? randomData(
+                    timeRangeValues[timeRange].lower,
+                    timeRangeValues[timeRange].upper,
+                    24
+                  )
+                : randomData(
+                    timeRangeValues[timeRange].lower,
+                    timeRangeValues[timeRange].upper,
+                    7
+                  ),
             backgroundColor: "green",
             borderColor: "green",
             borderWidth: 1,
@@ -191,6 +215,17 @@ export function generateData({
             ),
             backgroundColor: "red",
             borderColor: "red",
+            borderWidth: 1,
+          },
+          {
+            label: "Neutral",
+            data: randomData(
+              timeRangeValues[timeRange].lower,
+              timeRangeValues[timeRange].upper,
+              24
+            ),
+            backgroundColor: "blue",
+            borderColor: "blue",
             borderWidth: 1,
           },
         ],
