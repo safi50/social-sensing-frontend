@@ -117,6 +117,23 @@ export const PurpleCircle = styled.img`
   object-fit: cover;
 `;
 
+export const BackIcon = styled.img`
+  height: 3rem;
+  width: 3rem;
+  object-fit: cover;
+`;
+
+export const BackContainer = styled.div`
+  display: flex;
+  align-content: center;
+  padding: 10px 10px 10px 25px
+`
+
+export const BackText = styled.span`
+  font-size: 20px;
+  color: #6937f2
+`
+
 export const HashtagText = styled.span`
   font-size: 14px;
   padding-left: 10px;

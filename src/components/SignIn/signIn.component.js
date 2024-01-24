@@ -121,7 +121,7 @@ const SignInContent = () => {
           Forgot Password?
         </a>
       </div>
-      <CustomButton className="customButton" text="Sign In" onClick={() => {navigate('/dashboard')}}/>
+      <CustomButton className="customButton" text="Sign In" onClick={() => {navigate('/searchPage')}}/>
       <div className="bottomText">
         Need a new account?
         <span className="textButton" onClick={()=>{navigate('/signup')}}>Sign Up</span>
