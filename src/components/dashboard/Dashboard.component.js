@@ -262,6 +262,14 @@ const Dashboard = () => {
     date: "",
   });
 
+  const handleSentimentChange = (sentiment, isChecked) => {
+    const newSentimentType = isChecked
+      ? [...contextFilters.sentimentType, sentiment] // Add sentiment if checked
+      : contextFilters.sentimentType.filter(type => type !== sentiment); // Remove sentiment if not checked
+  
+    setContextFilters({ ...contextFilters, sentimentType: newSentimentType });
+  };
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -426,16 +434,16 @@ const Dashboard = () => {
                 {showSentimentCheckboxes && (
                   <FilterItemDropdown>
                     <FilterCheckbox>
-                      <input type="checkbox" id="positive" />
-                      <CheckBoxLabel htmlFor="positive">Positive</CheckBoxLabel>
+                      <input type="checkbox" id="positive" defaultChecked={contextFilters.sentimentType.includes("positive")} onChange={(e) => handleSentimentChange("positive", e.target.checked)}/>
+                      <CheckBoxLabel htmlFor="positive" >Positive</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterCheckbox>
-                      <input type="checkbox" id="negative" />
-                      <CheckBoxLabel htmlFor="negative">Negative</CheckBoxLabel>
+                      <input type="checkbox" id="negative" defaultChecked={contextFilters.sentimentType.includes("negative")} onChange={(e) => handleSentimentChange("negative", e.target.checked)}/>
+                      <CheckBoxLabel htmlFor="negative" >Negative</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterCheckbox>
-                      <input type="checkbox" id="neutral" />
-                      <CheckBoxLabel htmlFor="neutral">Neutral</CheckBoxLabel>
+                      <input type="checkbox" id="neutral" defaultChecked={contextFilters.sentimentType.includes("neutral")} onChange={(e) => handleSentimentChange("neutral", e.target.checked)}/>
+                      <CheckBoxLabel htmlFor="neutral" >Neutral</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterCheckbox>
                       <input type="checkbox" id="important" />

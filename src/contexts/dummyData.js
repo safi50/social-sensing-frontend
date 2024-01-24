@@ -36,6 +36,24 @@ export function generateData({
     "rgba(153, 102, 255, 1)",
   ];
 
+  const sentimentConfig = {
+    positive: {
+      label: "Positive",
+      backgroundColor: "green",
+      borderColor: "green",
+    },
+    negative: {
+      label: "Negative",
+      backgroundColor: "red",
+      borderColor: "red",
+    },
+    neutral: {
+      label: "Neutral",
+      backgroundColor: "blue",
+      borderColor: "blue",
+    }
+  };
+
   let data = eventNames.map((name, index) => {
     return {
       name: name,
@@ -187,48 +205,57 @@ export function generateData({
                 "23",
               ]
             : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        datasets: [
-          {
-            label: name,
-            data:
-              timeRange === "1d"
-                ? randomData(
-                    timeRangeValues[timeRange].lower,
-                    timeRangeValues[timeRange].upper,
-                    24
-                  )
-                : randomData(
-                    timeRangeValues[timeRange].lower,
-                    timeRangeValues[timeRange].upper,
-                    7
-                  ),
-            backgroundColor: "green",
-            borderColor: "green",
-            borderWidth: 1,
-          },
-          {
-            label: "Negative",
-            data: randomData(
-              timeRangeValues[timeRange].lower,
-              timeRangeValues[timeRange].upper,
-              24
-            ),
-            backgroundColor: "red",
-            borderColor: "red",
-            borderWidth: 1,
-          },
-          {
-            label: "Neutral",
-            data: randomData(
-              timeRangeValues[timeRange].lower,
-              timeRangeValues[timeRange].upper,
-              24
-            ),
-            backgroundColor: "blue",
-            borderColor: "blue",
-            borderWidth: 1,
-          },
-        ],
+        // datasets: [
+        //   {
+        //     label: "Positive",
+        //     data:
+        //       timeRange === "1d"
+        //         ? randomData(
+        //             timeRangeValues[timeRange].lower,
+        //             timeRangeValues[timeRange].upper,
+        //             24
+        //           )
+        //         : randomData(
+        //             timeRangeValues[timeRange].lower,
+        //             timeRangeValues[timeRange].upper,
+        //             7
+        //           ),
+        //     backgroundColor: "green",
+        //     borderColor: "green",
+        //     borderWidth: 1,
+        //   },
+        //   {
+        //     label: "Negative",
+        //     data: randomData(
+        //       timeRangeValues[timeRange].lower,
+        //       timeRangeValues[timeRange].upper,
+        //       24
+        //     ),
+        //     backgroundColor: "red",
+        //     borderColor: "red",
+        //     borderWidth: 1,
+        //   },
+        //   {
+        //     label: "Neutral",
+        //     data: randomData(
+        //       timeRangeValues[timeRange].lower,
+        //       timeRangeValues[timeRange].upper,
+        //       24
+        //     ),
+        //     backgroundColor: "blue",
+        //     borderColor: "blue",
+        //     borderWidth: 1,
+        //   },
+        // ],
+        datasets: sentimentType.map(type => ({
+          ...sentimentConfig[type],
+          data: randomData(
+            timeRangeValues[timeRange].lower,
+            timeRangeValues[timeRange].upper,
+            timeRange === "1d" ? 24 : 7
+          ),
+          borderWidth: 1,
+        }))
       },
     };
   });
