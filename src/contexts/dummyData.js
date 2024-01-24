@@ -8,16 +8,18 @@ function randomData(min, max, count) {
   );
 }
 
-export function generateData() {
-  const eventNames = [
-    "#lahorecarshow",
-    "#sargodhacarshow",
-    "#karachicarshow",
-    "#faisalabadcarshow",
-    // "#islamabadcarshow",
-  ];
-  const infos = ["526.5K", "176.5K", "676.5K", "376.5K", "576.2K"];
-
+export function generateData({
+  eventNames,
+  timeRange,
+  date,
+  sentimentType,
+  language,
+}) {
+  const timeRangeValues = {
+    "1d": { upper: 300, lower: 0 },
+    "7d": { upper: 600, lower: 300 },
+    "1M": { upper: 1000, lower: 600 },
+  };
   const colors = [
     "rgba(255, 99, 132)", // Pink
     "rgba(54, 162, 235)", // Blue
@@ -37,14 +39,22 @@ export function generateData() {
   let data = eventNames.map((name, index) => {
     return {
       name: name,
-      infoText: infos[index],
+      infoText: randomData(
+        timeRangeValues[timeRange].lower,
+        timeRangeValues[timeRange].upper,
+        1
+      )[0],
       color: colors[index],
       totalEngagement: {
         labels: [name],
         datasets: [
           {
             label: name,
-            data: randomData(0, 1000, 1),
+            data: randomData(
+              timeRangeValues[timeRange].lower,
+              timeRangeValues[timeRange].upper,
+              1
+            ),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -56,7 +66,7 @@ export function generateData() {
         datasets: [
           {
             label: name,
-            data: randomData(0, 1000, 1),
+            data: randomData(0, timeRangeValues[timeRange].upper, 1),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -65,23 +75,40 @@ export function generateData() {
       },
       resultsOverTime: {
         labels: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
+          "00",
+          "01",
+          "02",
+          "03",
+          "04",
+          "04",
+          "05",
+          "06",
+          "07",
+          "08",
+          "09",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
         ],
         datasets: [
           {
             label: name,
-            data: randomData(0, 1000, 12),
+            data: randomData(
+              timeRangeValues[timeRange].lower,
+              timeRangeValues[timeRange].upper,
+              24
+            ),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -93,14 +120,22 @@ export function generateData() {
         datasets: [
           {
             label: "Positive",
-            data: randomData(0, 1000, 1),
+            data: randomData(
+              timeRangeValues[timeRange].lower,
+              timeRangeValues[timeRange].upper,
+              1
+            ),
             backgroundColor: "green",
             borderColor: "green",
             borderWidth: 1,
           },
           {
             label: "Negative",
-            data: randomData(0, 1000, 1),
+            data: randomData(
+              timeRangeValues[timeRange].lower,
+              timeRangeValues[timeRange].upper,
+              1
+            ),
             backgroundColor: "red",
             borderColor: "red",
             borderWidth: 1,
@@ -109,25 +144,53 @@ export function generateData() {
       },
       netSentimentsOverTime: {
         labels: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
+          "00",
+          "01",
+          "02",
+          "03",
+          "04",
+          "04",
+          "05",
+          "06",
+          "07",
+          "08",
+          "09",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
         ],
         datasets: [
           {
-            label: name,
-            data: randomData(0, 1000, 12),
-            backgroundColor: colors[index],
-            borderColor: borderColors[index],
+            label: "Positive",
+            data: randomData(
+              timeRangeValues[timeRange].lower,
+              timeRangeValues[timeRange].upper,
+              24
+            ),
+            backgroundColor: "green",
+            borderColor: "green",
+            borderWidth: 1,
+          },
+          {
+            label: "Negative",
+            data: randomData(
+              timeRangeValues[timeRange].lower,
+              timeRangeValues[timeRange].upper,
+              24
+            ),
+            backgroundColor: "red",
+            borderColor: "red",
             borderWidth: 1,
           },
         ],
