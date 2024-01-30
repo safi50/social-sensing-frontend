@@ -350,6 +350,47 @@ const Dashboard = () => {
     setSaveSearches(saveSearches.filter((search) => search.id !== id));
   };
 
+  const handleDeleteCompareSearch = (searchName) => {
+    if (contextFilters.eventNames.length <= 2){
+      setContextFilters({
+        ...contextFilters,
+        eventNames: contextFilters.eventNames.filter(item => item !== searchName)
+      });
+      // deleteDataByName(searchName)
+      navigate('/dashboard')
+    }
+    // deleteDataByName(searchName)
+    setContextFilters({
+      ...contextFilters,
+      eventNames: contextFilters.eventNames.filter(item => item !== searchName)
+    });
+  }
+
+  const [compareEditMode, setCompareEditMode] = useState(false);
+  const [compareInputValue, setCompareInputValue] = useState('');
+
+  // Handle submission (Enter key)
+  const handleCompareInputSubmit = (e) => {
+    let zeroSearches = false
+    if (contextFilters.eventNames.length == 0) zeroSearches = true
+    if (e.key === 'Enter') {
+      console.log("Event names:", typeof contextFilters.eventNames)
+      // Call your handler function here with inputValue
+      console.log("Submitted value:", compareInputValue);
+      // You can also toggle editMode off if needed
+      setCompareEditMode(false);
+      setContextFilters({
+        ...contextFilters,
+        eventNames: [...contextFilters.eventNames, compareInputValue]
+      });
+      
+    if (!zeroSearches){
+      navigate('compare-keyword')
+    }
+      
+    }
+  };
+
   return (
     <div style={{ backgroundColor: "#6937F2" }}>
       <Navbar />
@@ -385,19 +426,33 @@ const Dashboard = () => {
                     handleClose={handleCompareKeywordEditClose}
                     currentHashtag={item.name}
                   />
-                  <DeleteIcon onClick={() => deleteDataByName(item.name)} />
+                  <DeleteIcon onClick={() => handleDeleteCompareSearch(item.name)} />
                 </IconContainer>
               </HashtagContainer>
             ))}
 
-            <CompareContainer
-              onClick={() => {
-                navigate("compare-keyword");
-              }}
-            >
-              <PurplePlus src="/plus-large-svgrepo-com.svg" />
-              <CompareKeywordText>Compare keyword</CompareKeywordText>
-            </CompareContainer>
+            <div>
+              {compareEditMode ? (
+                <input
+                  type="text"
+                  // value={inputValue}
+                  onBlur={() => setCompareEditMode(false)}
+                  onChange={(e) => {setCompareInputValue(e.target.value)}}
+                  onKeyDown={handleCompareInputSubmit}
+                  autoFocus
+                />
+              ) : (
+                <CompareContainer
+                  onClick={() => {
+                    setCompareEditMode(true)
+                  }}
+                >
+                  <PurplePlus src="/plus-large-svgrepo-com.svg" />
+                  <CompareKeywordText>Compare keyword</CompareKeywordText>
+                </CompareContainer>
+              )}
+            </div>
+
           </LeftContainer>
           <RightContainer>
             <SaveSearchContainer onClick={handleSaveSearchShow}>
