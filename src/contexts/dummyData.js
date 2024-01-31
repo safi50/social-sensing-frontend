@@ -20,6 +20,12 @@ export function generateData({
     "7d": { upper: 600, lower: 300 },
     "1M": { upper: 1000, lower: 600 },
   };
+
+  const languageRangeValues = {
+    en: { upper: 500, lower: 0 }, // Example range for English
+    ur: { upper: 1000, lower: 500 }, // Example range for Urdu
+  };
+
   const colors = [
     "rgba(255, 99, 132)", // Pink
     "rgba(54, 162, 235)", // Blue
@@ -51,28 +57,39 @@ export function generateData({
       label: "Neutral",
       backgroundColor: "blue",
       borderColor: "blue",
-    }
+    },
   };
 
   let data = eventNames.map((name, index) => {
+    const languageUpper = language.reduce(
+      (acc, lang) => acc + languageRangeValues[lang].upper,
+      0
+    );
+    const languageLower = language.reduce(
+      (acc, lang) => acc + languageRangeValues[lang].lower,
+      0
+    );
+
+    // Determine the final upper and lower limits combining time range and language range
+    const finalUpper = Math.min(
+      timeRangeValues[timeRange].upper,
+      languageUpper
+    );
+    const finalLower = Math.max(
+      timeRangeValues[timeRange].lower,
+      languageLower
+    );
+
     return {
       name: name,
-      infoText: randomData(
-        timeRangeValues[timeRange].lower,
-        timeRangeValues[timeRange].upper,
-        1
-      )[0],
+      infoText: randomData(finalLower, finalUpper, 1)[0],
       color: colors[index],
       totalEngagement: {
         labels: [name],
         datasets: [
           {
             label: name,
-            data: randomData(
-              timeRangeValues[timeRange].lower,
-              timeRangeValues[timeRange].upper,
-              1
-            ),
+            data: randomData(finalLower, finalUpper, 1),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -84,11 +101,7 @@ export function generateData({
         datasets: [
           {
             label: name,
-            data: randomData(
-              timeRangeValues[timeRange].lower,
-              timeRangeValues[timeRange].upper,
-              1
-            ),
+            data: randomData(finalLower, finalUpper, 1),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -131,16 +144,8 @@ export function generateData({
             label: name,
             data:
               timeRange === "1d"
-                ? randomData(
-                    timeRangeValues[timeRange].lower,
-                    timeRangeValues[timeRange].upper,
-                    24
-                  )
-                : randomData(
-                    timeRangeValues[timeRange].lower,
-                    timeRangeValues[timeRange].upper,
-                    7
-                  ),
+                ? randomData(finalLower, finalUpper, 24)
+                : randomData(finalLower, finalUpper, 7),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -152,22 +157,14 @@ export function generateData({
         datasets: [
           {
             label: "Positive",
-            data: randomData(
-              timeRangeValues[timeRange].lower,
-              timeRangeValues[timeRange].upper,
-              1
-            ),
+            data: randomData(finalLower, finalUpper, 1),
             backgroundColor: "green",
             borderColor: "green",
             borderWidth: 1,
           },
           {
             label: "Negative",
-            data: randomData(
-              timeRangeValues[timeRange].lower,
-              timeRangeValues[timeRange].upper,
-              1
-            ),
+            data: randomData(finalLower, finalUpper, 1),
             backgroundColor: "red",
             borderColor: "red",
             borderWidth: 1,
@@ -211,13 +208,13 @@ export function generateData({
         //     data:
         //       timeRange === "1d"
         //         ? randomData(
-        //             timeRangeValues[timeRange].lower,
-        //             timeRangeValues[timeRange].upper,
+        //             finalLower,
+        //             finalUpper,
         //             24
         //           )
         //         : randomData(
-        //             timeRangeValues[timeRange].lower,
-        //             timeRangeValues[timeRange].upper,
+        //             finalLower,
+        //             finalUpper,
         //             7
         //           ),
         //     backgroundColor: "green",
@@ -227,8 +224,8 @@ export function generateData({
         //   {
         //     label: "Negative",
         //     data: randomData(
-        //       timeRangeValues[timeRange].lower,
-        //       timeRangeValues[timeRange].upper,
+        //       finalLower,
+        //       finalUpper,
         //       24
         //     ),
         //     backgroundColor: "red",
@@ -238,8 +235,8 @@ export function generateData({
         //   {
         //     label: "Neutral",
         //     data: randomData(
-        //       timeRangeValues[timeRange].lower,
-        //       timeRangeValues[timeRange].upper,
+        //       finalLower,
+        //       finalUpper,
         //       24
         //     ),
         //     backgroundColor: "blue",
@@ -247,15 +244,11 @@ export function generateData({
         //     borderWidth: 1,
         //   },
         // ],
-        datasets: sentimentType.map(type => ({
+        datasets: sentimentType.map((type) => ({
           ...sentimentConfig[type],
-          data: randomData(
-            timeRangeValues[timeRange].lower,
-            timeRangeValues[timeRange].upper,
-            timeRange === "1d" ? 24 : 7
-          ),
+          data: randomData(finalLower, finalUpper, timeRange === "1d" ? 24 : 7),
           borderWidth: 1,
-        }))
+        })),
       },
     };
   });

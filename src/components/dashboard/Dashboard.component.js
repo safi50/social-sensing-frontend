@@ -267,11 +267,18 @@ const Dashboard = () => {
   const handleSentimentChange = (sentiment, isChecked) => {
     const newSentimentType = isChecked
       ? [...contextFilters.sentimentType, sentiment] // Add sentiment if checked
-      : contextFilters.sentimentType.filter(type => type !== sentiment); // Remove sentiment if not checked
-  
+      : contextFilters.sentimentType.filter((type) => type !== sentiment); // Remove sentiment if not checked
+
     setContextFilters({ ...contextFilters, sentimentType: newSentimentType });
   };
 
+  const handleLanguageChange = (language, isChecked) => {
+    const newLanguage = isChecked
+      ? [...contextFilters.language, language] // Add language if checked
+      : contextFilters.language.filter((lang) => lang !== language); // Remove language if not checked
+
+    setContextFilters({ ...contextFilters, language: newLanguage });
+  };
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -319,9 +326,8 @@ const Dashboard = () => {
     setShowCompareKeywordEditModal(false);
   const handleCompareKeywordEditShow = (currentSearchName) => {
     setShowCompareKeywordEditModal(true);
-    setCurrentEditingSearch(currentSearchName)
-  }
-    
+    setCurrentEditingSearch(currentSearchName);
+  };
 
   const handleSaveSearchClose = () => setShowSaveSearchModal(false);
   const handleSaveSearchShow = () => setShowSaveSearchModal(true);
@@ -356,30 +362,34 @@ const Dashboard = () => {
   };
 
   const handleDeleteCompareSearch = (searchName) => {
-    if (contextFilters.eventNames.length <= 2){
+    if (contextFilters.eventNames.length <= 2) {
       setContextFilters({
         ...contextFilters,
-        eventNames: contextFilters.eventNames.filter(item => item !== searchName)
+        eventNames: contextFilters.eventNames.filter(
+          (item) => item !== searchName
+        ),
       });
       // deleteDataByName(searchName)
-      navigate('/dashboard')
+      navigate("/dashboard");
     }
     // deleteDataByName(searchName)
     setContextFilters({
       ...contextFilters,
-      eventNames: contextFilters.eventNames.filter(item => item !== searchName)
+      eventNames: contextFilters.eventNames.filter(
+        (item) => item !== searchName
+      ),
     });
-  }
+  };
 
   const [compareEditMode, setCompareEditMode] = useState(false);
-  const [compareInputValue, setCompareInputValue] = useState('');
+  const [compareInputValue, setCompareInputValue] = useState("");
 
   // Handle submission (Enter key)
   const handleCompareInputSubmit = (e) => {
-    let zeroSearches = false
-    if (contextFilters.eventNames.length == 0) zeroSearches = true
-    if (e.key === 'Enter') {
-      console.log("Event names:", typeof contextFilters.eventNames)
+    let zeroSearches = false;
+    if (contextFilters.eventNames.length == 0) zeroSearches = true;
+    if (e.key === "Enter") {
+      console.log("Event names:", typeof contextFilters.eventNames);
       // Call your handler function here with inputValue
       console.log("Submitted value:", compareInputValue);
       // You can also toggle editMode off if needed
@@ -387,13 +397,12 @@ const Dashboard = () => {
       setContextFilters({
         ...contextFilters,
         eventNames: [...contextFilters.eventNames, compareInputValue],
-        eventQueries: [...contextFilters.eventQueries, compareInputValue]
+        eventQueries: [...contextFilters.eventQueries, compareInputValue],
       });
-      
-    if (!zeroSearches){
-      navigate('compare-keyword')
-    }
-      
+
+      if (!zeroSearches) {
+        navigate("compare-keyword");
+      }
     }
   };
 
@@ -426,15 +435,19 @@ const Dashboard = () => {
                 <PurpleCircle src="/purple-circle-svgrepo-com.svg" />
                 <HashtagText>{item.name}</HashtagText>
                 <IconContainer className="icon-container">
-                  <EditIcon onClick={() => handleCompareKeywordEditShow(item.name)} />
-                  {currentEditingSearch === item.name &&
+                  <EditIcon
+                    onClick={() => handleCompareKeywordEditShow(item.name)}
+                  />
+                  {currentEditingSearch === item.name && (
                     <EditCompareKeywordModal
-                    show={showCompareKeywordEditModal}
-                    handleClose={handleCompareKeywordEditClose}
-                    currentHashtag={item.name}
+                      show={showCompareKeywordEditModal}
+                      handleClose={handleCompareKeywordEditClose}
+                      currentHashtag={item.name}
                     />
-                  }
-                  <DeleteIcon onClick={() => handleDeleteCompareSearch(item.name)} />
+                  )}
+                  <DeleteIcon
+                    onClick={() => handleDeleteCompareSearch(item.name)}
+                  />
                 </IconContainer>
               </HashtagContainer>
             ))}
@@ -443,18 +456,19 @@ const Dashboard = () => {
               {compareEditMode ? (
                 <div>
                   <CompareKeywordInput
-                  type="text"
-                  onBlur={() => setCompareEditMode(false)}
-                  onChange={(e) => {setCompareInputValue(e.target.value)}}
-                  onKeyDown={handleCompareInputSubmit}
-                  autoFocus
+                    type="text"
+                    onBlur={() => setCompareEditMode(false)}
+                    onChange={(e) => {
+                      setCompareInputValue(e.target.value);
+                    }}
+                    onKeyDown={handleCompareInputSubmit}
+                    autoFocus
                   />
                 </div>
-                
               ) : (
                 <CompareContainer
                   onClick={() => {
-                    setCompareEditMode(true)
+                    setCompareEditMode(true);
                   }}
                 >
                   <PurplePlus src="/plus-large-svgrepo-com.svg" />
@@ -462,7 +476,6 @@ const Dashboard = () => {
                 </CompareContainer>
               )}
             </div>
-
           </LeftContainer>
           <RightContainer>
             <SaveSearchContainer onClick={handleSaveSearchShow}>
@@ -499,16 +512,43 @@ const Dashboard = () => {
                 {showSentimentCheckboxes && (
                   <FilterItemDropdown>
                     <FilterCheckbox>
-                      <input type="checkbox" id="positive" defaultChecked={contextFilters.sentimentType.includes("positive")} onChange={(e) => handleSentimentChange("positive", e.target.checked)}/>
-                      <CheckBoxLabel htmlFor="positive" >Positive</CheckBoxLabel>
+                      <input
+                        type="checkbox"
+                        id="positive"
+                        defaultChecked={contextFilters.sentimentType.includes(
+                          "positive"
+                        )}
+                        onChange={(e) =>
+                          handleSentimentChange("positive", e.target.checked)
+                        }
+                      />
+                      <CheckBoxLabel htmlFor="positive">Positive</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterCheckbox>
-                      <input type="checkbox" id="negative" defaultChecked={contextFilters.sentimentType.includes("negative")} onChange={(e) => handleSentimentChange("negative", e.target.checked)}/>
-                      <CheckBoxLabel htmlFor="negative" >Negative</CheckBoxLabel>
+                      <input
+                        type="checkbox"
+                        id="negative"
+                        defaultChecked={contextFilters.sentimentType.includes(
+                          "negative"
+                        )}
+                        onChange={(e) =>
+                          handleSentimentChange("negative", e.target.checked)
+                        }
+                      />
+                      <CheckBoxLabel htmlFor="negative">Negative</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterCheckbox>
-                      <input type="checkbox" id="neutral" defaultChecked={contextFilters.sentimentType.includes("neutral")} onChange={(e) => handleSentimentChange("neutral", e.target.checked)}/>
-                      <CheckBoxLabel htmlFor="neutral" >Neutral</CheckBoxLabel>
+                      <input
+                        type="checkbox"
+                        id="neutral"
+                        defaultChecked={contextFilters.sentimentType.includes(
+                          "neutral"
+                        )}
+                        onChange={(e) =>
+                          handleSentimentChange("neutral", e.target.checked)
+                        }
+                      />
+                      <CheckBoxLabel htmlFor="neutral">Neutral</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterCheckbox>
                       <input type="checkbox" id="important" />
@@ -532,12 +572,24 @@ const Dashboard = () => {
                 {showLanguageCheckboxes && (
                   <FilterItemDropdown>
                     <FilterCheckbox>
-                      <input type="checkbox" id="urdu" />
-                      <CheckBoxLabel htmlFor="urdu">Urdu</CheckBoxLabel>
+                      <input
+                        type="checkbox"
+                        id="ur"
+                        onChange={(e) =>
+                          handleLanguageChange("ur", e.target.checked)
+                        }
+                      />
+                      <CheckBoxLabel htmlFor="ur">Urdu</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterCheckbox>
-                      <input type="checkbox" id="english" />
-                      <CheckBoxLabel htmlFor="english">English</CheckBoxLabel>
+                      <input
+                        type="checkbox"
+                        id="en"
+                        onChange={(e) =>
+                          handleLanguageChange("en", e.target.checked)
+                        }
+                      />
+                      <CheckBoxLabel htmlFor="en">English</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterApplicationFooter filterType={"language"} />
                   </FilterItemDropdown>

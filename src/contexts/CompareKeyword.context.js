@@ -11,7 +11,7 @@ export const CompareKeywordProvider = ({ children }) => {
     timeRange: "1d", //1d , 7d , 1M
     date: new Date(),
     sentimentType: ["positive", "negative", "neutral"], // positive, negative, neutral
-    language: "en", // en, ur
+    language: ["en", "ur"], // en, ur
   });
 
   useEffect(() => {
