@@ -11,6 +11,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@visx/wordcloud": "^3.3.0",
+    "axios": "^1.6.5",
     "bootstrap": "^5.3.2",
     "canvas": "^2.11.2",
     "chart.js": "^4.4.0",
