@@ -8,15 +8,23 @@ function randomData(min, max, count) {
   );
 }
 
-export function generateData() {
-  const eventNames = [
-    "#lahorecarshow",
-    "#sargodhacarshow",
-    "#karachicarshow",
-    "#faisalabadcarshow",
-    // "#islamabadcarshow",
-  ];
-  const infos = ["526.5K", "176.5K", "676.5K", "376.5K", "576.2K"];
+export function generateData({
+  eventNames,
+  timeRange,
+  date,
+  sentimentType,
+  language,
+}) {
+  const timeRangeValues = {
+    "1d": { upper: 300, lower: 0 },
+    "7d": { upper: 600, lower: 300 },
+    "1M": { upper: 1000, lower: 600 },
+  };
+
+  const languageRangeValues = {
+    en: { upper: 500, lower: 0 }, // Example range for English
+    ur: { upper: 1000, lower: 500 }, // Example range for Urdu
+  };
 
   const colors = [
     "rgba(255, 99, 132)", // Pink
@@ -34,17 +42,54 @@ export function generateData() {
     "rgba(153, 102, 255, 1)",
   ];
 
+  const sentimentConfig = {
+    positive: {
+      label: "Positive",
+      backgroundColor: "green",
+      borderColor: "green",
+    },
+    negative: {
+      label: "Negative",
+      backgroundColor: "red",
+      borderColor: "red",
+    },
+    neutral: {
+      label: "Neutral",
+      backgroundColor: "blue",
+      borderColor: "blue",
+    },
+  };
+
   let data = eventNames.map((name, index) => {
+    const languageUpper = language.reduce(
+      (acc, lang) => acc + languageRangeValues[lang].upper,
+      0
+    );
+    const languageLower = language.reduce(
+      (acc, lang) => acc + languageRangeValues[lang].lower,
+      0
+    );
+
+    // Determine the final upper and lower limits combining time range and language range
+    const finalUpper = Math.min(
+      timeRangeValues[timeRange].upper,
+      languageUpper
+    );
+    const finalLower = Math.max(
+      timeRangeValues[timeRange].lower,
+      languageLower
+    );
+
     return {
       name: name,
-      infoText: infos[index],
+      infoText: randomData(finalLower, finalUpper, 1)[0],
       color: colors[index],
       totalEngagement: {
         labels: [name],
         datasets: [
           {
             label: name,
-            data: randomData(0, 1000, 1),
+            data: randomData(finalLower, finalUpper, 1),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -56,7 +101,7 @@ export function generateData() {
         datasets: [
           {
             label: name,
-            data: randomData(0, 1000, 1),
+            data: randomData(finalLower, finalUpper, 1),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -64,24 +109,43 @@ export function generateData() {
         ],
       },
       resultsOverTime: {
-        labels: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
+        labels:
+          timeRange === "1d"
+            ? [
+                "00",
+                "01",
+                "02",
+                "03",
+                "04",
+                "04",
+                "05",
+                "06",
+                "07",
+                "08",
+                "09",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+              ]
+            : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         datasets: [
           {
             label: name,
-            data: randomData(0, 1000, 12),
+            data:
+              timeRange === "1d"
+                ? randomData(finalLower, finalUpper, 24)
+                : randomData(finalLower, finalUpper, 7),
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -93,14 +157,14 @@ export function generateData() {
         datasets: [
           {
             label: "Positive",
-            data: randomData(0, 1000, 1),
+            data: randomData(finalLower, finalUpper, 1),
             backgroundColor: "green",
             borderColor: "green",
             borderWidth: 1,
           },
           {
             label: "Negative",
-            data: randomData(0, 1000, 1),
+            data: randomData(finalLower, finalUpper, 1),
             backgroundColor: "red",
             borderColor: "red",
             borderWidth: 1,
@@ -108,29 +172,83 @@ export function generateData() {
         ],
       },
       netSentimentsOverTime: {
-        labels: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
-        datasets: [
-          {
-            label: name,
-            data: randomData(0, 1000, 12),
-            backgroundColor: colors[index],
-            borderColor: borderColors[index],
-            borderWidth: 1,
-          },
-        ],
+        labels:
+          timeRange === "1d"
+            ? [
+                "00",
+                "01",
+                "02",
+                "03",
+                "04",
+                "04",
+                "05",
+                "06",
+                "07",
+                "08",
+                "09",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+              ]
+            : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        // datasets: [
+        //   {
+        //     label: "Positive",
+        //     data:
+        //       timeRange === "1d"
+        //         ? randomData(
+        //             finalLower,
+        //             finalUpper,
+        //             24
+        //           )
+        //         : randomData(
+        //             finalLower,
+        //             finalUpper,
+        //             7
+        //           ),
+        //     backgroundColor: "green",
+        //     borderColor: "green",
+        //     borderWidth: 1,
+        //   },
+        //   {
+        //     label: "Negative",
+        //     data: randomData(
+        //       finalLower,
+        //       finalUpper,
+        //       24
+        //     ),
+        //     backgroundColor: "red",
+        //     borderColor: "red",
+        //     borderWidth: 1,
+        //   },
+        //   {
+        //     label: "Neutral",
+        //     data: randomData(
+        //       finalLower,
+        //       finalUpper,
+        //       24
+        //     ),
+        //     backgroundColor: "blue",
+        //     borderColor: "blue",
+        //     borderWidth: 1,
+        //   },
+        // ],
+        datasets: sentimentType.map((type) => ({
+          ...sentimentConfig[type],
+          data: randomData(finalLower, finalUpper, timeRange === "1d" ? 24 : 7),
+          borderWidth: 1,
+        })),
       },
     };
   });

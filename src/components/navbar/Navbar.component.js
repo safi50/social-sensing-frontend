@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import {
   NavbarContainer,
   Logo,
@@ -16,6 +16,7 @@ import Filters from "../filters/Filters.component";
 import Notifications from "../notifications/Notifications.component";
 import { useNavigate, useLocation } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
+import { CompareKeywordContext } from '../../contexts/CompareKeyword.context';
 
 
 const Navbar = () => {
@@ -23,6 +24,10 @@ const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const {
+    filters: contextFilters,
+  } = useContext(CompareKeywordContext);
 
   const toggleFilters = () => {
     setShowNotifications(false)
@@ -46,7 +51,7 @@ const Navbar = () => {
       <span style={{ opacity: location.pathname === '/searchPage' ? 1 : 0.5 }}>Home</span>
 
         </NavLinkContainer>
-        <NavLinkContainer to="/dashboard" onClick={() => {navigate('/dashboard')}}>
+        <NavLinkContainer to="/dashboard" onClick={() => {contextFilters.eventNames.length > 1? navigate('/dashboard/compare-keyword'): navigate('/dashboard')}}>
           <span style={{ opacity: location.pathname.includes('/dashboard') ? 1 : 0.5 }}>Listening Analysis</span>
         </NavLinkContainer>
         <NavLinkContainer to="/dashboard" onClick={() => {navigate('/topResults')}}>

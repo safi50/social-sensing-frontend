@@ -161,6 +161,13 @@ export const CompareContainer = styled.div`
   }
 `;
 
+export const CompareKeywordInput = styled.input`
+  width: 200px;
+  height: 40px;
+  font-size: 14px;
+  padding: 10px
+`;
+
 export const PurplePlus = styled.img`
   height: 1.5rem;
   width: 1.5rem;

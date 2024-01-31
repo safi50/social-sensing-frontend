@@ -38,7 +38,7 @@ import {
   DateInputContainer,
   DateInput,
   CrossIcon,
-  CrossBtn, 
+  CrossBtn,
   IconContainer,
   EditIcon,
   DeleteIcon,
@@ -50,7 +50,8 @@ import {
   SentimentFilterFooterContainer,
   BackIcon,
   BackContainer,
-  BackText
+  BackText,
+  CompareKeywordInput,
 } from "./Dashboard.styles";
 import Navbar from "../navbar/Navbar.component";
 import SaveSearchModal from "../saveSearchModal/SaveSearchModal.component";
@@ -60,7 +61,7 @@ import TopThemes from "../top-themes/TopThemes";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 import EditCompareKeywordModal from "../editCompareKeywordModal/EditCompareKeywordModal.component";
 import zIndex from "@mui/material/styles/zIndex";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from "react-router-dom";
 
 export const savedSearches = [
   {
@@ -225,44 +226,59 @@ const generateMockData = (numberOfPosts) => {
   return mockData;
 };
 
-
-
-
-
 const Dashboard = () => {
-
-  const FilterApplicationFooter = ({filterType})=>{
-    let togglefnc = null
-    if (filterType == 'sentiment') togglefnc = toggleSentimentCheckboxes
-    else if (filterType == 'language') togglefnc = toggleLanguageCheckboxes
-    return(
+  const FilterApplicationFooter = ({ filterType }) => {
+    let togglefnc = null;
+    if (filterType == "sentiment") togglefnc = toggleSentimentCheckboxes;
+    else if (filterType == "language") togglefnc = toggleLanguageCheckboxes;
+    return (
       <SentimentFilterFooterContainer>
         <CrossBtn onClick={togglefnc}>
           <CrossIcon src="/cross-svgrepo-com.svg" />
         </CrossBtn>
         <ApplyBtnMedium>Apply</ApplyBtnMedium>
       </SentimentFilterFooterContainer>
-    )
-  }
+    );
+  };
 
-
-
-  const { data } = useContext(CompareKeywordContext);
+  const {
+    data,
+    deleteDataByName,
+    filters: contextFilters,
+    setFilters: setContextFilters,
+  } = useContext(CompareKeywordContext);
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
   const [showMySeachesModal, setShowMySearchesModal] = useState(false);
-  const [showCompareKeywordEditModal, setShowCompareKeywordEditModal] = useState(false);
+  const [showCompareKeywordEditModal, setShowCompareKeywordEditModal] =
+    useState(false);
   const [showSentimentCheckboxes, setShowSentimentCheckboxes] = useState(false);
   const [showLanguageCheckboxes, setShowLanguageCheckboxes] = useState(false);
 
   const [saveSearches, setSaveSearches] = useState(savedSearches);
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
+  const [currentEditingSearch, setCurrentEditingSearch] = useState(null);
   const [filters, setFilters] = useState({
     sentiment: "",
     language: "",
     date: "",
   });
 
+  const handleSentimentChange = (sentiment, isChecked) => {
+    const newSentimentType = isChecked
+      ? [...contextFilters.sentimentType, sentiment] // Add sentiment if checked
+      : contextFilters.sentimentType.filter((type) => type !== sentiment); // Remove sentiment if not checked
+
+    setContextFilters({ ...contextFilters, sentimentType: newSentimentType });
+  };
+
+  const handleLanguageChange = (language, isChecked) => {
+    const newLanguage = isChecked
+      ? [...contextFilters.language, language] // Add language if checked
+      : contextFilters.language.filter((lang) => lang !== language); // Remove language if not checked
+
+    setContextFilters({ ...contextFilters, language: newLanguage });
+  };
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -306,8 +322,12 @@ const Dashboard = () => {
     handleSaveSearchClose(); // Closes the modal
   }
 
-  const handleCompareKeywordEditClose = () => setShowCompareKeywordEditModal(false);
-  const handleCompareKeywordEditShow = () => setShowCompareKeywordEditModal(true);
+  const handleCompareKeywordEditClose = () =>
+    setShowCompareKeywordEditModal(false);
+  const handleCompareKeywordEditShow = (currentSearchName) => {
+    setShowCompareKeywordEditModal(true);
+    setCurrentEditingSearch(currentSearchName);
+  };
 
   const handleSaveSearchClose = () => setShowSaveSearchModal(false);
   const handleSaveSearchShow = () => setShowSaveSearchModal(true);
@@ -341,20 +361,62 @@ const Dashboard = () => {
     setSaveSearches(saveSearches.filter((search) => search.id !== id));
   };
 
+  const handleDeleteCompareSearch = (searchName) => {
+    if (contextFilters.eventNames.length <= 2) {
+      setContextFilters({
+        ...contextFilters,
+        eventNames: contextFilters.eventNames.filter(
+          (item) => item !== searchName
+        ),
+      });
+      // deleteDataByName(searchName)
+      navigate("/dashboard");
+    }
+    // deleteDataByName(searchName)
+    setContextFilters({
+      ...contextFilters,
+      eventNames: contextFilters.eventNames.filter(
+        (item) => item !== searchName
+      ),
+    });
+  };
 
+  const [compareEditMode, setCompareEditMode] = useState(false);
+  const [compareInputValue, setCompareInputValue] = useState("");
+
+  // Handle submission (Enter key)
+  const handleCompareInputSubmit = (e) => {
+    let zeroSearches = false;
+    if (contextFilters.eventNames.length == 0) zeroSearches = true;
+    if (e.key === "Enter") {
+      console.log("Event names:", typeof contextFilters.eventNames);
+      // Call your handler function here with inputValue
+      console.log("Submitted value:", compareInputValue);
+      // You can also toggle editMode off if needed
+      setCompareEditMode(false);
+      setContextFilters({
+        ...contextFilters,
+        eventNames: [...contextFilters.eventNames, compareInputValue],
+        eventQueries: [...contextFilters.eventQueries, compareInputValue],
+      });
+
+      if (!zeroSearches) {
+        navigate("compare-keyword");
+      }
+    }
+  };
 
   return (
     <div style={{ backgroundColor: "#6937F2" }}>
       <Navbar />
-      
+
       <DashboardContainer>
         {/* <BackContainer>
         <BackIcon src="/back-svgrepo-com.svg" onClick={() => {location.pathname == '/dashboard' ? navigate('/searchPage'): navigate('/dashboard')}}/>
         <BackText onClick={() => {location.pathname == '/dashboard' ? navigate('/searchPage'): navigate('/dashboard')}}>{location.pathname == '/dashboard' ? "Search": "Dashboard"}</BackText>
         </BackContainer> */}
-        
+
         <HeaderContainer>
-          
           <Header>Listening Analysis</Header>
           <ButtonsContainer>
             <RefreshButton>
@@ -371,20 +433,49 @@ const Dashboard = () => {
             {data.map((item) => (
               <HashtagContainer>
                 <PurpleCircle src="/purple-circle-svgrepo-com.svg" />
-                <HashtagText>{item.name}
-                </HashtagText>
+                <HashtagText>{item.name}</HashtagText>
                 <IconContainer className="icon-container">
-                  <EditIcon onClick={handleCompareKeywordEditShow}/>
-                  <EditCompareKeywordModal show={showCompareKeywordEditModal} handleClose={handleCompareKeywordEditClose} currentHashtag={item.name}/>
-                  <DeleteIcon/>
+                  <EditIcon
+                    onClick={() => handleCompareKeywordEditShow(item.name)}
+                  />
+                  {currentEditingSearch === item.name && (
+                    <EditCompareKeywordModal
+                      show={showCompareKeywordEditModal}
+                      handleClose={handleCompareKeywordEditClose}
+                      currentHashtag={item.name}
+                    />
+                  )}
+                  <DeleteIcon
+                    onClick={() => handleDeleteCompareSearch(item.name)}
+                  />
                 </IconContainer>
               </HashtagContainer>
             ))}
 
-            <CompareContainer onClick={()=>{navigate('compare-keyword')}}>
-              <PurplePlus src="/plus-large-svgrepo-com.svg" />
-              <CompareKeywordText>Compare keyword</CompareKeywordText>
-            </CompareContainer>
+            <div>
+              {compareEditMode ? (
+                <div>
+                  <CompareKeywordInput
+                    type="text"
+                    onBlur={() => setCompareEditMode(false)}
+                    onChange={(e) => {
+                      setCompareInputValue(e.target.value);
+                    }}
+                    onKeyDown={handleCompareInputSubmit}
+                    autoFocus
+                  />
+                </div>
+              ) : (
+                <CompareContainer
+                  onClick={() => {
+                    setCompareEditMode(true);
+                  }}
+                >
+                  <PurplePlus src="/plus-large-svgrepo-com.svg" />
+                  <CompareKeywordText>Compare keyword</CompareKeywordText>
+                </CompareContainer>
+              )}
+            </div>
           </LeftContainer>
           <RightContainer>
             <SaveSearchContainer onClick={handleSaveSearchShow}>
@@ -416,51 +507,96 @@ const Dashboard = () => {
             <FilterItemsRow>
               <FilterItemContainer>
                 <FilterItem onClick={toggleSentimentCheckboxes}>
-                Sentiments <CountBox>2</CountBox>
-              </FilterItem>
-              {showSentimentCheckboxes && <FilterItemDropdown>
-              <FilterCheckbox>
-              <input type="checkbox" id="positive"/>
-              <CheckBoxLabel htmlFor="positive">Positive</CheckBoxLabel>
-              </FilterCheckbox>
-              <FilterCheckbox>
-              <input type="checkbox" id="negative"/>
-              <CheckBoxLabel htmlFor="negative">Negative</CheckBoxLabel>
-              </FilterCheckbox>
-              <FilterCheckbox>
-              <input type="checkbox" id="neutral"/>
-              <CheckBoxLabel htmlFor="neutral">Neutral</CheckBoxLabel>
-              </FilterCheckbox>
-              <FilterCheckbox>
-              <input type="checkbox" id="important"/>
-              <CheckBoxLabel htmlFor="important">Important</CheckBoxLabel>
-              </FilterCheckbox>
-              <FilterApplicationFooter filterType={"sentiment"}/>
-              </FilterItemDropdown>}
+                  Sentiments <CountBox>2</CountBox>
+                </FilterItem>
+                {showSentimentCheckboxes && (
+                  <FilterItemDropdown>
+                    <FilterCheckbox>
+                      <input
+                        type="checkbox"
+                        id="positive"
+                        defaultChecked={contextFilters.sentimentType.includes(
+                          "positive"
+                        )}
+                        onChange={(e) =>
+                          handleSentimentChange("positive", e.target.checked)
+                        }
+                      />
+                      <CheckBoxLabel htmlFor="positive">Positive</CheckBoxLabel>
+                    </FilterCheckbox>
+                    <FilterCheckbox>
+                      <input
+                        type="checkbox"
+                        id="negative"
+                        defaultChecked={contextFilters.sentimentType.includes(
+                          "negative"
+                        )}
+                        onChange={(e) =>
+                          handleSentimentChange("negative", e.target.checked)
+                        }
+                      />
+                      <CheckBoxLabel htmlFor="negative">Negative</CheckBoxLabel>
+                    </FilterCheckbox>
+                    <FilterCheckbox>
+                      <input
+                        type="checkbox"
+                        id="neutral"
+                        defaultChecked={contextFilters.sentimentType.includes(
+                          "neutral"
+                        )}
+                        onChange={(e) =>
+                          handleSentimentChange("neutral", e.target.checked)
+                        }
+                      />
+                      <CheckBoxLabel htmlFor="neutral">Neutral</CheckBoxLabel>
+                    </FilterCheckbox>
+                    <FilterCheckbox>
+                      <input type="checkbox" id="important" />
+                      <CheckBoxLabel htmlFor="important">
+                        Important
+                      </CheckBoxLabel>
+                    </FilterCheckbox>
+                    <FilterApplicationFooter filterType={"sentiment"} />
+                  </FilterItemDropdown>
+                )}
               </FilterItemContainer>
-              
 
               {/* <FilterItem>
                 Media type <CountBox>2</CountBox>
               </FilterItem> */}
 
               <FilterItemContainer>
-              <FilterItem onClick={toggleLanguageCheckboxes}>
-                Language <CountBox>3</CountBox>
-              </FilterItem>
-              {showLanguageCheckboxes && <FilterItemDropdown>
-              <FilterCheckbox>
-              <input type="checkbox" id="urdu"/>
-              <CheckBoxLabel htmlFor="urdu">Urdu</CheckBoxLabel>
-              </FilterCheckbox>
-              <FilterCheckbox>
-              <input type="checkbox" id="english"/>
-              <CheckBoxLabel htmlFor="english">English</CheckBoxLabel>
-              </FilterCheckbox>
-              <FilterApplicationFooter filterType={"language"}/>
-              </FilterItemDropdown>}
+                <FilterItem onClick={toggleLanguageCheckboxes}>
+                  Language <CountBox>3</CountBox>
+                </FilterItem>
+                {showLanguageCheckboxes && (
+                  <FilterItemDropdown>
+                    <FilterCheckbox>
+                      <input
+                        type="checkbox"
+                        id="ur"
+                        defaultChecked={contextFilters.language.includes("ur")}
+                        onChange={(e) =>
+                          handleLanguageChange("ur", e.target.checked)
+                        }
+                      />
+                      <CheckBoxLabel htmlFor="ur">Urdu</CheckBoxLabel>
+                    </FilterCheckbox>
+                    <FilterCheckbox>
+                      <input
+                        type="checkbox"
+                        id="en"
+                        defaultChecked={contextFilters.language.includes("en")}
+                        onChange={(e) =>
+                          handleLanguageChange("en", e.target.checked)
+                        }
+                      />
+                      <CheckBoxLabel htmlFor="en">English</CheckBoxLabel>
+                    </FilterCheckbox>
+                    <FilterApplicationFooter filterType={"language"} />
+                  </FilterItemDropdown>
+                )}
               </FilterItemContainer>
-
 
               <FilterItem>
                 Pakistan <CountBox>1</CountBox>
@@ -482,9 +618,40 @@ const Dashboard = () => {
               </CrossBtn>
               <BarIcon src="/bar-svgrepo-com.svg" />
 
-              <DurationBtn>1d</DurationBtn>
-              <DurationBtnSelected>7d</DurationBtnSelected>
-              <DurationBtn>1M</DurationBtn>
+              {contextFilters.timeRange === "1d" ? (
+                <DurationBtnSelected>1d</DurationBtnSelected>
+              ) : (
+                <DurationBtn
+                  onClick={() =>
+                    setContextFilters({ ...contextFilters, timeRange: "1d" })
+                  }
+                >
+                  1d
+                </DurationBtn>
+              )}
+              {contextFilters.timeRange === "7d" ? (
+                <DurationBtnSelected>7d</DurationBtnSelected>
+              ) : (
+                <DurationBtn
+                  onClick={() =>
+                    setContextFilters({ ...contextFilters, timeRange: "7d" })
+                  }
+                >
+                  7d
+                </DurationBtn>
+              )}
+              {contextFilters.timeRange === "1M" ? (
+                <DurationBtnSelected>1M</DurationBtnSelected>
+              ) : (
+                <DurationBtn
+                  onClick={() =>
+                    setContextFilters({ ...contextFilters, timeRange: "1M" })
+                  }
+                >
+                  1M
+                </DurationBtn>
+              )}
+
               <DateInputContainer>
                 <DateInput />
               </DateInputContainer>
