@@ -16,7 +16,7 @@ const SearchPage = () => {
   } = useContext(CompareKeywordContext);
 
   const handleSearchClick = ()=>{
-    setContextFilters({...contextFilters, eventNames:[searchQuery]})
+    setContextFilters({...contextFilters, eventNames:[searchQuery], eventQueries: [searchQuery]})
     navigate('/dashboard')
   }
     return (

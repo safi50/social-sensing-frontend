@@ -7,6 +7,7 @@ export const CompareKeywordProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({
     eventNames: [],
+    eventQueries: [],
     timeRange: "1d", //1d , 7d , 1M
     date: new Date(),
     sentimentType: ["positive", "negative", "neutral"], // positive, negative, neutral

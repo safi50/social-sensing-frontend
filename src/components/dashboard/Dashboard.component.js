@@ -257,6 +257,7 @@ const Dashboard = () => {
   const [saveSearches, setSaveSearches] = useState(savedSearches);
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
+  const [currentEditingSearch, setCurrentEditingSearch] = useState(null);
   const [filters, setFilters] = useState({
     sentiment: "",
     language: "",
@@ -316,8 +317,11 @@ const Dashboard = () => {
 
   const handleCompareKeywordEditClose = () =>
     setShowCompareKeywordEditModal(false);
-  const handleCompareKeywordEditShow = () =>
+  const handleCompareKeywordEditShow = (currentSearchName) => {
     setShowCompareKeywordEditModal(true);
+    setCurrentEditingSearch(currentSearchName)
+  }
+    
 
   const handleSaveSearchClose = () => setShowSaveSearchModal(false);
   const handleSaveSearchShow = () => setShowSaveSearchModal(true);
@@ -382,7 +386,8 @@ const Dashboard = () => {
       setCompareEditMode(false);
       setContextFilters({
         ...contextFilters,
-        eventNames: [...contextFilters.eventNames, compareInputValue]
+        eventNames: [...contextFilters.eventNames, compareInputValue],
+        eventQueries: [...contextFilters.eventQueries, compareInputValue]
       });
       
     if (!zeroSearches){
@@ -421,12 +426,14 @@ const Dashboard = () => {
                 <PurpleCircle src="/purple-circle-svgrepo-com.svg" />
                 <HashtagText>{item.name}</HashtagText>
                 <IconContainer className="icon-container">
-                  <EditIcon onClick={handleCompareKeywordEditShow} />
-                  <EditCompareKeywordModal
+                  <EditIcon onClick={() => handleCompareKeywordEditShow(item.name)} />
+                  {currentEditingSearch === item.name &&
+                    <EditCompareKeywordModal
                     show={showCompareKeywordEditModal}
                     handleClose={handleCompareKeywordEditClose}
                     currentHashtag={item.name}
-                  />
+                    />
+                  }
                   <DeleteIcon onClick={() => handleDeleteCompareSearch(item.name)} />
                 </IconContainer>
               </HashtagContainer>
@@ -437,7 +444,6 @@ const Dashboard = () => {
                 <div>
                   <CompareKeywordInput
                   type="text"
-                  // style={{ width: '200px', height: '40px', fontSize: '14px' }}
                   onBlur={() => setCompareEditMode(false)}
                   onChange={(e) => {setCompareInputValue(e.target.value)}}
                   onKeyDown={handleCompareInputSubmit}
