@@ -51,6 +51,7 @@ import {
   BackIcon,
   BackContainer,
   BackText,
+  CompareKeywordInput,
 } from "./Dashboard.styles";
 import Navbar from "../navbar/Navbar.component";
 import SaveSearchModal from "../saveSearchModal/SaveSearchModal.component";
@@ -433,14 +434,17 @@ const Dashboard = () => {
 
             <div>
               {compareEditMode ? (
-                <input
+                <div>
+                  <CompareKeywordInput
                   type="text"
-                  // value={inputValue}
+                  // style={{ width: '200px', height: '40px', fontSize: '14px' }}
                   onBlur={() => setCompareEditMode(false)}
                   onChange={(e) => {setCompareInputValue(e.target.value)}}
                   onKeyDown={handleCompareInputSubmit}
                   autoFocus
-                />
+                  />
+                </div>
+                
               ) : (
                 <CompareContainer
                   onClick={() => {
