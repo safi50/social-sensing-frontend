@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Wordcloud } from "@visx/wordcloud";
 import ResizeDetector from "react-resize-detector";
-
+import axios from "axios";
+import Spinner from './spinner';   
 //  data
-const words = [
-  { text: "Test", value: 500 },
-  { text: "web", value: 100 },
-  { text: "Test", value: 10 },
-  { text: "Walee", value: 500 },
-  { text: "Inspired", value: 350 },
-  { text: "visualisation", value: 180 },
-  { text: "data", value: 200 },
-  { text: "imagine", value: 100 },
-  { text: "css", value: 100 },
-  { text: "html", value: 100 },
-  { text: "python", value: 100 },
-  { text: "influence", value: 100 },
-  { text: "Inspired", value: 350 },
-  { text: "Data Moderation", value: 200 },
-  { text: "analytics", value: 100 },
-  { text: "css", value: 100 },
-  { text: "html", value: 100 },
-  { text: "python", value: 100 },
-  { text: "java", value: 100 },
-  { text: "innovate", value: 300 },
-  { text: "go Walee!", value: 200 },
-  { text: "In-app Currencies", value: 250 },
-  { text: "Inspired", value: 450 },
-];
+// const words = [
+//   { text: "Test", value: 500 },
+//   { text: "web", value: 100 },
+//   { text: "Test", value: 10 },
+//   { text: "Walee", value: 500 },
+//   { text: "Inspired", value: 350 },
+//   { text: "visualisation", value: 180 },
+//   { text: "data", value: 200 },
+//   { text: "imagine", value: 100 },
+//   { text: "css", value: 100 },
+//   { text: "html", value: 100 },
+//   { text: "python", value: 100 },
+//   { text: "influence", value: 100 },
+//   { text: "Inspired", value: 350 },
+//   { text: "Data Moderation", value: 200 },
+//   { text: "analytics", value: 100 },
+//   { text: "css", value: 100 },
+//   { text: "html", value: 100 },
+//   { text: "python", value: 100 },
+//   { text: "java", value: 100 },
+//   { text: "innovate", value: 300 },
+//   { text: "go Walee!", value: 200 },
+//   { text: "In-app Currencies", value: 250 },
+//   { text: "Inspired", value: 450 },
+// ];
 
 // map the word data
 const getWord = (word) => ({
@@ -50,6 +51,8 @@ const getRandomColor = () => {
 const WordCloudComponent = () => {
   const [svgWidth, setSvgWidth] = useState(800);
   const [svgHeight, setSvgHeight] = useState(500);
+  const [words, setWords] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const updateSvgSize = () => {
     const windowWidth = window.innerWidth;
@@ -68,9 +71,19 @@ const WordCloudComponent = () => {
   };
 
   useEffect(() => {
-    updateSvgSize();
+    const fetchWords = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('https://lda-iwz8.onrender.com/lda'); 
+        setWords(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching word data", error);
+        setLoading(false);
+      }
+    };
 
-    // window resize events
+    fetchWords();
     window.addEventListener("resize", updateSvgSize);
 
     return () => {
@@ -90,6 +103,10 @@ const WordCloudComponent = () => {
     spiral: "archimedean",
     random: () => Math.random(),
   };
+
+  if (loading) {
+    return <Spinner />; // Show spinner while loading
+  }
 
   return (
     <div className="responsive-wordcloud-container">
