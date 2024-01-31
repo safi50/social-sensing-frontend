@@ -575,6 +575,7 @@ const Dashboard = () => {
                       <input
                         type="checkbox"
                         id="ur"
+                        defaultChecked={contextFilters.language.includes("ur")}
                         onChange={(e) =>
                           handleLanguageChange("ur", e.target.checked)
                         }
@@ -585,6 +586,7 @@ const Dashboard = () => {
                       <input
                         type="checkbox"
                         id="en"
+                        defaultChecked={contextFilters.language.includes("en")}
                         onChange={(e) =>
                           handleLanguageChange("en", e.target.checked)
                         }
