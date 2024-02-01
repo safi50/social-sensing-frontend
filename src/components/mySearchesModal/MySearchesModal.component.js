@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Modal from "react-bootstrap/Modal";
 import Dropdown from "react-multilevel-dropdown";
 import {
@@ -13,6 +13,7 @@ import {
 import { Pagination } from "@mui/material";
 import MySearchesItem from "../MySearchesItem/MySearchesItem.component";
 import { DropdownIcon } from "../worldwideDropdown/worldwideDropdown.styles";
+import { SavedSearchesContext } from "../../contexts/SavedSearches.context";
 
 const MySearchModal = ({
   show,
@@ -21,6 +22,7 @@ const MySearchModal = ({
   handleEditSearch,
   handleDeleteSearch,
 }) => {
+  const { mySavedSearches, setMySavedSearches } = useContext(SavedSearchesContext)
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(

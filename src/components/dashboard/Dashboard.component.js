@@ -59,151 +59,152 @@ import MySearchModal from "../mySearchesModal/MySearchesModal.component";
 import { Outlet } from "react-router-dom";
 import TopThemes from "../top-themes/TopThemes";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
+import { SavedSearchesContext } from "../../contexts/SavedSearches.context";
 import EditCompareKeywordModal from "../editCompareKeywordModal/EditCompareKeywordModal.component";
 import zIndex from "@mui/material/styles/zIndex";
 import { useNavigate, useLocation } from "react-router-dom";
 
 export const savedSearches = [
-  {
-    id: "0",
-    name: "car show",
-    date: "Jan 02, 2022",
-    region: "Islamabad",
-    hashtags: ["#Islamabad", "#Lahore"],
-  },
-  {
-    id: "1",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
-  {
-    id: "2",
-    name: "car show",
-    date: "Jan 02, 2022",
-    region: "Islamabad",
-    hashtags: ["#Islamabad", "#Lahore"],
-  },
-  {
-    id: "3",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
-  {
-    id: "4",
-    name: "car show",
-    date: "Jan 02, 2022",
-    region: "Islamabad",
-    hashtags: ["#Islamabad", "#Lahore"],
-  },
-  {
-    id: "5",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
-  {
-    id: "6",
-    name: "car show",
-    date: "Jan 02, 2022",
-    region: "Islamabad",
-    hashtags: ["#Islamabad", "#Lahore"],
-  },
-  {
-    id: "7",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
-  {
-    id: "8",
-    name: "car show",
-    date: "Jan 02, 2022",
-    region: "Islamabad",
-    hashtags: ["#Islamabad", "#Lahore"],
-  },
-  {
-    id: "9",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
-  {
-    id: "10",
-    name: "car show",
-    date: "Jan 02, 2022",
-    region: "Islamabad",
-    hashtags: ["#Islamabad", "#Lahore"],
-  },
-  {
-    id: "11",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
-  {
-    id: "12",
-    name: "car show",
-    date: "Jan 02, 2022",
-    region: "Islamabad",
-    hashtags: ["#Islamabad", "#Lahore"],
-  },
-  {
-    id: "13",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
-  {
-    id: "14",
-    name: "car show",
-    date: "Jan 02, 2022",
-    region: "Islamabad",
-    hashtags: ["#Islamabad", "#Lahore"],
-  },
-  {
-    id: "15",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
-  {
-    id: "16",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
-  {
-    id: "17",
-    name: "car show",
-    date: "Jan 02, 2022",
-    region: "Islamabad",
-    hashtags: ["#Islamabad", "#Lahore"],
-  },
-  {
-    id: "18",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
-  {
-    id: "19",
-    name: "fast food",
-    date: "Jan 09, 2022",
-    region: "Lahore",
-    hashtags: ["#Islamabad"],
-  },
+  // {
+  //   id: "0",
+  //   name: "car show",
+  //   date: "Jan 02, 2022",
+  //   region: "Islamabad",
+  //   hashtags: ["#Islamabad", "#Lahore"],
+  // },
+  // {
+  //   id: "1",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
+  // {
+  //   id: "2",
+  //   name: "car show",
+  //   date: "Jan 02, 2022",
+  //   region: "Islamabad",
+  //   hashtags: ["#Islamabad", "#Lahore"],
+  // },
+  // {
+  //   id: "3",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
+  // {
+  //   id: "4",
+  //   name: "car show",
+  //   date: "Jan 02, 2022",
+  //   region: "Islamabad",
+  //   hashtags: ["#Islamabad", "#Lahore"],
+  // },
+  // {
+  //   id: "5",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
+  // {
+  //   id: "6",
+  //   name: "car show",
+  //   date: "Jan 02, 2022",
+  //   region: "Islamabad",
+  //   hashtags: ["#Islamabad", "#Lahore"],
+  // },
+  // {
+  //   id: "7",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
+  // {
+  //   id: "8",
+  //   name: "car show",
+  //   date: "Jan 02, 2022",
+  //   region: "Islamabad",
+  //   hashtags: ["#Islamabad", "#Lahore"],
+  // },
+  // {
+  //   id: "9",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
+  // {
+  //   id: "10",
+  //   name: "car show",
+  //   date: "Jan 02, 2022",
+  //   region: "Islamabad",
+  //   hashtags: ["#Islamabad", "#Lahore"],
+  // },
+  // {
+  //   id: "11",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
+  // {
+  //   id: "12",
+  //   name: "car show",
+  //   date: "Jan 02, 2022",
+  //   region: "Islamabad",
+  //   hashtags: ["#Islamabad", "#Lahore"],
+  // },
+  // {
+  //   id: "13",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
+  // {
+  //   id: "14",
+  //   name: "car show",
+  //   date: "Jan 02, 2022",
+  //   region: "Islamabad",
+  //   hashtags: ["#Islamabad", "#Lahore"],
+  // },
+  // {
+  //   id: "15",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
+  // {
+  //   id: "16",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
+  // {
+  //   id: "17",
+  //   name: "car show",
+  //   date: "Jan 02, 2022",
+  //   region: "Islamabad",
+  //   hashtags: ["#Islamabad", "#Lahore"],
+  // },
+  // {
+  //   id: "18",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
+  // {
+  //   id: "19",
+  //   name: "fast food",
+  //   date: "Jan 09, 2022",
+  //   region: "Lahore",
+  //   hashtags: ["#Islamabad"],
+  // },
 ];
 
 const generateMockData = (numberOfPosts) => {
@@ -247,6 +248,8 @@ const Dashboard = () => {
     filters: contextFilters,
     setFilters: setContextFilters,
   } = useContext(CompareKeywordContext);
+
+  const { mySavedSearches, setMySavedSearches } = useContext(SavedSearchesContext)
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
   const [showMySeachesModal, setShowMySearchesModal] = useState(false);
   const [showCompareKeywordEditModal, setShowCompareKeywordEditModal] =
@@ -254,7 +257,7 @@ const Dashboard = () => {
   const [showSentimentCheckboxes, setShowSentimentCheckboxes] = useState(false);
   const [showLanguageCheckboxes, setShowLanguageCheckboxes] = useState(false);
 
-  const [saveSearches, setSaveSearches] = useState(savedSearches);
+  const [saveSearches, setSaveSearches] = useState([]);
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [currentEditingSearch, setCurrentEditingSearch] = useState(null);
@@ -310,15 +313,17 @@ const Dashboard = () => {
     return date.toLocaleDateString("en-US", options);
   }
 
-  function addToDataset(name, region) {
+  function addToDataset(name, eventNames, eventQueries) {
     const newEntry = {
       id: String(Math.floor(Date.now() / 1000)),
       name: name,
       date: formatDate(new Date()), // Gets today's date in the specified format
-      region: region,
-      hashtags: ["#Islamabad"],
+      region: "none",
+      hashtags: eventQueries,
+      labels: eventNames
     };
-    setSaveSearches([...saveSearches, newEntry]); // Adds the new entry to the dataset
+    // setSaveSearches([...saveSearches, newEntry]); // Adds the new entry to the dataset
+    setMySavedSearches([...mySavedSearches, newEntry])
     handleSaveSearchClose(); // Closes the modal
   }
 
@@ -344,8 +349,8 @@ const Dashboard = () => {
   };
 
   const handleEditSearch = (id, name) => {
-    setSaveSearches(
-      saveSearches.map((search) => {
+    setMySavedSearches(
+      mySavedSearches.map((search) => {
         if (search.id === id) {
           return {
             ...search,
@@ -358,7 +363,7 @@ const Dashboard = () => {
   };
 
   const handleDeleteSearch = (id) => {
-    setSaveSearches(saveSearches.filter((search) => search.id !== id));
+    setMySavedSearches(mySavedSearches.filter((search) => search.id !== id));
   };
 
   const handleDeleteCompareSearch = (searchName) => {
@@ -495,7 +500,7 @@ const Dashboard = () => {
             <MySearchModal
               show={showMySeachesModal}
               handleClose={handleMySearchesClose}
-              saveSearches={saveSearches}
+              saveSearches={mySavedSearches}
               handleEditSearch={handleEditSearch}
               handleDeleteSearch={handleDeleteSearch}
             />

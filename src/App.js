@@ -27,6 +27,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { SentimentResults } from "./components/sentiment-results/SentimentResults";
 import { CompareKeyword } from "./components/compare-keywords/CompareKeyword";
 import { CompareKeywordProvider } from "./contexts/CompareKeyword.context";
+import { SavedSearchesProvider } from "./contexts/SavedSearches.context";
 import { Confirm } from "./components/confirm/confirm";
 import { NewPassword } from "./components/confirm/resetPassword";
 import { Error } from "./components/error-404/Error";
@@ -58,6 +59,7 @@ const App = () => {
   return (
     <>
       <CompareKeywordProvider>
+        <SavedSearchesProvider>
         <Router>
           <Routes>
             <Route path="/onboarding" element={<OnboardingCard />} />
@@ -87,6 +89,7 @@ const App = () => {
             <Route path="/topResults" element={<TopResults />} />
           </Routes>
         </Router>
+        </SavedSearchesProvider>
       </CompareKeywordProvider>
       {/* <Footer /> */}
       {/* <Navbar />

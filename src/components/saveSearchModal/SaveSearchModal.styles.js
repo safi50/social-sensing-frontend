@@ -37,7 +37,7 @@ export const ComparedQueriesContainer = styled(FiltersContainer)`
 `
 
 export const CompareQuery = styled(FilterItem)`
-    padding-right: 10px
+    padding-right: 10px;
 `
 
 export const CircleContainer = styled.svg.attrs({
