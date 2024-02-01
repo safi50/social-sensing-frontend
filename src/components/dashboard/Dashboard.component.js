@@ -367,23 +367,30 @@ const Dashboard = () => {
   };
 
   const handleDeleteCompareSearch = (searchName) => {
-    if (contextFilters.eventNames.length <= 2) {
+    const indexToRemove = contextFilters.eventNames.findIndex(item => item === searchName);
+
+    if (indexToRemove !== -1) {
+      const updatedEventNames = contextFilters.eventNames.filter((_, index) => index !== indexToRemove);
+      const updatedEventQueries = contextFilters.eventQueries.filter((_, index) => index !== indexToRemove);
+
+      if (contextFilters.eventNames.length <= 2) {
+        setContextFilters({
+          ...contextFilters,
+          eventNames: updatedEventNames,
+          eventQueries: updatedEventQueries,
+        });
+
+        navigate("/dashboard");
+      }
+      // deleteDataByName(searchName)
       setContextFilters({
         ...contextFilters,
-        eventNames: contextFilters.eventNames.filter(
-          (item) => item !== searchName
-        ),
-      });
-      // deleteDataByName(searchName)
-      navigate("/dashboard");
+        eventNames: updatedEventNames,
+        eventQueries: updatedEventQueries,
+      });    
     }
-    // deleteDataByName(searchName)
-    setContextFilters({
-      ...contextFilters,
-      eventNames: contextFilters.eventNames.filter(
-        (item) => item !== searchName
-      ),
-    });
+
+    
   };
 
   const [compareEditMode, setCompareEditMode] = useState(false);
