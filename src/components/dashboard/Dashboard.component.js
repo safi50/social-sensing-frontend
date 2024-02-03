@@ -249,7 +249,8 @@ const Dashboard = () => {
     setFilters: setContextFilters,
   } = useContext(CompareKeywordContext);
 
-  const { mySavedSearches, setMySavedSearches } = useContext(SavedSearchesContext)
+  const { mySavedSearches, setMySavedSearches } =
+    useContext(SavedSearchesContext);
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
   const [showMySeachesModal, setShowMySearchesModal] = useState(false);
   const [showCompareKeywordEditModal, setShowCompareKeywordEditModal] =
@@ -320,10 +321,10 @@ const Dashboard = () => {
       date: formatDate(new Date()), // Gets today's date in the specified format
       region: "none",
       hashtags: eventQueries,
-      labels: eventNames
+      labels: eventNames,
     };
     // setSaveSearches([...saveSearches, newEntry]); // Adds the new entry to the dataset
-    setMySavedSearches([...mySavedSearches, newEntry])
+    setMySavedSearches([...mySavedSearches, newEntry]);
     handleSaveSearchClose(); // Closes the modal
   }
 
@@ -367,11 +368,17 @@ const Dashboard = () => {
   };
 
   const handleDeleteCompareSearch = (searchName) => {
-    const indexToRemove = contextFilters.eventNames.findIndex(item => item === searchName);
+    const indexToRemove = contextFilters.eventNames.findIndex(
+      (item) => item === searchName
+    );
 
     if (indexToRemove !== -1) {
-      const updatedEventNames = contextFilters.eventNames.filter((_, index) => index !== indexToRemove);
-      const updatedEventQueries = contextFilters.eventQueries.filter((_, index) => index !== indexToRemove);
+      const updatedEventNames = contextFilters.eventNames.filter(
+        (_, index) => index !== indexToRemove
+      );
+      const updatedEventQueries = contextFilters.eventQueries.filter(
+        (_, index) => index !== indexToRemove
+      );
 
       if (contextFilters.eventNames.length <= 2) {
         setContextFilters({
@@ -387,10 +394,8 @@ const Dashboard = () => {
         ...contextFilters,
         eventNames: updatedEventNames,
         eventQueries: updatedEventQueries,
-      });    
+      });
     }
-
-    
   };
 
   const [compareEditMode, setCompareEditMode] = useState(false);
@@ -665,7 +670,14 @@ const Dashboard = () => {
               )}
 
               <DateInputContainer>
-                <DateInput />
+                <DateInput
+                  onChange={(e) =>
+                    setContextFilters({
+                      ...contextFilters,
+                      date: e.target.value,
+                    })
+                  }
+                />
               </DateInputContainer>
             </DateItemRow>
           </DateContainer>
