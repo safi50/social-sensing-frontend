@@ -71,7 +71,7 @@ export function generateData({
   const resultsOverTime_sevenRandomNumbers = generateRandomValues(1, 7);
   const resultsOverTime_twentyFourRandomNumbers = generateRandomValues(1, 24);
 
-  const sentiments_threeRandomNumbers = generateRandomValues(1, 2);
+  const sentiments_threeRandomNumbers = generateRandomValues(1, 3);
 
   const netPositiveSentimentsOverTime_sevenRandomNumbers = generateRandomValues(
     1,
@@ -86,6 +86,458 @@ export function generateData({
   );
   const netNegativeSentimentsOverTime_twentyFourRandomNumbers =
     generateRandomValues(1, 24);
+  const netNeutralSentimentsOverTime_sevenRandomNumbers = generateRandomValues(
+    1,
+    7
+  );
+  const netNeutralSentimentsOverTime_twentyFourRandomNumbers =
+    generateRandomValues(1, 24);
+
+  const sentimentData = [];
+  if (sentimentType.includes("positive")) {
+    sentimentData.push({
+      label: "Positive",
+      data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[0])],
+      backgroundColor: "green",
+      borderColor: "green",
+      borderWidth: 1,
+    });
+  }
+  if (sentimentType.includes("negative")) {
+    sentimentData.push({
+      label: "Negative",
+      data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[1])],
+      backgroundColor: "red",
+      borderColor: "red",
+      borderWidth: 1,
+    });
+  }
+  if (sentimentType.includes("neutral")) {
+    sentimentData.push({
+      label: "Neutral",
+      data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[2])],
+      backgroundColor: "blue",
+      borderColor: "blue",
+      borderWidth: 1,
+    });
+  }
+
+  const netSentimentsOverTimeData = [];
+  if (sentimentType.includes("positive")) {
+    netSentimentsOverTimeData.push({
+      label: "Positive",
+      data:
+        timeRange === "1d"
+          ? [
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[0]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[1]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[2]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[3]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[4]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[5]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[6]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[7]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[8]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[9]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[10]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[11]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[12]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[13]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[14]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[15]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[16]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[17]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[18]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[19]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[20]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[21]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[22]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_twentyFourRandomNumbers[23]
+              ),
+            ]
+          : [
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_sevenRandomNumbers[0]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_sevenRandomNumbers[1]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_sevenRandomNumbers[2]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_sevenRandomNumbers[3]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_sevenRandomNumbers[4]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_sevenRandomNumbers[5]
+              ),
+              Math.trunc(
+                totalResults *
+                  netPositiveSentimentsOverTime_sevenRandomNumbers[6]
+              ),
+            ],
+      backgroundColor: "green",
+      borderColor: "green",
+      borderWidth: 1,
+    });
+  }
+
+  if (sentimentType.includes("negative")) {
+    netSentimentsOverTimeData.push({
+      label: "Negative",
+      data:
+        timeRange === "1d"
+          ? [
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[0]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[1]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[2]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[3]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[4]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[5]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[6]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[7]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[8]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[9]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[10]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[11]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[12]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[13]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[14]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[15]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[16]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[17]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[18]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[19]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[20]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[21]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[22]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_twentyFourRandomNumbers[23]
+              ),
+            ]
+          : [
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_sevenRandomNumbers[0]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_sevenRandomNumbers[1]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_sevenRandomNumbers[2]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_sevenRandomNumbers[3]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_sevenRandomNumbers[4]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_sevenRandomNumbers[5]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNegativeSentimentsOverTime_sevenRandomNumbers[6]
+              ),
+            ],
+      backgroundColor: "red",
+      borderColor: "red",
+      borderWidth: 1,
+    });
+  }
+  if (sentimentType.includes("neutral")) {
+    netSentimentsOverTimeData.push({
+      label: "Neutral",
+      data:
+        timeRange === "1d"
+          ? [
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[0]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[1]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[2]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[3]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[4]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[5]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[6]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[7]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[8]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[9]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[10]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[11]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[12]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[13]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[14]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[15]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[16]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[17]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[18]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[19]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[20]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[21]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[22]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_twentyFourRandomNumbers[23]
+              ),
+            ]
+          : [
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_sevenRandomNumbers[0]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_sevenRandomNumbers[1]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_sevenRandomNumbers[2]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_sevenRandomNumbers[3]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_sevenRandomNumbers[4]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_sevenRandomNumbers[5]
+              ),
+              Math.trunc(
+                totalResults *
+                  netNeutralSentimentsOverTime_sevenRandomNumbers[6]
+              ),
+            ],
+      backgroundColor: "blue",
+      borderColor: "blue",
+      borderWidth: 1,
+    });
+  }
 
   let data = eventNames.map((name, index) => {
     return {
@@ -257,29 +709,7 @@ export function generateData({
       },
       sentiments: {
         labels: [name],
-        datasets: [
-          {
-            label: "Positive",
-            data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[0])],
-            backgroundColor: "green",
-            borderColor: "green",
-            borderWidth: 1,
-          },
-          {
-            label: "Negative",
-            data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[1])],
-            backgroundColor: "red",
-            borderColor: "red",
-            borderWidth: 1,
-          },
-          {
-            label: "Neutral",
-            data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[2])],
-            backgroundColor: "blue",
-            borderColor: "blue",
-            borderWidth: 1,
-          },
-        ],
+        datasets: sentimentData,
       },
       netSentimentsOverTime: {
         labels:
@@ -312,156 +742,7 @@ export function generateData({
                 "23",
               ]
             : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        datasets: [
-          {
-            label: "Positive",
-            data:
-              timeRange === "1d"
-                ? [
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[0],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[1],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[2],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[3],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[4],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[5],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[6],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[7],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[8],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[9],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[10],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[11],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[12],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[13],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[14],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[15],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[16],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[17],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[18],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[19],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[20],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[21],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[22],
-                    totalResults *
-                      netPositiveSentimentsOverTime_twentyFourRandomNumbers[23],
-                  ]
-                : [
-                    totalResults *
-                      netPositiveSentimentsOverTime_sevenRandomNumbers[0],
-                    totalResults *
-                      netPositiveSentimentsOverTime_sevenRandomNumbers[1],
-                    totalResults *
-                      netPositiveSentimentsOverTime_sevenRandomNumbers[2],
-                    totalResults *
-                      netPositiveSentimentsOverTime_sevenRandomNumbers[3],
-                    totalResults *
-                      netPositiveSentimentsOverTime_sevenRandomNumbers[4],
-                    totalResults *
-                      netPositiveSentimentsOverTime_sevenRandomNumbers[5],
-                    totalResults *
-                      netPositiveSentimentsOverTime_sevenRandomNumbers[6],
-                  ],
-            backgroundColor: "green",
-            borderColor: "green",
-            borderWidth: 1,
-          },
-          {
-            label: "Negative",
-            data:
-              timeRange === "1d"
-                ? [
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[0],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[1],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[2],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[3],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[4],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[5],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[6],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[7],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[8],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[9],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[10],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[11],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[12],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[13],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[14],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[15],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[16],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[17],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[18],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[19],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[20],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[21],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[22],
-                    totalResults *
-                      netNegativeSentimentsOverTime_twentyFourRandomNumbers[23],
-                  ]
-                : [
-                    totalResults *
-                      netNegativeSentimentsOverTime_sevenRandomNumbers[0],
-                    totalResults *
-                      netNegativeSentimentsOverTime_sevenRandomNumbers[1],
-                    totalResults *
-                      netNegativeSentimentsOverTime_sevenRandomNumbers[2],
-                    totalResults *
-                      netNegativeSentimentsOverTime_sevenRandomNumbers[3],
-                    totalResults *
-                      netNegativeSentimentsOverTime_sevenRandomNumbers[4],
-                    totalResults *
-                      netNegativeSentimentsOverTime_sevenRandomNumbers[5],
-                    totalResults *
-                      netNegativeSentimentsOverTime_sevenRandomNumbers[6],
-                  ],
-            backgroundColor: "red",
-            borderColor: "red",
-            borderWidth: 1,
-          },
-        ],
+        datasets: netSentimentsOverTimeData,
       },
     };
   });
