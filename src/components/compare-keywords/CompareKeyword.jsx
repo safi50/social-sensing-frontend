@@ -9,6 +9,7 @@ import {
 } from "./CompareKeyword.styles";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 import { mergeData } from "../../contexts/dummyData";
+import { useNavigate } from "react-router-dom";
 
 export const CompareKeyword = () => {
   const { data } = useContext(CompareKeywordContext);
@@ -18,23 +19,37 @@ export const CompareKeyword = () => {
   const mergedResultsOverTime = mergeData(data, "resultsOverTime");
   const mergedSentiments = mergeData(data, "sentiments");
   const mergedNetSentimentOverTime = mergeData(data, "netSentimentsOverTime");
+  const navigate = useNavigate();
   return (
     <CompareKeywordWrapper>
       <ComparisonCard title={"Total Results"} />
       <ChartsContainer>
-        <VerticalBarChart
-          title="Total Engagement"
-          data={mergedTotalEngagement}
-        />
-        <HorizontalBarChartComponent title="Reach" data={mergedReach} />
+        <div onClick={() => navigate("/topResults")}>
+          <VerticalBarChart
+            title="Total Engagement"
+            data={mergedTotalEngagement}
+          />
+        </div>
+        <div onClick={() => navigate("/topResults")}>
+          <HorizontalBarChartComponent title="Reach" data={mergedReach} />
+        </div>
       </ChartsContainer>
-      <ChartComponent title="Results over time" data={mergedResultsOverTime} />
-      <ChartsContainer>
-        <VerticalBarChart title="Sentiments" data={mergedSentiments} />
+      <div onClick={() => navigate("/topResults")}>
         <ChartComponent
-          title="Net Sentiment over time"
-          data={mergedNetSentimentOverTime}
+          title="Results over time"
+          data={mergedResultsOverTime}
         />
+      </div>
+      <ChartsContainer>
+        <div onClick={() => navigate("/topResults")}>
+          <VerticalBarChart title="Sentiments" data={mergedSentiments} />
+        </div>
+        <div onClick={() => navigate("/topResults")}>
+          <ChartComponent
+            title="Net Sentiment over time"
+            data={mergedNetSentimentOverTime}
+          />
+        </div>
       </ChartsContainer>
     </CompareKeywordWrapper>
   );

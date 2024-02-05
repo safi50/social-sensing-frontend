@@ -9,6 +9,7 @@ import {
 import SentimentsCard from "../sentiments-card/SentimentsCard";
 import Papa from "papaparse";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
+const { useNavigate } = require("react-router-dom");
 
 export const SentimentResults = () => {
   const { data } = useContext(CompareKeywordContext);
@@ -43,7 +44,9 @@ export const SentimentResults = () => {
       setNegativeResults(negative?.Score);
     }
   }, [sentimentResults]);
-  
+
+  const navigate = useNavigate();
+
   return (
     <>
       {data.length && (
@@ -74,14 +77,18 @@ export const SentimentResults = () => {
             />
           </CardsContainer>
           <ChartsContainer>
-            <ChartComponent
-              title={"Results over time"}
-              data={data[0].resultsOverTime}
-            />
-            <ChartComponent
-              title={"Net sentiment over time"}
-              data={data[0].netSentimentsOverTime}
-            />
+            <div onClick={() => navigate("/topResults")}>
+              <ChartComponent
+                title={"Results over time"}
+                data={data[0].resultsOverTime}
+              />
+            </div>
+            <div onClick={() => navigate("/topResults")}>
+              <ChartComponent
+                title={"Net sentiment over time"}
+                data={data[0].netSentimentsOverTime}
+              />
+            </div>
           </ChartsContainer>
         </ResultsContainer>
       )}
