@@ -126,13 +126,13 @@ export const BackIcon = styled.img`
 export const BackContainer = styled.div`
   display: flex;
   align-content: center;
-  padding: 10px 10px 10px 25px
-`
+  padding: 10px 10px 10px 25px;
+`;
 
 export const BackText = styled.span`
   font-size: 20px;
-  color: #6937f2
-`
+  color: #6937f2;
+`;
 
 export const HashtagText = styled.span`
   font-size: 14px;
@@ -165,7 +165,7 @@ export const CompareKeywordInput = styled.input`
   width: 200px;
   height: 40px;
   font-size: 14px;
-  padding: 10px
+  padding: 10px;
 `;
 
 export const PurplePlus = styled.img`
@@ -340,10 +340,7 @@ export const DateInputContainer = styled.div`
 `;
 
 // Styled input for the date
-export const DateInput = styled.input.attrs({
-  type: "date",
-  placeholder: "dd mm yyyy",
-})`
+export const DateInput = styled.button`
   opacity: 0.2;
   border: none;
   outline: none;
@@ -390,21 +387,20 @@ export const ChartsContainer = styled.div`
   justify-content: space-between;
 `;
 
-
 export const EditIcon = styled.img.attrs({
-  src: "/edit.svg"
+  src: "/edit.svg",
 })`
-margin-right: 5px;
-width: 15px;
-height: 15px;
-`
+  margin-right: 5px;
+  width: 15px;
+  height: 15px;
+`;
 
 export const DeleteIcon = styled.img.attrs({
-  src: "/trash-2.svg"
+  src: "/trash-2.svg",
 })`
-width: 15px;
-height: 15px;
-`
+  width: 15px;
+  height: 15px;
+`;
 
 export const FilterCheckbox = styled.div`
   display: flex;
@@ -417,8 +413,8 @@ export const FilterCheckbox = styled.div`
 `;
 
 export const CheckBoxLabel = styled.label`
-  font-size: 12px
-`
+  font-size: 12px;
+`;
 
 export const FilterItemContainer = styled.div`
   position: relative;
@@ -427,7 +423,7 @@ export const FilterItemContainer = styled.div`
 `;
 
 export const FilterItemDropdown = styled.div`
-position: absolute;
+  position: absolute;
   top: 100%; // Position the dropdown right below the filter item
   left: 0;
   z-index: 10; // Ensure it's above other items
@@ -436,16 +432,16 @@ position: absolute;
   border-radius: 5px;
   width: 100%;
   padding: 10px 5px;
-`
+`;
 
 export const ApplyBtnMedium = styled(DownloadButton)`
-width: 50%;
-height: 30px;
-maxWidth: 200px
-`
+  width: 50%;
+  height: 30px;
+  maxwidth: 200px;
+`;
 
 export const SentimentFilterFooterContainer = styled.div`
-display: flex;
-padding-top: 10px;
-justify-content: right;
-`
+  display: flex;
+  padding-top: 10px;
+  justify-content: right;
+`;

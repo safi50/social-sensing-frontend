@@ -9,7 +9,10 @@ export const CompareKeywordProvider = ({ children }) => {
     eventNames: [],
     eventQueries: [],
     timeRange: "1d", //1d , 7d , 1M
-    date: new Date(),
+    date: {
+      startDate: new Date(),
+      endDate: new Date(),
+    },
     sentimentType: ["positive", "negative", "neutral"], // positive, negative, neutral
     language: ["en", "ur"], // en, ur
   });

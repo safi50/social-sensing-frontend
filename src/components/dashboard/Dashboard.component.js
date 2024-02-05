@@ -63,6 +63,9 @@ import { SavedSearchesContext } from "../../contexts/SavedSearches.context";
 import EditCompareKeywordModal from "../editCompareKeywordModal/EditCompareKeywordModal.component";
 import zIndex from "@mui/material/styles/zIndex";
 import { useNavigate, useLocation } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { DateRange } from "../date-range/DateRange.component";
 
 export const savedSearches = [
   // {
@@ -670,13 +673,30 @@ const Dashboard = () => {
               )}
 
               <DateInputContainer>
-                <DateInput
+                {/* <DateInput
                   onChange={(e) =>
                     setContextFilters({
                       ...contextFilters,
                       date: e.target.value,
                     })
                   }
+                /> */}
+                <DatePicker
+                  selected={contextFilters.date.startDate}
+                  onChange={(update) => {
+                    setContextFilters({
+                      ...contextFilters,
+                      date: {
+                        startDate: update[0] || update,
+                        endDate: update[1],
+                      },
+                    });
+                  }}
+                  startDate={contextFilters.date.startDate}
+                  endDate={contextFilters.date.endDate}
+                  selectsRange
+                  inline={false}
+                  customInput={<DateRange />}
                 />
               </DateInputContainer>
             </DateItemRow>
