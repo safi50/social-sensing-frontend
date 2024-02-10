@@ -77,13 +77,13 @@ export const SentimentResults = () => {
             />
           </CardsContainer>
           <ChartsContainer>
-            <div onClick={() => navigate("/topResults")}>
+            <div>
               <ChartComponent
-                title={"Results over time"}
+                title={"Resultseee over times"}
                 data={data[0].resultsOverTime}
               />
             </div>
-            <div onClick={() => navigate("/topResults")}>
+            <div>
               <ChartComponent
                 title={"Net sentiment over time"}
                 data={data[0].netSentimentsOverTime}

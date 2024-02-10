@@ -16,6 +16,52 @@ function generateRandomValues(sumTo, count) {
 
   return normalizedNumbers;
 }
+
+const getMonthName = (monthIndex) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+  return months[monthIndex];
+};
+
+const generateLastDaysArray = () => {
+  const today = new Date();
+  const lastDays = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - i);
+    const formattedDate = `${date.getDate()} ${getMonthName(
+      date.getMonth()
+    )}`;
+    lastDays.push(formattedDate);
+  }
+  return lastDays
+};
+
+const generateLast24HoursArray = () => {
+  const now = new Date();
+  const last24Hours = [];
+
+  for (let i = 0; i < 24; i++) {
+    const hour = new Date(now);
+    hour.setHours(now.getHours() - i);
+    last24Hours.unshift(hour.getHours());
+  }
+  return last24Hours
+};
+
 export function generateData({
   eventNames,
   timeRange,
@@ -571,34 +617,8 @@ export function generateData({
       resultsOverTime: {
         labels:
           timeRange === "1d"
-            ? [
-                "00",
-                "01",
-                "02",
-                "03",
-                "04",
-                "04",
-                "05",
-                "06",
-                "07",
-                "08",
-                "09",
-                "10",
-                "11",
-                "12",
-                "13",
-                "14",
-                "15",
-                "16",
-                "17",
-                "18",
-                "19",
-                "20",
-                "21",
-                "22",
-                "23",
-              ]
-            : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            ? generateLast24HoursArray()
+            : generateLastDaysArray(),
         datasets: [
           {
             label: name,
@@ -714,34 +734,8 @@ export function generateData({
       netSentimentsOverTime: {
         labels:
           timeRange === "1d"
-            ? [
-                "00",
-                "01",
-                "02",
-                "03",
-                "04",
-                "04",
-                "05",
-                "06",
-                "07",
-                "08",
-                "09",
-                "10",
-                "11",
-                "12",
-                "13",
-                "14",
-                "15",
-                "16",
-                "17",
-                "18",
-                "19",
-                "20",
-                "21",
-                "22",
-                "23",
-              ]
-            : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            ? generateLast24HoursArray()
+            : generateLastDaysArray(),
         datasets: netSentimentsOverTimeData,
       },
     };

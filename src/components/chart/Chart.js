@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -48,24 +48,58 @@ const TitleText = styled.p`
   color: #000;
 `;
 
-const options = {
-  plugins: {
-    legend: {
-      position: "top",
-      labels: {
-        usePointStyle: true,
-        pointStyle: "circle",
-      },
-    },
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-    },
-  },
-};
+// const options = {
+//   plugins: {
+//     legend: {
+//       position: "top",
+//       labels: {
+//         usePointStyle: true,
+//         pointStyle: "circle",
+//       },
+//     },
+//   },
+//   scales: {
+//     y: {
+//       beginAtZero: true,
+//     },
+//   },
+//   onClick: (event, elements) => {
+//     if (elements.length > 0) {
+//       const clickedElement = elements[0];
+//       const datasetIndex = clickedElement._datasetIndex;
+//       const index = clickedElement._index;
+//       const xValue = data.labels[index]; // Assuming labels represent x-axis values
+//       console.log("xvalue:", xValue)
+//     }
+//   }
+// };
 
 const ChartComponent = ({ title, data }) => {
+  const [xValue, setXValue] = useState(0);
+
+  const options = {
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          usePointStyle: true,
+          pointStyle: "circle",
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+    onClick: (event, elements) => {
+      if (elements.length > 0) {
+        const clickedElement = elements[0];
+        setXValue(clickedElement.index); // Assuming labels represent x-axis values
+      }
+    }
+  };
+
   return (
     <ChartContainer>
       <Row>
