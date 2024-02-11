@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   DashboardContainer,
   HeaderContainer,
@@ -307,6 +307,7 @@ const TopResults = () => {
     language: "",
     date: "",
   });
+
 
   useEffect(() => {
     const mockPosts = generateMockData(50); // Generate 50 mock posts

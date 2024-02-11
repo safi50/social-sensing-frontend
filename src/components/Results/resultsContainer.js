@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import ResultCard from "./resultCard";
 import ResultCardCompact from "./resultCardCompact";
 import ResultCardStory from "./resultCardStory";
@@ -7,6 +7,9 @@ import ResultCardGrid from "./resultCardGrid";
 import WordCloudComponent from "../top-themes/wordcloud";
 import EmojiCloudComponent from "../top-themes/emojicloud";
 import Select from "react-select";
+import { TopResultsFilterContext } from "../../contexts/TopResultsFilter.context";
+import profileImage from '../../assets/profile-pic.jpeg';
+import sharedImage from '../../assets/cool-profile-picture.jpeg';
 
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
@@ -164,12 +167,72 @@ const exportOptions = [
   { value: "PPT Portrait", label: "PPT Portrait" },
 ];
 
+
 const ResultsCard = () => {
   const [activeTab, setActiveTab] = useState("topResults");
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedLayout, setSelectedLayout] = useState("Normal");
   const [selectedExport, setSelectedExport] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("Bio");
+
+  const {topResultMatch, setTopResultMatch, topResultRange, setTopResultRange, topResultSentiment, setTopResultSentiment} = useContext(TopResultsFilterContext)
+
+  
+  const generateRandomTweets = () => {
+    const sentiments = ['Positive', 'Negative', 'Neutral'];
+    const profiles = [
+        { name: 'John Doe', handle: '@johndoe'},
+        { name: 'Jane Smith', handle: '@janesmith'},
+        { name: 'Alice Johnson', handle: '@alicejohnson'}
+    ];
+
+    const tweets = [];
+    for (let i = 0; i < 3; i++) {
+        const randomProfile = profiles[Math.floor(Math.random() * profiles.length)];
+
+        let randomTime = Math.floor(Math.random() * 24); // Random hour
+        if (randomTime < 10) {
+            randomTime = `0${randomTime}`;
+        }
+        const randomMinutes = Math.floor(Math.random() * 60); // Random minutes
+        const randomHourString = `${randomTime}:${randomMinutes < 10 ? '0' : ''}${randomMinutes}`;
+        const randomTimePublished = `${topResultRange} ${randomHourString}`;
+
+        let sentiment = topResultSentiment;
+        if (sentiment === 'None') {
+            sentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
+        }
+
+        const profileData = {
+            name: randomProfile.name,
+            handle: randomProfile.handle,
+            profileImage: profileImage,
+            content: 'Random tweet content here...',
+            sharedImage: sharedImage,
+            sentiment: sentiment,
+            matches: topResultMatch,
+            reach: `${(Math.random()*10).toFixed(1)}k`,
+            engagement: `${(Math.random()*1000).toFixed(0)}k`,
+            trending: `${(Math.random()*10).toFixed(1)}k`,
+            timePublished: randomTimePublished,
+            location: 'Pakistan',
+            platform: "Twitter.com"
+        };
+        const additionalMetrics = {
+          shares: `${(Math.random()*1000).toFixed(0)}k`,
+          hearts: `${(Math.random()*1000).toFixed(0)}k`,
+          users: `${(Math.random()*1000).toFixed(0)}k`
+        }
+
+        tweets.push([{profileData, additionalMetrics}]);
+    }
+
+    return tweets;
+};
+
+
+  const randomTweets = generateRandomTweets()
+  console.log("randomTweets:", randomTweets)
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
@@ -265,12 +328,22 @@ const ResultsCard = () => {
 
       {activeTab === "topResults" && (
         <div>
-         {[...Array(3)].map((_, index) => (
+         {/* {[...Array(3)].map((_, index) => (
                 <div key={index}>
                     {selectedLayout === "Normal" && <ResultCard />}
                     {selectedLayout === "Compact" && <ResultCardCompact />}
                 </div>
-            ))}
+            ))} */}
+          {randomTweets.map((data, index) => (
+            <div key={index}>
+              {selectedLayout === "Normal" && 
+                  <ResultCard profileData={data[0].profileData} additionalMetrics={data[0].additionalMetrics}/>
+              }
+              {selectedLayout === "Compact" &&
+                  <ResultCardCompact profileData={data[0].profileData} additionalMetrics={data[0].additionalMetrics}/>
+              }
+            </div>
+          ))}
           {selectedLayout === "Stories" && (
             <CardRow>
               <ResultCardStory />

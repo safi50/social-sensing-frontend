@@ -24,27 +24,27 @@ export const CompareKeyword = () => {
     <CompareKeywordWrapper>
       <ComparisonCard title={"Total Results"} />
       <ChartsContainer>
-        <div onClick={() => navigate("/topResults")}>
+        <div>
           <VerticalBarChart
             title="Total Engagement"
             data={mergedTotalEngagement}
           />
         </div>
-        <div onClick={() => navigate("/topResults")}>
+        <div>
           <HorizontalBarChartComponent title="Reach" data={mergedReach} />
         </div>
       </ChartsContainer>
-      <div onClick={() => navigate("/topResults")}>
+      <div>
         <ChartComponent
           title="Results over time"
           data={mergedResultsOverTime}
         />
       </div>
       <ChartsContainer>
-        <div onClick={() => navigate("/topResults")}>
+        <div>
           <VerticalBarChart title="Sentiments" data={mergedSentiments} />
         </div>
-        <div onClick={() => navigate("/topResults")}>
+        <div>
           <ChartComponent
             title="Net Sentiment over time"
             data={mergedNetSentimentOverTime}

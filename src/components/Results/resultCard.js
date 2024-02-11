@@ -195,28 +195,28 @@ const SmallMetricValue = styled.span`
 
 
 // React component
-const ResultCard = () => {
+const ResultCard = ({profileData, additionalMetrics}) => {
     // Placeholder data - you'd replace this with data from your backend
-    const profileData = {
-        name: 'John Doe',
-        handle: '@johndoe',
-        profileImage: profileImage,
-        content: 'olamaz ȇ̈s̑̈c̑̈ȏ̈ȓ̈t̑ degiliz başka kalışların sanırım, hayalindeki gec #beylikdüzü Hicbirimizhayal #ataköy insanın Bu #bakirköy pic.twitter.com/HBnEasCJFo',
-        sharedImage: sharedImage,
-        sentiment: 'Neutral',
-        matches: '#istanbul',
-        reach: '2.1K',
-        engagement: '200K',
-        trending: '2.1K',
-        timePublished: '11 hours ago',
-        location: 'Turkey',
-        platform: 'Twitter.com'
-    };
-    const additionalMetrics = {
-        shares: '124K',
-        hearts: '31K',
-        users: '32K'
-    };
+    // const profileData = {
+    //     name: 'John Doe',
+    //     handle: '@johndoe',
+    //     profileImage: profileImage,
+    //     content: 'olamaz ȇ̈s̑̈c̑̈ȏ̈ȓ̈t̑ degiliz başka kalışların sanırım, hayalindeki gec #beylikdüzü Hicbirimizhayal #ataköy insanın Bu #bakirköy pic.twitter.com/HBnEasCJFo',
+    //     sharedImage: sharedImage,
+    //     sentiment: 'Neutral',
+    //     matches: '#istanbul',
+    //     reach: '2.1K',
+    //     engagement: '200K',
+    //     trending: '2.1K',
+    //     timePublished: '11 hours ago',
+    //     location: 'Turkey',
+    //     platform: 'Twitter.com'
+    // };
+    // const additionalMetrics = {
+    //     shares: '124K',
+    //     hearts: '31K',
+    //     users: '32K'
+    // };
     
     return (
         <CardContainer>

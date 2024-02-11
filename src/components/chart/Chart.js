@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -12,6 +12,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { TopResultsFilterContext } from "../../contexts/TopResultsFilter.context";
+import { useNavigate, useLocation } from "react-router-dom";
 
 Chart.register(
   CategoryScale,
@@ -22,6 +24,7 @@ Chart.register(
   Tooltip,
   Legend
 );
+
 
 const ChartContainer = styled.div`
   margin-top: 2rem;
@@ -48,34 +51,9 @@ const TitleText = styled.p`
   color: #000;
 `;
 
-// const options = {
-//   plugins: {
-//     legend: {
-//       position: "top",
-//       labels: {
-//         usePointStyle: true,
-//         pointStyle: "circle",
-//       },
-//     },
-//   },
-//   scales: {
-//     y: {
-//       beginAtZero: true,
-//     },
-//   },
-//   onClick: (event, elements) => {
-//     if (elements.length > 0) {
-//       const clickedElement = elements[0];
-//       const datasetIndex = clickedElement._datasetIndex;
-//       const index = clickedElement._index;
-//       const xValue = data.labels[index]; // Assuming labels represent x-axis values
-//       console.log("xvalue:", xValue)
-//     }
-//   }
-// };
-
-const ChartComponent = ({ title, data }) => {
-  const [xValue, setXValue] = useState(0);
+const ChartComponent = ({ title, data, queryMatches, sentimentType, timeRange }) => {
+  const {topResultMatch, setTopResultMatch, topResultRange, setTopResultRange, topResultSentiment, setTopResultSentiment} = useContext(TopResultsFilterContext)
+  const navigate = useNavigate();
 
   const options = {
     plugins: {
@@ -95,7 +73,14 @@ const ChartComponent = ({ title, data }) => {
     onClick: (event, elements) => {
       if (elements.length > 0) {
         const clickedElement = elements[0];
-        setXValue(clickedElement.index); // Assuming labels represent x-axis values
+        console.log("title:", title)
+        console.log("data:", data)
+        console.log("Clicked element:", clickedElement)
+        console.log("Time range:", data.labels[clickedElement.index])
+        setTopResultRange(data.labels[clickedElement.index])
+        setTopResultMatch(queryMatches[0])
+        setTopResultSentiment(data.datasets.length == 1? 'none': data.datasets[clickedElement.datasetIndex].label)
+        navigate('/topResults')
       }
     }
   };

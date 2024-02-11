@@ -12,7 +12,13 @@ import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 const { useNavigate } = require("react-router-dom");
 
 export const SentimentResults = () => {
-  const { data } = useContext(CompareKeywordContext);
+  const {
+    data,
+    deleteDataByName,
+    filters: contextFilters,
+    setFilters: setContextFilters,
+  } = useContext(CompareKeywordContext);
+
   const [sentimentResults, setSentimentResults] = useState();
   const [positiveResults, setPositiveResults] = useState();
   const [negativeResults, setNegativeResults] = useState();
@@ -81,12 +87,18 @@ export const SentimentResults = () => {
               <ChartComponent
                 title={"Resultseee over times"}
                 data={data[0].resultsOverTime}
+                queryMatches={contextFilters.eventNames}
+                sentimentType={null}
+                timeRange={null}
               />
             </div>
             <div>
               <ChartComponent
                 title={"Net sentiment over time"}
                 data={data[0].netSentimentsOverTime}
+                queryMatches={contextFilters.eventNames}
+                sentimentType={null}
+                timeRange={null}
               />
             </div>
           </ChartsContainer>
