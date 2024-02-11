@@ -13,6 +13,7 @@ export const CompareKeywordProvider = ({ children }) => {
       startDate: new Date(),
       endDate: new Date(),
     },
+    devices: ["mobile", "desktop", "tablet"],
     sentimentType: ["positive", "negative", "neutral"], // positive, negative, neutral
     language: ["en", "ur"], // en, ur
   });

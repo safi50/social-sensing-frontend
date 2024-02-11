@@ -235,6 +235,7 @@ const Dashboard = () => {
     let togglefnc = null;
     if (filterType == "sentiment") togglefnc = toggleSentimentCheckboxes;
     else if (filterType == "language") togglefnc = toggleLanguageCheckboxes;
+    else if (filterType == "device") togglefnc = toggleDevicesCheckboxes;
     return (
       <SentimentFilterFooterContainer>
         <CrossBtn onClick={togglefnc}>
@@ -260,6 +261,8 @@ const Dashboard = () => {
     useState(false);
   const [showSentimentCheckboxes, setShowSentimentCheckboxes] = useState(false);
   const [showLanguageCheckboxes, setShowLanguageCheckboxes] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const [showDevicesCheckboxes, setShowDevicesCheckboxes] = useState(false);
 
   const [saveSearches, setSaveSearches] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -285,6 +288,14 @@ const Dashboard = () => {
       : contextFilters.language.filter((lang) => lang !== language); // Remove language if not checked
 
     setContextFilters({ ...contextFilters, language: newLanguage });
+  };
+
+  const handleDeviceChange = (device, isChecked) => {
+    const newDevice = isChecked
+      ? [...contextFilters.devices, device] // Add language if checked
+      : contextFilters.devices.filter((dev) => dev !== device); // Remove language if not checked
+
+    setContextFilters({ ...contextFilters, devices: newDevice });
   };
   const navigate = useNavigate();
   const location = useLocation();
@@ -350,6 +361,9 @@ const Dashboard = () => {
 
   const toggleLanguageCheckboxes = () => {
     setShowLanguageCheckboxes(!showLanguageCheckboxes);
+  };
+  const toggleDevicesCheckboxes = () => {
+    setShowDevicesCheckboxes(!showDevicesCheckboxes);
   };
 
   const handleEditSearch = (id, name) => {
@@ -580,11 +594,9 @@ const Dashboard = () => {
                   </FilterItemDropdown>
                 )}
               </FilterItemContainer>
-
               {/* <FilterItem>
                 Media type <CountBox>2</CountBox>
               </FilterItem> */}
-
               <FilterItemContainer>
                 <FilterItem onClick={toggleLanguageCheckboxes}>
                   Language <CountBox>3</CountBox>
@@ -617,12 +629,72 @@ const Dashboard = () => {
                   </FilterItemDropdown>
                 )}
               </FilterItemContainer>
-
               <FilterItem>
                 Pakistan <CountBox>1</CountBox>
               </FilterItem>
 
-              <MoreItem>
+              {isMoreOpen && (
+                <>
+                  <FilterItem>
+                    Twitter <CountBox>1</CountBox>
+                  </FilterItem>
+                  <FilterItem>
+                    Demographics <CountBox>1</CountBox>
+                  </FilterItem>
+                  <FilterItemContainer>
+                    <FilterItem onClick={toggleDevicesCheckboxes}>
+                      Devices <CountBox>3</CountBox>
+                    </FilterItem>
+                    {showDevicesCheckboxes && (
+                      <FilterItemDropdown>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="mobile"
+                            defaultChecked={contextFilters.devices.includes(
+                              "mobile"
+                            )}
+                            onChange={(e) =>
+                              handleDeviceChange("mobile", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="mobile">Mobile</CheckBoxLabel>
+                        </FilterCheckbox>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="desktop"
+                            defaultChecked={contextFilters.devices.includes(
+                              "desktop"
+                            )}
+                            onChange={(e) =>
+                              handleDeviceChange("desktop", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="desktop">
+                            Desktop
+                          </CheckBoxLabel>
+                        </FilterCheckbox>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="tablet"
+                            defaultChecked={contextFilters.devices.includes(
+                              "tablet"
+                            )}
+                            onChange={(e) =>
+                              handleDeviceChange("tablet", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="tablet">Tablet</CheckBoxLabel>
+                        </FilterCheckbox>
+                        <FilterApplicationFooter filterType={"device"} />
+                      </FilterItemDropdown>
+                    )}
+                  </FilterItemContainer>
+                </>
+              )}
+              <MoreItem onClick={() => setIsMoreOpen((prev) => !prev)}>
                 <PurplePlus src="/plus-large-svgrepo-com.svg" />
                 More
               </MoreItem>

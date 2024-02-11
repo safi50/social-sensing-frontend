@@ -55,7 +55,7 @@ export const SentimentResults = () => {
 
   return (
     <>
-      {data.length && (
+      {data && data.length && (
         <ResultsContainer>
           <CardsContainer>
             <Card
@@ -72,8 +72,16 @@ export const SentimentResults = () => {
             />
             <SentimentsCard
               title={"Sentiments"}
-              happy={data[0].sentiments.datasets[0].data[0]}
-              sad={data[0].sentiments.datasets[1].data[0]}
+              happy={
+                data[0].sentiments.datasets[0]
+                  ? data[0].sentiments.datasets[0].data[0]
+                  : 0
+              }
+              sad={
+                data[0].sentiments.datasets[1]
+                  ? data[0].sentiments.datasets[1].data[0]
+                  : 0
+              }
             />
             <Card
               image={"/noun-antenna-4635475.svg"}

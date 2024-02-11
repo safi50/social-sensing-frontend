@@ -294,6 +294,7 @@ export const FilterItem = styled.div`
 `;
 
 export const MoreItem = styled.div`
+  cursor: pointer;
   display: flex;
   align-items: center;
   border-radius: 30px;
