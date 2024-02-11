@@ -129,19 +129,19 @@ const Icon = styled.img`
   }
 `;
 
-const data = {
-  imageUrl: "https://picsum.photos/300/150",
-  mainText:
-    "🤝🎯TARGET COMPLETED 🔥🔥 HERE'S 10U #NBA MAX BET 👀⚠️💵 🏀 Heat vs Celtics 🎯 OVER (216.5) @ 1.5",
-  publishedInfo: "Published 11 hours ago",
-  handleName: "@JohnDoe",
-  reach: "2.1K",
-};
+// const data = {
+//   imageUrl: "https://picsum.photos/300/150",
+//   mainText:
+//     "🤝🎯TARGET COMPLETED 🔥🔥 HERE'S 10U #NBA MAX BET 👀⚠️💵 🏀 Heat vs Celtics 🎯 OVER (216.5) @ 1.5",
+//   publishedInfo: "Published 11 hours ago",
+//   handleName: "@JohnDoe",
+//   reach: "2.1K",
+// };
 
-const ResultCardStory = () => {
+const ResultCardStory = ({data}) => {
   return (
     <StoryContainer>
-      <ImageSection imgUrl={data.imageUrl}>
+      <ImageSection imgUrl={data.sharedImage}>
         <Reach>
           {data.reach}
           <ReachLabel> Reach</ReachLabel>
@@ -152,11 +152,11 @@ const ResultCardStory = () => {
         <HoverIcon src={externalLinkIcon} alt="External Link" />
       </IconsContainer>
       <TextSection>
-        <MainText>{data.mainText}</MainText>
-        <PublishInfo>{data.publishedInfo}</PublishInfo>
+        <MainText>{data.content}</MainText>
+        <PublishInfo>{data.timePublished}</PublishInfo>
         <TwitterHandle>
           <TwitterIcon src={twitterIcon} alt="Twitter" />
-          <HandleName>{data.handleName}</HandleName>
+          <HandleName>{data.handle}</HandleName>
         </TwitterHandle>
       </TextSection>
     </StoryContainer>

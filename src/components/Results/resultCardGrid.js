@@ -85,19 +85,19 @@ const ImageSection = styled.div`
   height: 150px;
 `;
 
-const data = {
-  imageUrl: "https://picsum.photos/300/150",
-  mainText:
-    "🤝🎯TARGET COMPLETED 🔥🔥 HERE'S 10U #NBA MAX BET 👀⚠️💵 🏀 Heat vs Celtics 🎯 OVER (216.5) @ 1.5",
-  publishedInfo: "Published 11 hours ago",
-  handleName: "@JohnDoe",
-  reach: "2.1K",
-};
+// const data = {
+//   imageUrl: "https://picsum.photos/300/150",
+//   mainText:
+//     "🤝🎯TARGET COMPLETED 🔥🔥 HERE'S 10U #NBA MAX BET 👀⚠️💵 🏀 Heat vs Celtics 🎯 OVER (216.5) @ 1.5",
+//   publishedInfo: "Published 11 hours ago",
+//   handleName: "@JohnDoe",
+//   reach: "2.1K",
+// };
 
-const ResultCardGrid = ({ imageUrl, mainText, publishedInfo, handleName }) => {
+const ResultCardGrid = ({ data }) => {
   return (
     <StoryContainer>
-      <ImageSection imgUrl={data.imageUrl}>
+      <ImageSection imgUrl={data.sharedImage}>
         <Reach>
           {data.reach}
           <ReachLabel> Reach</ReachLabel>

@@ -178,7 +178,7 @@ const ResultsCard = () => {
   const {topResultMatch, setTopResultMatch, topResultRange, setTopResultRange, topResultSentiment, setTopResultSentiment} = useContext(TopResultsFilterContext)
 
   
-  const generateRandomTweets = () => {
+  const generateRandomTweetsNormal = () => {
     const sentiments = ['Positive', 'Negative', 'Neutral'];
     const profiles = [
         { name: 'John Doe', handle: '@johndoe'},
@@ -187,7 +187,7 @@ const ResultsCard = () => {
     ];
 
     const tweets = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 13; i++) {
         const randomProfile = profiles[Math.floor(Math.random() * profiles.length)];
 
         let randomTime = Math.floor(Math.random() * 24); // Random hour
@@ -199,7 +199,7 @@ const ResultsCard = () => {
         const randomTimePublished = `${topResultRange} ${randomHourString}`;
 
         let sentiment = topResultSentiment;
-        if (sentiment === 'None') {
+        if (sentiment === 'none') {
             sentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
         }
 
@@ -214,7 +214,7 @@ const ResultsCard = () => {
             reach: `${(Math.random()*10).toFixed(1)}k`,
             engagement: `${(Math.random()*1000).toFixed(0)}k`,
             trending: `${(Math.random()*10).toFixed(1)}k`,
-            timePublished: randomTimePublished,
+            timePublished: isNaN(topResultRange)? randomTimePublished: `${topResultRange} hours ago`,
             location: 'Pakistan',
             platform: "Twitter.com"
         };
@@ -231,8 +231,7 @@ const ResultsCard = () => {
 };
 
 
-  const randomTweets = generateRandomTweets()
-  console.log("randomTweets:", randomTweets)
+  const randomTweetsNormal = generateRandomTweetsNormal()
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
@@ -334,30 +333,48 @@ const ResultsCard = () => {
                     {selectedLayout === "Compact" && <ResultCardCompact />}
                 </div>
             ))} */}
-          {randomTweets.map((data, index) => (
-            <div key={index}>
+          {randomTweetsNormal.map((data, index) => (
+            <div>
               {selectedLayout === "Normal" && 
                   <ResultCard profileData={data[0].profileData} additionalMetrics={data[0].additionalMetrics}/>
               }
               {selectedLayout === "Compact" &&
                   <ResultCardCompact profileData={data[0].profileData} additionalMetrics={data[0].additionalMetrics}/>
               }
-            </div>
+              </div>
           ))}
+
           {selectedLayout === "Stories" && (
+
             <CardRow>
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
+              {randomTweetsNormal.map((data, index)=>{
+                 return <ResultCardStory data={data[0].profileData}/>
+              })}
             </CardRow>
           )}
+
           {selectedLayout === "grid" && (
             <CardRow>
+              {randomTweetsNormal.map((data, index)=>{
+                 return <ResultCardGrid data={data[0].profileData}/>
+              })}
+            </CardRow>
+          )}
+
+          {/* {selectedLayout === "Stories" && (
+            <CardRow>
+              <ResultCardStory />
+              <ResultCardStory />
+              <ResultCardStory />
+              <ResultCardStory />
+              <ResultCardStory />
+              <ResultCardStory />
+              <ResultCardStory />
+              <ResultCardStory />
+            </CardRow>
+          )} */}
+          {/* {selectedLayout === "grid" && (
+            <CardRow>
               <ResultCardGrid />
               <ResultCardGrid />
               <ResultCardGrid />
@@ -374,7 +391,7 @@ const ResultsCard = () => {
               <ResultCardGrid />
               <ResultCardGrid />
             </CardRow>
-          )}
+          )} */}
         </div>
       )}
       {activeTab === "topThemes" && (
