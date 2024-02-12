@@ -251,6 +251,7 @@ const Dashboard = () => {
     deleteDataByName,
     filters: contextFilters,
     setFilters: setContextFilters,
+    clearFilters,
   } = useContext(CompareKeywordContext);
 
   const { mySavedSearches, setMySavedSearches } =
@@ -696,7 +697,12 @@ const Dashboard = () => {
               )}
               <MoreItem onClick={() => setIsMoreOpen((prev) => !prev)}>
                 <PurplePlus src="/plus-large-svgrepo-com.svg" />
-                More
+                {!isMoreOpen ? "More" : "Less"}
+              </MoreItem>
+
+              <MoreItem onClick={clearFilters}>
+                <PurplePlus src="/cross-svgrepo-com.svg" />
+                Clear Filters
               </MoreItem>
             </FilterItemsRow>
           </FiltersContainer>

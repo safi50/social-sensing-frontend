@@ -18,6 +18,21 @@ export const CompareKeywordProvider = ({ children }) => {
     language: ["en", "ur"], // en, ur
   });
 
+  const clearFilters = () => {
+    setFilters({
+      eventNames: filters.eventNames,
+      eventQueries: [],
+      timeRange: "1d", //1d , 7d , 1M
+      date: {
+        startDate: new Date(),
+        endDate: new Date(),
+      },
+      devices: ["mobile", "desktop", "tablet"],
+      sentimentType: ["positive", "negative", "neutral"], // positive, negative, neutral
+      language: ["en", "ur"], // en, ur
+    });
+  };
+
   useEffect(() => {
     setData(generateData(filters));
   }, [filters]);
@@ -28,7 +43,7 @@ export const CompareKeywordProvider = ({ children }) => {
 
   return (
     <CompareKeywordContext.Provider
-      value={{ data, deleteDataByName, filters, setFilters }}
+      value={{ data, deleteDataByName, filters, setFilters, clearFilters }}
     >
       {children}
     </CompareKeywordContext.Provider>
