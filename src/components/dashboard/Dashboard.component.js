@@ -254,6 +254,9 @@ const Dashboard = () => {
     clearFilters,
   } = useContext(CompareKeywordContext);
 
+  const [timeRange, setTimeRange] = useState("1d");
+
+
   const { mySavedSearches, setMySavedSearches } =
     useContext(SavedSearchesContext);
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
@@ -720,9 +723,10 @@ const Dashboard = () => {
                 <DurationBtnSelected>1d</DurationBtnSelected>
               ) : (
                 <DurationBtn
-                  onClick={() =>
-                    setContextFilters({ ...contextFilters, timeRange: "1d" })
-                  }
+                  onClick={() => {
+                    setContextFilters({ ...contextFilters, timeRange: "1d" });
+                    setTimeRange("1d");
+                  }}
                 >
                   1d
                 </DurationBtn>
@@ -731,9 +735,10 @@ const Dashboard = () => {
                 <DurationBtnSelected>7d</DurationBtnSelected>
               ) : (
                 <DurationBtn
-                  onClick={() =>
-                    setContextFilters({ ...contextFilters, timeRange: "7d" })
-                  }
+                  onClick={() => {
+                    setContextFilters({ ...contextFilters, timeRange: "7d" });
+                    setTimeRange("7d");
+                  }}
                 >
                   7d
                 </DurationBtn>
@@ -742,9 +747,10 @@ const Dashboard = () => {
                 <DurationBtnSelected>1M</DurationBtnSelected>
               ) : (
                 <DurationBtn
-                  onClick={() =>
-                    setContextFilters({ ...contextFilters, timeRange: "1M" })
-                  }
+                  onClick={() => {
+                    setContextFilters({ ...contextFilters, timeRange: "1M" });
+                    setTimeRange("1M");
+                  }}
                 >
                   1M
                 </DurationBtn>
@@ -782,7 +788,7 @@ const Dashboard = () => {
         </SelectionContainer>
 
         <Outlet />
-        <TopThemes />
+        <TopThemes timeRange={timeRange} />
       </DashboardContainer>
     </div>
   );

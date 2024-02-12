@@ -48,7 +48,7 @@ const getRandomColor = () => {
   return colors[Math.floor(Math.random() * colors.length)];
 };
 
-const WordCloudComponent = () => {
+const WordCloudComponent = ({ timeRange }) => {
   const [svgWidth, setSvgWidth] = useState(800);
   const [svgHeight, setSvgHeight] = useState(500);
   const [words, setWords] = useState([]);
@@ -74,7 +74,8 @@ const WordCloudComponent = () => {
     const fetchWords = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('https://lda-iwz8.onrender.com/lda'); 
+        let url = "https://lda-iwz8.onrender.com/lda/time/" + timeRange.toLowerCase();
+        const response = await axios.get(url); 
         setWords(response.data);
         setLoading(false);
       } catch (error) {
@@ -89,7 +90,9 @@ const WordCloudComponent = () => {
     return () => {
       window.removeEventListener("resize", updateSvgSize);
     };
-  }, []);
+
+
+  }, [timeRange]);
 
   const wordcloudProps = {
     width: svgWidth,
