@@ -60,8 +60,9 @@ const WordCloudStyle = styled.div`
   overflow: hidden;
 `;
 
-export default function TopThemes() {
+export default function TopThemes({ timeRange }) {
   const [selectedOption, setSelectedOption] = useState("Bio");
+
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
@@ -86,7 +87,7 @@ export default function TopThemes() {
         </Row>
       </OuterRow>
       <WordCloudStyle>
-        {selectedOption === "Bio" && <WordCloudComponent />}
+      {selectedOption === "Bio" && <WordCloudComponent timeRange={timeRange} />}
         {selectedOption === "Emojis" && <EmojiCloudComponent />}
       </WordCloudStyle>
     </Container>
