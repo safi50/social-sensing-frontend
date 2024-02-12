@@ -6,7 +6,9 @@ import profileImage from '../../assets/profile-pic.jpeg';
 import sharedImage from '../../assets/cool-profile-picture.jpeg';
 import shareIcon from '../../assets/share.svg';
 import retweetIcon from '../../assets/repeat.svg';
-import sentimentIcon from '../../assets/frown.svg';
+import negativeSentimentIcon from '../../assets/frown.svg';
+import positiveSentimentIcon from '../../assets/emotsmile-svgrepo-com.svg'
+import neutralSentimentIcon from '../../assets/neutral-svgrepo-com.svg'
 import userIcon from '../../assets/users.svg';
 // Styled components
 const CardContainer = styled.div`
@@ -21,12 +23,15 @@ const CardContainer = styled.div`
 const ProfileSection = styled.div`
   display: flex;
   align-items: flex-start;
+  width: 50%;
   max-width: 55%;
 `;
 
 const ProfileTextAndImage = styled.div`
   display: flex;
   align-items: flex-start;
+  justify-content: space-between;
+  width: calc(100% - 80px);
 `;
 
 const ProfileImage = styled.img`
@@ -99,7 +104,6 @@ const ImageSection = styled.div`
   background-size: cover;
   margin-left: 1rem;
 `;
-
 
 
 const Sentiment = styled.div`
@@ -196,28 +200,6 @@ const SmallMetricValue = styled.span`
 
 // React component
 const ResultCard = ({profileData, additionalMetrics}) => {
-    // Placeholder data - you'd replace this with data from your backend
-    // const profileData = {
-    //     name: 'John Doe',
-    //     handle: '@johndoe',
-    //     profileImage: profileImage,
-    //     content: 'olamaz ȇ̈s̑̈c̑̈ȏ̈ȓ̈t̑ degiliz başka kalışların sanırım, hayalindeki gec #beylikdüzü Hicbirimizhayal #ataköy insanın Bu #bakirköy pic.twitter.com/HBnEasCJFo',
-    //     sharedImage: sharedImage,
-    //     sentiment: 'Neutral',
-    //     matches: '#istanbul',
-    //     reach: '2.1K',
-    //     engagement: '200K',
-    //     trending: '2.1K',
-    //     timePublished: '11 hours ago',
-    //     location: 'Turkey',
-    //     platform: 'Twitter.com'
-    // };
-    // const additionalMetrics = {
-    //     shares: '124K',
-    //     hearts: '31K',
-    //     users: '32K'
-    // };
-    
     return (
         <CardContainer>
             <ProfileSection>
@@ -249,7 +231,9 @@ const ResultCard = ({profileData, additionalMetrics}) => {
             <MetricsSection>
                 <Row>
                     <Sentiment>
-                        <img src={sentimentIcon} alt="Sentiment" />
+                        {profileData.sentiment=="Negative" && <img src={negativeSentimentIcon} alt="Sentiment" style={{width: '25px'}}/>}
+                        {profileData.sentiment=="Positive" && <img src={positiveSentimentIcon} alt="Sentiment" style={{width: '25px'}}/>}
+                        {profileData.sentiment=="Neutral" && <img src={neutralSentimentIcon} alt="Sentiment" style={{width: '30px'}}/>}
                         &nbsp; &nbsp;{profileData.sentiment}
                     </Sentiment>
                     <MetricColumn style={{ marginLeft: 'auto' }}>
