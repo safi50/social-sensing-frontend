@@ -38,6 +38,7 @@ export const CompareKeyword = () => {
         <ChartComponent
           title="Results over time"
           data={mergedResultsOverTime}
+          queryMatches={filters.eventNames}
         />
       </div>
       <ChartsContainer>

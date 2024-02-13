@@ -90,32 +90,36 @@ export function generateData({
     "rgba(75, 192, 192, 1)",
     "rgba(153, 102, 255, 1)",
   ];
+  let getTotalResults = () =>{
+    let totalResults = randomData(
+      timeRangeValues[timeRange].lower,
+      timeRangeValues[timeRange].upper,
+      1
+    )[0];
+    totalResults =
+      language.length === 2
+        ? totalResults
+        : language.length === 1
+        ? totalResults * 0.4
+        : totalResults * 0;
+  
+    totalResults =
+      sentimentType.length === 3
+        ? totalResults
+        : sentimentType.length === 2
+        ? totalResults * 0.8
+        : sentimentType.length === 1
+        ? totalResults * 0.6
+        : totalResults * 0;
+  
+    totalResults = Math.trunc(totalResults);
+    return totalResults
+  }
+  
+  let totalResults = getTotalResults();
 
-  let totalResults = randomData(
-    timeRangeValues[timeRange].lower,
-    timeRangeValues[timeRange].upper,
-    1
-  )[0];
-  totalResults =
-    language.length === 2
-      ? totalResults
-      : language.length === 1
-      ? totalResults * 0.4
-      : totalResults * 0;
-
-  totalResults =
-    sentimentType.length === 3
-      ? totalResults
-      : sentimentType.length === 2
-      ? totalResults * 0.8
-      : sentimentType.length === 1
-      ? totalResults * 0.6
-      : totalResults * 0;
-
-  totalResults = Math.trunc(totalResults);
-
-  const resultsOverTime_sevenRandomNumbers = generateRandomValues(1, 7);
-  const resultsOverTime_twentyFourRandomNumbers = generateRandomValues(1, 24);
+  let resultsOverTime_sevenRandomNumbers = generateRandomValues(1, 7);
+  let resultsOverTime_twentyFourRandomNumbers = generateRandomValues(1, 24);
 
   const sentiments_threeRandomNumbers = generateRandomValues(1, 3);
 
@@ -139,34 +143,41 @@ export function generateData({
   const netNeutralSentimentsOverTime_twentyFourRandomNumbers =
     generateRandomValues(1, 24);
 
-  const sentimentData = [];
-  if (sentimentType.includes("positive")) {
-    sentimentData.push({
-      label: "Positive",
-      data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[0])],
-      backgroundColor: "green",
-      borderColor: "green",
-      borderWidth: 1,
-    });
+
+  let getSentimentData = ()=>{
+    const sentimentData = [];
+    if (sentimentType.includes("positive")) {
+      sentimentData.push({
+        label: "Positive",
+        data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[0])],
+        backgroundColor: "green",
+        borderColor: "green",
+        borderWidth: 1,
+      });
+    }
+    if (sentimentType.includes("negative")) {
+      sentimentData.push({
+        label: "Negative",
+        data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[1])],
+        backgroundColor: "red",
+        borderColor: "red",
+        borderWidth: 1,
+      });
+    }
+    if (sentimentType.includes("neutral")) {
+      sentimentData.push({
+        label: "Neutral",
+        data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[2])],
+        backgroundColor: "blue",
+        borderColor: "blue",
+        borderWidth: 1,
+      });
+    }
+    return sentimentData
   }
-  if (sentimentType.includes("negative")) {
-    sentimentData.push({
-      label: "Negative",
-      data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[1])],
-      backgroundColor: "red",
-      borderColor: "red",
-      borderWidth: 1,
-    });
-  }
-  if (sentimentType.includes("neutral")) {
-    sentimentData.push({
-      label: "Neutral",
-      data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[2])],
-      backgroundColor: "blue",
-      borderColor: "blue",
-      borderWidth: 1,
-    });
-  }
+
+  let sentimentData = getSentimentData()
+  
 
   const netSentimentsOverTimeData = [];
   if (sentimentType.includes("positive")) {
@@ -586,6 +597,9 @@ export function generateData({
   }
 
   let data = eventNames.map((name, index) => {
+    resultsOverTime_twentyFourRandomNumbers = generateRandomValues(1, 24);
+    resultsOverTime_sevenRandomNumbers = generateRandomValues(1, 7);
+    totalResults = getTotalResults()
     return {
       name: name,
       infoText: totalResults,
@@ -595,7 +609,7 @@ export function generateData({
         datasets: [
           {
             label: name,
-            data: [totalResults + 1500],
+            data: [totalResults + 200],
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -607,7 +621,7 @@ export function generateData({
         datasets: [
           {
             label: name,
-            data: [totalResults + 3000],
+            data: [totalResults + 500],
             backgroundColor: colors[index],
             borderColor: borderColors[index],
             borderWidth: 1,
@@ -729,7 +743,7 @@ export function generateData({
       },
       sentiments: {
         labels: [name],
-        datasets: sentimentData,
+        datasets: getSentimentData(),
       },
       netSentimentsOverTime: {
         labels:

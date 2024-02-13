@@ -115,7 +115,7 @@ const VerticalBarChart = ({ title, data }) => {
   return (
     <ChartContainer>
       <Row>
-        <TitleText>{title} {topResultSentiment}</TitleText>
+        <TitleText>{title}</TitleText>
         <Img src="/danger-circle.svg" />
       </Row>
       <Bar data={data} options={options} />
