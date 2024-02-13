@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Bar } from "react-chartjs-2"; // Using Bar for both horizontal and vertical bar charts
 import styled from "styled-components";
 import {
@@ -10,6 +10,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { Chart } from 'chart.js/auto';
+import { TopResultsFilterContext } from "../../../contexts/TopResultsFilter.context"
+import { useNavigate} from "react-router-dom";
+import { click } from "@testing-library/user-event/dist/click";
 
 ChartJS.register(
   CategoryScale,
@@ -45,29 +49,73 @@ const TitleText = styled.p`
   color: #000;
 `;
 
-const options = {
-  // No need to set indexAxis for a vertical bar chart
-  plugins: {
-    legend: {
-      position: "top",
-      labels: {
-        usePointStyle: true,
-        pointStyle: "circle",
-      },
-    },
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-    },
-  },
-};
 
 const VerticalBarChart = ({ title, data }) => {
+  const {topResultMatch, setTopResultMatch, topResultRange, setTopResultRange, topResultSentiment, setTopResultSentiment} = useContext(TopResultsFilterContext)
+  const navigate = useNavigate();
+
+  const options = {
+    // No need to set indexAxis for a vertical bar chart
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          usePointStyle: true,
+          pointStyle: "circle",
+          generateLabels: function(chart) {
+            if (chart.data.datasets.length !== chart.data.labels.length) {
+              return ["Positive", "Negative", "Neutral"].map((label, index) => ({
+                text: label,
+                fillStyle: chart.data.datasets[index].backgroundColor,
+                hidden: false,
+                index: index
+              }));
+            } else {
+              // If the number of datasets and labels are equal, use the default legend generation
+              return Chart.defaults.plugins.legend.labels.generateLabels(chart);
+            }
+          }
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+    onClick: (event, elements) => {
+      if (elements.length > 0){
+        const clickedElement = elements[0];
+        console.log("data:", data)
+        console.log("clickedElement:", clickedElement)
+        if (data.datasets.length == data.labels.length){
+          setTopResultMatch(data.labels[clickedElement.datasetIndex])
+          setTopResultRange("none")
+          setTopResultSentiment("none")
+        }
+        else{
+          setTopResultMatch(data.labels[clickedElement.index])
+          setTopResultRange("none")
+          if (clickedElement.datasetIndex%3==2){
+            setTopResultSentiment("Neutral")
+          }
+          else if (clickedElement.datasetIndex%3==1){
+            setTopResultSentiment("Negative")
+          }
+          else if (clickedElement.datasetIndex%3==0){
+            setTopResultSentiment("Positive")
+          }
+        }
+        navigate('/topResults')
+      }
+    }
+  };
+
+
   return (
     <ChartContainer>
       <Row>
-        <TitleText>{title}</TitleText>
+        <TitleText>{title} {topResultSentiment}</TitleText>
         <Img src="/danger-circle.svg" />
       </Row>
       <Bar data={data} options={options} />

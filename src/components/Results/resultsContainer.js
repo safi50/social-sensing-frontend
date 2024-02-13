@@ -196,7 +196,13 @@ const ResultsCard = () => {
         }
         const randomMinutes = Math.floor(Math.random() * 60); // Random minutes
         const randomHourString = `${randomTime}:${randomMinutes < 10 ? '0' : ''}${randomMinutes}`;
-        const randomTimePublished = `${topResultRange} ${randomHourString}`;
+        let randomTimePublished = `${topResultRange} ${randomHourString}`;
+        if (!isNaN(topResultRange)){
+          randomTimePublished = `${topResultRange} hours ago`
+        }
+        else if(topResultRange == "none"){
+          randomTimePublished = `${Math.floor(Math.random() * 12)} Feb ${randomHourString}`
+        }
 
         let sentiment = topResultSentiment;
         if (sentiment === 'none') {

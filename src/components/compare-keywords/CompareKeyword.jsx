@@ -12,7 +12,7 @@ import { mergeData } from "../../contexts/dummyData";
 import { useNavigate } from "react-router-dom";
 
 export const CompareKeyword = () => {
-  const { data } = useContext(CompareKeywordContext);
+  const { data, deleteDataByName, filters } = useContext(CompareKeywordContext);
   console.log(data);
   const mergedTotalEngagement = mergeData(data, "totalEngagement");
   const mergedReach = mergeData(data, "reach");

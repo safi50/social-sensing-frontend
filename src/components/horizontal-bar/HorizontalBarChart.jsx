@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Bar } from "react-chartjs-2"; // Import Bar instead of Line
 import styled from "styled-components";
 import {
@@ -10,6 +10,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { TopResultsFilterContext } from "../../contexts/TopResultsFilter.context"
+import { useNavigate} from "react-router-dom";
 
 ChartJS.register(
   CategoryScale,
@@ -45,25 +47,41 @@ const TitleText = styled.p`
   color: #000;
 `;
 
-const options = {
-  indexAxis: "y",
-  plugins: {
-    legend: {
-      position: "top",
-      labels: {
-        usePointStyle: true,
-        pointStyle: "circle",
-      },
-    },
-  },
-  scales: {
-    x: {
-      beginAtZero: true,
-    },
-  },
-};
+
 
 export const HorizontalBarChartComponent = ({ title, data }) => {
+  const {topResultMatch, setTopResultMatch, topResultRange, setTopResultRange, topResultSentiment, setTopResultSentiment} = useContext(TopResultsFilterContext)
+  const navigate = useNavigate();
+
+  const options = {
+    indexAxis: "y",
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          usePointStyle: true,
+          pointStyle: "circle",
+        },
+      },
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+      },
+    },
+    onClick: (event, elements) => {
+      if (elements.length > 0){
+        const clickedElement = elements[0];
+        console.log("data:", data)
+        console.log("clickedElement:", clickedElement)
+        setTopResultMatch(data.labels[clickedElement.datasetIndex])
+        setTopResultRange("none")
+        setTopResultSentiment("none")
+        navigate('/topResults')
+      }
+    }
+  };
+
   return (
     <ChartContainer>
       <Row>

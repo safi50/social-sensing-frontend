@@ -13,7 +13,7 @@ import {
   Legend,
 } from "chart.js";
 import { TopResultsFilterContext } from "../../contexts/TopResultsFilter.context";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 Chart.register(
   CategoryScale,
