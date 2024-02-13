@@ -51,6 +51,7 @@ const TitleText = styled.p`
   color: #000;
 `;
 
+
 const ChartComponent = ({ title, data, queryMatches, sentimentType, timeRange }) => {
   const {topResultMatch, setTopResultMatch, topResultRange, setTopResultRange, topResultSentiment, setTopResultSentiment} = useContext(TopResultsFilterContext)
   const navigate = useNavigate();
@@ -78,7 +79,7 @@ const ChartComponent = ({ title, data, queryMatches, sentimentType, timeRange })
         console.log("Clicked element:", clickedElement)
         console.log("Time range:", data.labels[clickedElement.index])
         setTopResultRange(isNaN(data.labels[clickedElement.index])? data.labels[clickedElement.index]: `${24-clickedElement.index}`)
-        setTopResultMatch(queryMatches[clickedElement.datasetIndex])
+        setTopResultMatch(data.datasets.length == queryMatches.length? queryMatches[clickedElement.datasetIndex]: queryMatches[0])
         setTopResultSentiment(data.datasets.length == queryMatches.length? 'none': data.datasets[clickedElement.datasetIndex].label)
         navigate('/topResults')
       }
@@ -88,7 +89,7 @@ const ChartComponent = ({ title, data, queryMatches, sentimentType, timeRange })
   return (
     <ChartContainer>
       <Row>
-        <TitleText>{title} {topResultMatch} {topResultRange} {topResultSentiment}</TitleText>
+        <TitleText>{title}</TitleText>
         <Img src="/danger-circle.svg" />
       </Row>
       <Line data={data} options={options} />
