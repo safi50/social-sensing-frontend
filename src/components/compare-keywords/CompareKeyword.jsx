@@ -46,10 +46,15 @@ export const CompareKeyword = () => {
           <VerticalBarChart title="Sentiments" data={mergedSentiments} />
         </div>
         <div>
-          <ChartComponent
+          {/* <ChartComponent
             title="Net Sentiment over time"
             data={mergedNetSentimentOverTime}
-          />
+          /> */}
+          <ChartComponent
+          title="Net Sentiment over time"
+          data={mergedResultsOverTime}
+          queryMatches={filters.eventNames}
+        />
         </div>
       </ChartsContainer>
     </CompareKeywordWrapper>
