@@ -33,7 +33,7 @@ export const CompareKeywordProvider = ({ children }) => {
     });
   };
 
-  useEffect(() => {
+  useEffect( () => {
     setData(generateData(filters));
   }, [filters]);
 
