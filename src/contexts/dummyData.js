@@ -8,6 +8,8 @@
 //   // Generate 'count' random numbers
 //   let randomNumbers = Array.from({ length: count }, Math.random);
 
+import { parse } from "papaparse";
+
 //   // Calculate their total sum
 //   let total = randomNumbers.reduce((acc, val) => acc + val, 0);
 
@@ -868,7 +870,7 @@ function randomData(min, max, count) {
   );
 }
 
-export const generateData = ({
+export const generateData = async({
   eventNames,
   timeRange,
   date,
@@ -920,7 +922,7 @@ export const generateData = ({
     },
   };
 
-  let data = eventNames.map((name, index) => {
+  let data = await Promise.all(eventNames.map( async (name, index) => {
     const languageUpper = language.reduce(
       (acc, lang) => acc + languageRangeValues[lang].upper,
       0
@@ -953,7 +955,8 @@ export const generateData = ({
           "retweet_count": "109",
           "reply_count": "210",
           "like_count": "190",
-          "quote_count": "140"
+          "quote_count": "140",
+          "impressions": "190"
         },
         {
           "id": "9876543210987654321",
@@ -963,7 +966,8 @@ export const generateData = ({
           "retweet_count": "19",
           "reply_count": "100",
           "like_count": "150",
-          "quote_count": "223"
+          "quote_count": "223",
+          "impressions": "270"
         },
         {
           "id": "98765432109876121554321",
@@ -973,7 +977,8 @@ export const generateData = ({
           "retweet_count": "19",
           "reply_count": "100",
           "like_count": "150",
-          "quote_count": "223"
+          "quote_count": "223",
+          "impressions": "100"
       },
         {
           "id": "9876543210987654121321",
@@ -983,17 +988,19 @@ export const generateData = ({
           "retweet_count": "19",
           "reply_count": "100",
           "like_count": "150",
-          "quote_count": "223"
+          "quote_count": "223",
+          "impressions": "90"
       },
         {
           "id": "98765432109875621654321",
-          "text": "Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
+          "text": "This is such a bad movie",
           "created_at": "2024-02-15T09:21:43.000Z",
           "author_id": "1991",
           "retweet_count": "19",
           "reply_count": "100",
           "like_count": "150",
-          "quote_count": "223"
+          "quote_count": "223",
+          "impressions": "10"
       }
     ]}]
 
@@ -1007,11 +1014,35 @@ export const generateData = ({
 
     const getTotalEngagement = (tweetsData)=>{
       // add retweet_count, reply_count, like_count, quote_count in tweetsData
-      return randomData(finalLower, finalUpper, 1)
+      let totalRetweets = 0;
+      let totalReplies = 0;
+      let totalLikes = 0;
+      let totalQuotes = 0;
+
+      // Access the tweets array
+      const tweets = tweetsData[0].data;
+
+      // Iterate through each tweet
+      tweets.forEach(tweet => {
+        totalRetweets += parseInt(tweet.retweet_count, 10);
+        totalReplies += parseInt(tweet.reply_count, 10);
+        totalLikes += parseInt(tweet.like_count, 10);
+        totalQuotes += parseInt(tweet.quote_count, 10);
+      });
+
+      // Calculate the combined total
+      const totalEngagement = totalRetweets + totalReplies + totalLikes + totalQuotes;
+
+      return [totalEngagement];
     }
   
     const getTotalReach = (tweetsData)=>{
-      return randomData(finalLower, finalUpper, 1)
+      let reach = 0
+
+      tweetsData[0].data.forEach(tweet => {
+        reach += parseInt(tweet.impressions, 10);
+      })
+      return [reach]
     }
 
     tweetsData = getTwitterTweets(name);
@@ -1037,34 +1068,32 @@ export const generateData = ({
 
     let tweetsText = getTweetsTextFromData(tweetsData)
 
-    const getTweetSentiments = (tweetsText) =>{
+    const getTweetSentiments = async (tweetsText) =>{
       //call hassan's api
       //return await fetch('/sentiments', tweetsData)
-      // const url = 'https://deploy-check-azure.vercel.app/api/batch_sentiment';
+      const url = 'https://deploy-check-azure.vercel.app/api/batch_sentiment';
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(tweetsText) 
+        });
 
-      // try {
-      //   const response = await fetch(url, {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json'
-      //     },
-      //     body: JSON.stringify({ texts: tweetsText }) 
-      //   });
-
-      //   if (response.ok) {
-      //     const sentimentData = await response.json();
-      //     return sentimentData;
-      //   } else {
-      //       throw new Error(`API request failed with status: ${response.status}`);
-      //   }  
+        if (response.ok) {
+          const sentimentData = await response.json();
+          return sentimentData;
+        } else {
+            throw new Error(`API request failed with status: ${response.status}`);
+        }  
         
-      // } catch (error) {
-      //   console.error('Error in sentiment analysis:', error);
-      // }
-      return ["Positive", "Neutral", "Positive", "Negative", "Negative"]
+      } catch (error) {
+        console.error('Error in sentiment analysis:', error);
+      }
     }
 
-    tweetsSentiments = getTweetSentiments(tweetsText);
+    tweetsSentiments = await getTweetSentiments(tweetsText);
 
     const getResultsOver24Hours = (query) =>{
       // use tweet count api to get tweets count values for each hour
@@ -1173,7 +1202,7 @@ export const generateData = ({
         })),
       },
     };
-  });
+  }));
 
   return data;
 }

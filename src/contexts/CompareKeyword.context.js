@@ -34,7 +34,19 @@ export const CompareKeywordProvider = ({ children }) => {
   };
 
   useEffect( () => {
-    setData(generateData(filters));
+
+    async function fetchMyAPI() {
+      try {
+        const result = await generateData(filters);
+        console.log("results are:", result)
+        setData(result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Optionally, handle the error state in your component
+      }
+    }
+
+    fetchMyAPI();
   }, [filters]);
 
   const deleteDataByName = (name) => {
