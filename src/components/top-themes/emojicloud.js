@@ -1,48 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Wordcloud } from '@visx/wordcloud';
 import ResizeDetector from 'react-resize-detector';
+import axios from 'axios';
+import Spinner from './spinner'; 
 
-const emojis = [
-  { text: '😀', value: 100 },
-  { text: '😍', value: 80 },
-  { text: '🚀', value: 70 },
-  { text: '🎉', value: 60 },
-  { text: '🌟', value: 90 },
-  { text: '❤️', value: 75 },
-  { text: '🍀', value: 65 },
-  { text: '🌈', value: 85 },
-  { text: '🐱', value: 95 },
-  { text: '🐶', value: 88 },
-  { text: '😎', value: 85 },
-  { text: '😂', value: 82 },
-  { text: '🤣', value: 80 },
-  { text: '😁', value: 65 },
-  { text: '😆', value: 75 },
-  { text: '👍', value: 62 },
-  { text: '🙏', value: 73 },
-  { text: '😝', value: 89 },
-  { text: '👏', value: 91 },
-  { text: '🙌', value: 52 },
-  { text: '💔', value: 66 },
-  { text: '💕', value: 77 },
-  { text: '‼️', value: 83 },
-  { text: '💓', value: 81 },
-  { text: '❗', value: 85 },
-  { text: '😘', value: 88 },
-];
-
-const EmojiCloudComponent = () => {
+const EmojiCloudComponent = ({ timeRange }) => {
   const [svgWidth, setSvgWidth] = useState(600); 
   const [svgHeight, setSvgHeight] = useState(500); 
+  const [emojis, setEmojis] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const updateSvgSize = () => {
     const windowWidth = window.innerWidth;
     if (windowWidth < 400) {
-      // For smaller screens
       setSvgWidth(300); 
       setSvgHeight(600); 
     } else if (windowWidth < 630) {
-      // For larger screens
       setSvgWidth(400); 
       setSvgHeight(600); 
     } else {
@@ -51,35 +24,37 @@ const EmojiCloudComponent = () => {
     }
   };
 
-  const getEmoji = emoji => ({
-    text: emoji.text,
-    value: emoji.value,
-  });
-
-  const calculateEmojiSize = (svgWidth) => {
-    if (svgWidth < 400) {
-      return emoji => emoji.value * 0.5; 
-    } else {
-      return emoji => emoji.value * 0.7; 
-    }
-  };
-
   useEffect(() => {
-    updateSvgSize();
+    const fetchEmojis = async () => {
+      try {
+        setLoading(true);
+        let url = `https://lda-iwz8.onrender.com/lda/emojis/time/${timeRange.toLowerCase()}`; // Update this URL to your emoji LDA endpoint
+        const response = await axios.get(url); 
+        setEmojis(response.data.map(emoji => ({
+          text: emoji.emoji, 
+          value: emoji.value,
+        })));
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching emoji data", error);
+        setLoading(false);
+      }
+    };
 
+    fetchEmojis();
     window.addEventListener('resize', updateSvgSize);
 
     return () => {
       window.removeEventListener('resize', updateSvgSize);
     };
-  }, []);
+  }, [timeRange]);
 
   const emojiCloudProps = {
     width: svgWidth,
     height: svgHeight,
-    words: emojis.map(getEmoji),
-    fontSize: svgWidth > 425 ? emoji => emoji.value : calculateEmojiSize(svgWidth),
-    rotate: emoji => emoji.value % 10,
+    words: emojis,
+    fontSize: (emoji) => Math.sqrt(emoji.value) * 5,
+    rotate: (emoji) => emoji.value % emoji.value,
     font: 'Arial',
     fontWeight: 'bold',
     fontStyle: 'italic',
@@ -87,10 +62,14 @@ const EmojiCloudComponent = () => {
     random: () => Math.random(),
   };
 
+  if (loading) {
+    return <Spinner />; // Show spinner while loading
+  }
+
   return (
     <div className="responsive-emoji-cloud-container">
       <Wordcloud {...emojiCloudProps}>
-        {cloudEmojis => cloudEmojis.map((emoji, i) => (
+        {(cloudEmojis) => cloudEmojis.map((emoji, i) => (
           <text
             key={i}
             fontSize={emoji.size}

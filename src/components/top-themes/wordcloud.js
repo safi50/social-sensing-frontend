@@ -99,7 +99,7 @@ const WordCloudComponent = ({ timeRange }) => {
     height: svgHeight,
     words: words.map(getWord),
     fontSize: (word) => Math.sqrt(word.value) * 5,
-    rotate: (word) => word.value % 10,
+    rotate: (word) => word.value % word.value,
     font: "Arial",
     fontWeight: "bold",
     fontStyle: "italic",

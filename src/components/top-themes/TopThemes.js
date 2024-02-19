@@ -88,7 +88,7 @@ export default function TopThemes({ timeRange }) {
       </OuterRow>
       <WordCloudStyle>
       {selectedOption === "Bio" && <WordCloudComponent timeRange={timeRange} />}
-        {selectedOption === "Emojis" && <EmojiCloudComponent />}
+        {selectedOption === "Emojis" && <EmojiCloudComponent timeRange={timeRange} />}
       </WordCloudStyle>
     </Container>
   );
