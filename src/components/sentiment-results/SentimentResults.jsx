@@ -26,18 +26,6 @@ export const SentimentResults = () => {
   useEffect(() => {
     const csvFilePath = "./sentiment_results.csv";
 
-    // Papa.parse(csvFilePath, {
-    //   header: true,
-    //   download: true,
-    //   complete: (result) => {
-    //     // console.log('CSV Data:', result.data);
-    //     setSentimentResults(result.data);
-    //     // console.log(sentimentResults);
-    //   },
-    //   error: (error) => {
-    //     console.error("Error reading CSV file:", error.message);
-    //   },
-    // });
     if (sentimentResults) {
       const positive = sentimentResults.find(
         (item) => item.Label === "positive"

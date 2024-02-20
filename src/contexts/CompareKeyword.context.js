@@ -14,7 +14,7 @@ export const CompareKeywordProvider = ({ children }) => {
       endDate: new Date(),
     },
     devices: ["mobile", "desktop", "tablet"],
-    sentimentType: ["positive", "negative", "neutral"], // positive, negative, neutral
+    sentimentType: ["Positive", "Negative", "Neutral"], // positive, negative, neutral
     language: ["en", "ur"], // en, ur
   });
 
@@ -28,7 +28,7 @@ export const CompareKeywordProvider = ({ children }) => {
         endDate: new Date(),
       },
       devices: ["mobile", "desktop", "tablet"],
-      sentimentType: ["positive", "negative", "neutral"], // positive, negative, neutral
+      sentimentType: ["Positive", "Negative", "Neutral"], // positive, negative, neutral
       language: ["en", "ur"], // en, ur
     });
   };

@@ -905,17 +905,17 @@ export const generateData = async({
   ];
 
   const sentimentConfig = {
-    positive: {
+    Positive: {
       label: "Positive",
       backgroundColor: "green",
       borderColor: "green",
     },
-    negative: {
+    Negative: {
       label: "Negative",
       backgroundColor: "red",
       borderColor: "red",
     },
-    neutral: {
+    Neutral: {
       label: "Neutral",
       backgroundColor: "blue",
       borderColor: "blue",
@@ -961,7 +961,7 @@ export const generateData = async({
         {
           "id": "9876543210987654321",
           "text": "Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
-          "created_at": "2024-02-15T09:21:43.000Z",
+          "created_at": "2024-02-20T02:21:43.000Z",
           "author_id": "1991",
           "retweet_count": "19",
           "reply_count": "100",
@@ -972,7 +972,7 @@ export const generateData = async({
         {
           "id": "98765432109876121554321",
           "text": "Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
-          "created_at": "2024-02-15T09:21:43.000Z",
+          "created_at": "2024-02-16T09:21:43.000Z",
           "author_id": "1991",
           "retweet_count": "19",
           "reply_count": "100",
@@ -983,7 +983,7 @@ export const generateData = async({
         {
           "id": "9876543210987654121321",
           "text": "Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
-          "created_at": "2024-02-15T09:21:43.000Z",
+          "created_at": "2024-02-19T04:21:43.000Z",
           "author_id": "1991",
           "retweet_count": "19",
           "reply_count": "100",
@@ -994,7 +994,7 @@ export const generateData = async({
         {
           "id": "98765432109875621654321",
           "text": "This is such a bad movie",
-          "created_at": "2024-02-15T09:21:43.000Z",
+          "created_at": "2024-02-20T04:21:43.000Z",
           "author_id": "1991",
           "retweet_count": "19",
           "reply_count": "100",
@@ -1070,7 +1070,6 @@ export const generateData = async({
 
     const getTweetSentiments = async (tweetsText) =>{
       //call hassan's api
-      //return await fetch('/sentiments', tweetsData)
       const url = 'https://deploy-check-azure.vercel.app/api/batch_sentiment';
       try {
         const response = await fetch(url, {
@@ -1105,15 +1104,45 @@ export const generateData = async({
       return randomData(finalLower, finalUpper, 7)
     }
 
-    const SentimentResultsOver24Hours = (tweetData, tweetSentiments)=>{
+    const SentimentResultsOver24Hours = (tweetData, tweetSentiments, sentimentFilter)=>{
       // preprocessing of current tweet data to get last 24 hours of data
       // return [...] // 24 numbers returned
-      return randomData(finalLower, finalUpper, 24)
+      const hoursCount = Array(24).fill(0); // Initialize counts for each hour
+      const now = new Date();
+      
+      tweetData[0].data.forEach((tweet, index) => {
+        const tweetDate = new Date(tweet.created_at);
+        const diffInHours = Math.floor((now - tweetDate) / (1000 * 60 * 60));
+        console.log(`tweetDate:${tweetDate} now:${now} diffInHours:${diffInHours} tweetSentiment:${tweetSentiments[index]} sentimentFilter:${sentimentFilter}`)
+        if (diffInHours < 24 && tweetSentiments[index] === sentimentFilter) {
+          // Ensure the hour is within the array bounds and increment the count
+          hoursCount[23 - diffInHours]++; // Subtract from 23 to get the correct index (0 to 23)
+        }
+      });
+      console.log("hoursCount:", hoursCount)
+      // return randomData(finalLower, finalUpper, 24)
+      return hoursCount
     }
 
-    const SentimentResultsOver7Days = (tweetData, tweetSentiments) => {
+    const SentimentResultsOver7Days = (tweetData, tweetSentiments, sentimentFilter) => {
       // preprocessing of current tweet data to get last 7 days of data
       // return [...] // 24 numbers returned
+      const daysCount = Array(7).fill(0); // Initialize counts for each day
+      const now = new Date();
+      now.setHours(0, 0, 0, 0); // Normalize current time to the start of the current day
+
+      tweetData[0].data.forEach((tweet, index) => {
+        const tweetDate = new Date(tweet.created_at);
+        tweetDate.setHours(0, 0, 0, 0); // Normalize tweet time to the start of its day
+        const diffInDays = Math.floor((now - tweetDate) / (1000 * 60 * 60 * 24));
+        
+        if (diffInDays < 7 && tweetSentiments[index] === sentimentFilter) {
+          // Ensure the day is within the array bounds and increment the count
+          daysCount[6 - diffInDays]++; // Subtract from 6 to get the correct index (0 to 6)
+        }
+      });
+
+      return daysCount;
       return randomData(finalLower, finalUpper, 7)
     }
 
@@ -1197,7 +1226,7 @@ export const generateData = async({
 
         datasets: sentimentType.map((type) => ({
           ...sentimentConfig[type],
-          data: timeRange === "1d" ? SentimentResultsOver24Hours(tweetsData, tweetsSentiments): SentimentResultsOver7Days(tweetsData, tweetsSentiments),   // call sentiment result over 24 hours or 7 days function
+          data: timeRange === "1d" ? SentimentResultsOver24Hours(tweetsData, tweetsSentiments, type): SentimentResultsOver7Days(tweetsData, tweetsSentiments, type),   // call sentiment result over 24 hours or 7 days function
           borderWidth: 1,
         })),
       },
