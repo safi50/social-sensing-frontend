@@ -236,6 +236,8 @@ const Dashboard = () => {
     if (filterType == "sentiment") togglefnc = toggleSentimentCheckboxes;
     else if (filterType == "language") togglefnc = toggleLanguageCheckboxes;
     else if (filterType == "device") togglefnc = toggleDevicesCheckboxes;
+    else if (filterType == "age") togglefnc = toggleAgeCheckboxes;
+    else if (filterType == "gender") togglefnc = toggleGenderCheckboxes;
     return (
       <SentimentFilterFooterContainer>
         <CrossBtn onClick={togglefnc}>
@@ -256,7 +258,6 @@ const Dashboard = () => {
 
   const [timeRange, setTimeRange] = useState("1d");
 
-
   const { mySavedSearches, setMySavedSearches } =
     useContext(SavedSearchesContext);
   const [showSaveSearchModal, setShowSaveSearchModal] = useState(false);
@@ -267,6 +268,8 @@ const Dashboard = () => {
   const [showLanguageCheckboxes, setShowLanguageCheckboxes] = useState(false);
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [showDevicesCheckboxes, setShowDevicesCheckboxes] = useState(false);
+  const [showAgeCheckboxes, setShowAgeCheckboxes] = useState(false);
+  const [showGenderCheckboxes, setShowGenderCheckboxes] = useState(false);
 
   const [saveSearches, setSaveSearches] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -300,6 +303,22 @@ const Dashboard = () => {
       : contextFilters.devices.filter((dev) => dev !== device); // Remove language if not checked
 
     setContextFilters({ ...contextFilters, devices: newDevice });
+  };
+
+  const handleGenderChange = (gender, isChecked) => {
+    const newGender = isChecked
+      ? [...contextFilters.genders, gender] // Add language if checked
+      : contextFilters.genders.filter((dev) => dev !== gender); // Remove language if not checked
+
+    setContextFilters({ ...contextFilters, genders: newGender });
+  };
+
+  const handleAgeChange = (age, isChecked) => {
+    const newAge = isChecked
+      ? [...contextFilters.age, age] // Add age if checked
+      : contextFilters.age.filter((a) => a !== age); // Remove age if not checked
+
+    setContextFilters({ ...contextFilters, age: newAge });
   };
   const navigate = useNavigate();
   const location = useLocation();
@@ -368,6 +387,12 @@ const Dashboard = () => {
   };
   const toggleDevicesCheckboxes = () => {
     setShowDevicesCheckboxes(!showDevicesCheckboxes);
+  };
+  const toggleAgeCheckboxes = () => {
+    setShowAgeCheckboxes(!showAgeCheckboxes);
+  };
+  const toggleGenderCheckboxes = () => {
+    setShowGenderCheckboxes(!showGenderCheckboxes);
   };
 
   const handleEditSearch = (id, name) => {
@@ -552,47 +577,41 @@ const Dashboard = () => {
                     <FilterCheckbox>
                       <input
                         type="checkbox"
-                        id="positive"
+                        id="Positive"
                         defaultChecked={contextFilters.sentimentType.includes(
-                          "positive"
+                          "Positive"
                         )}
                         onChange={(e) =>
-                          handleSentimentChange("positive", e.target.checked)
+                          handleSentimentChange("Positive", e.target.checked)
                         }
                       />
-                      <CheckBoxLabel htmlFor="positive">Positive</CheckBoxLabel>
+                      <CheckBoxLabel htmlFor="Positive">Positive</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterCheckbox>
                       <input
                         type="checkbox"
-                        id="negative"
+                        id="Negative"
                         defaultChecked={contextFilters.sentimentType.includes(
-                          "negative"
+                          "Negative"
                         )}
                         onChange={(e) =>
-                          handleSentimentChange("negative", e.target.checked)
+                          handleSentimentChange("Negative", e.target.checked)
                         }
                       />
-                      <CheckBoxLabel htmlFor="negative">Negative</CheckBoxLabel>
+                      <CheckBoxLabel htmlFor="Negative">Negative</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterCheckbox>
                       <input
                         type="checkbox"
                         id="neutral"
                         defaultChecked={contextFilters.sentimentType.includes(
-                          "neutral"
+                          "Neutral"
                         )}
                         onChange={(e) =>
-                          handleSentimentChange("neutral", e.target.checked)
+                          handleSentimentChange("Neutral", e.target.checked)
                         }
                       />
-                      <CheckBoxLabel htmlFor="neutral">Neutral</CheckBoxLabel>
-                    </FilterCheckbox>
-                    <FilterCheckbox>
-                      <input type="checkbox" id="important" />
-                      <CheckBoxLabel htmlFor="important">
-                        Important
-                      </CheckBoxLabel>
+                      <CheckBoxLabel htmlFor="Neutral">Neutral</CheckBoxLabel>
                     </FilterCheckbox>
                     <FilterApplicationFooter filterType={"sentiment"} />
                   </FilterItemDropdown>
@@ -642,9 +661,130 @@ const Dashboard = () => {
                   <FilterItem>
                     Twitter <CountBox>1</CountBox>
                   </FilterItem>
-                  <FilterItem>
-                    Demographics <CountBox>1</CountBox>
-                  </FilterItem>
+                  <FilterItemContainer>
+                    <FilterItem onClick={toggleAgeCheckboxes}>
+                      Age <CountBox>3</CountBox>
+                    </FilterItem>
+                    {showAgeCheckboxes && (
+                      <FilterItemDropdown>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="18-24"
+                            defaultChecked={contextFilters.age.includes(
+                              "18-24"
+                            )}
+                            onChange={(e) =>
+                              handleAgeChange("18-24", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="18-24">18-24</CheckBoxLabel>
+                        </FilterCheckbox>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="25-34"
+                            defaultChecked={contextFilters.age.includes(
+                              "25-34"
+                            )}
+                            onChange={(e) =>
+                              handleAgeChange("25-34", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="25-34">25-34</CheckBoxLabel>
+                        </FilterCheckbox>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="35-44"
+                            defaultChecked={contextFilters.age.includes(
+                              "35-44"
+                            )}
+                            onChange={(e) =>
+                              handleAgeChange("35-44", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="35-44">35-44</CheckBoxLabel>
+                        </FilterCheckbox>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="45-54"
+                            defaultChecked={contextFilters.age.includes(
+                              "45-54"
+                            )}
+                            onChange={(e) =>
+                              handleAgeChange("45-54", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="45-54">45-54</CheckBoxLabel>
+                        </FilterCheckbox>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="55-64"
+                            defaultChecked={contextFilters.age.includes(
+                              "55-64"
+                            )}
+                            onChange={(e) =>
+                              handleAgeChange("55-64", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="55-64">55-64</CheckBoxLabel>
+                        </FilterCheckbox>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="65+"
+                            defaultChecked={contextFilters.age.includes("65+")}
+                            onChange={(e) =>
+                              handleAgeChange("65+", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="65+">65+</CheckBoxLabel>
+                        </FilterCheckbox>
+
+                        <FilterApplicationFooter filterType={"age"} />
+                      </FilterItemDropdown>
+                    )}
+                  </FilterItemContainer>
+                  <FilterItemContainer>
+                    <FilterItem onClick={toggleGenderCheckboxes}>
+                      Gender <CountBox>3</CountBox>
+                    </FilterItem>
+                    {showGenderCheckboxes && (
+                      <FilterItemDropdown>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="Male"
+                            defaultChecked={contextFilters.genders.includes(
+                              "Male"
+                            )}
+                            onChange={(e) =>
+                              handleGenderChange("Male", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="Male">Male</CheckBoxLabel>
+                        </FilterCheckbox>
+                        <FilterCheckbox>
+                          <input
+                            type="checkbox"
+                            id="Female"
+                            defaultChecked={contextFilters.genders.includes(
+                              "Female"
+                            )}
+                            onChange={(e) =>
+                              handleGenderChange("Female", e.target.checked)
+                            }
+                          />
+                          <CheckBoxLabel htmlFor="Female">Female</CheckBoxLabel>
+                        </FilterCheckbox>
+
+                        <FilterApplicationFooter filterType={"gender"} />
+                      </FilterItemDropdown>
+                    )}
+                  </FilterItemContainer>
                   <FilterItemContainer>
                     <FilterItem onClick={toggleDevicesCheckboxes}>
                       Devices <CountBox>3</CountBox>

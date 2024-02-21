@@ -14,6 +14,8 @@ export const CompareKeywordProvider = ({ children }) => {
       endDate: new Date(),
     },
     devices: ["mobile", "desktop", "tablet"],
+    age: ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
+    genders: ["Male", "Female"],
     sentimentType: ["Positive", "Negative", "Neutral"], // positive, negative, neutral
     language: ["en", "ur"], // en, ur
   });
@@ -28,20 +30,21 @@ export const CompareKeywordProvider = ({ children }) => {
         endDate: new Date(),
       },
       devices: ["mobile", "desktop", "tablet"],
+      age: ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
+      genders: ["Male", "Female"],
       sentimentType: ["Positive", "Negative", "Neutral"], // positive, negative, neutral
       language: ["en", "ur"], // en, ur
     });
   };
 
-  useEffect( () => {
-
+  useEffect(() => {
     async function fetchMyAPI() {
       try {
         const result = await generateData(filters);
-        console.log("results are:", result)
+        console.log("results are:", result);
         setData(result);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
         // Optionally, handle the error state in your component
       }
     }
