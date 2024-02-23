@@ -201,7 +201,7 @@ const ResultsCard = () => {
           randomTimePublished = `${topResultRange} hours ago`
         }
         else if(topResultRange == "none"){
-          randomTimePublished = `${Math.floor(Math.random() * 12)} Feb ${randomHourString}`
+          randomTimePublished = `${Math.floor(Math.random() * 12)+1} Feb ${randomHourString}`
         }
 
         let sentiment = topResultSentiment;
@@ -240,6 +240,13 @@ const ResultsCard = () => {
 const convertStringResultsToNumber = (strnum) =>{
   return parseFloat(isNaN(strnum)? strnum.slice(0,-1): strnum)
 }
+
+function convertToDate(timePublished) {
+  const currentYear = new Date().getFullYear(); // Get the current year
+  // Prepend the current year and convert to a Date object
+  const date = new Date(`${timePublished} ${currentYear}`);
+  return date;
+}
   // const randomTweetsNormal = generateRandomTweetsNormal()
 
   // Use useMemo to sort the tweets based on the selectedOption
@@ -261,7 +268,12 @@ const sortedTweets = useMemo(() => {
       // Add more cases for other sorting options
       case 'CommentCount':
         return convertStringResultsToNumber(b[0].additionalMetrics.shares) - convertStringResultsToNumber(a[0].additionalMetrics.shares)
-      default:
+      case 'Published':
+        if (!isNaN(topResultRange)){
+          return 0
+        }
+        return convertToDate(b[0].profileData.timePublished) - convertToDate(a[0].profileData.timePublished)
+        default:
         return 0; // Default case if no sorting is needed
     }
   });
