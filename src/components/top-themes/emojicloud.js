@@ -1,14 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Wordcloud } from '@visx/wordcloud';
 import ResizeDetector from 'react-resize-detector';
 import axios from 'axios';
 import Spinner from './spinner'; 
+import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
+
 
 const EmojiCloudComponent = ({ timeRange }) => {
   const [svgWidth, setSvgWidth] = useState(600); 
   const [svgHeight, setSvgHeight] = useState(500); 
   const [emojis, setEmojis] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const {
+    data,
+    deleteDataByName,
+    filters: contextFilters,
+    setFilters: setContextFilters,
+    clearFilters,
+  } = useContext(CompareKeywordContext);
+
+  let combinedTweetsText = data.reduce((acc, current) => {
+    // Check if the current object has the tweetsText property to avoid errors
+    if (current.tweetsText) {
+      return acc.concat(current.tweetsText);
+    } else {
+      return acc;
+    }
+  }, []); // Start with an empty array
 
   const updateSvgSize = () => {
     const windowWidth = window.innerWidth;
@@ -28,8 +47,8 @@ const EmojiCloudComponent = ({ timeRange }) => {
     const fetchEmojis = async () => {
       try {
         setLoading(true);
-        let url = `https://lda-iwz8.onrender.com/lda/emojis/time/${timeRange.toLowerCase()}`; // Update this URL to your emoji LDA endpoint
-        const response = await axios.get(url); 
+        let url = "https://lda-iwz8.onrender.com/lda/emojis"
+        const response = await axios.post(url, {tweets: combinedTweetsText}); 
         setEmojis(response.data.map(emoji => ({
           text: emoji.emoji, 
           value: emoji.value,

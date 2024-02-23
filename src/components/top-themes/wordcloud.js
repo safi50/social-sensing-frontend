@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Wordcloud } from "@visx/wordcloud";
 import ResizeDetector from "react-resize-detector";
 import axios from "axios";
-import Spinner from './spinner';   
+import Spinner from './spinner'; 
+import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 //  data
 // const words = [
 //   { text: "Test", value: 500 },
@@ -54,6 +55,24 @@ const WordCloudComponent = ({ timeRange }) => {
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const {
+    data,
+    deleteDataByName,
+    filters: contextFilters,
+    setFilters: setContextFilters,
+    clearFilters,
+  } = useContext(CompareKeywordContext);
+
+
+  let combinedTweetsText = data.reduce((acc, current) => {
+    // Check if the current object has the tweetsText property to avoid errors
+    if (current.tweetsText) {
+      return acc.concat(current.tweetsText);
+    } else {
+      return acc;
+    }
+  }, []); // Start with an empty array
+  
   const updateSvgSize = () => {
     const windowWidth = window.innerWidth;
     if (windowWidth < 426) {
@@ -72,10 +91,11 @@ const WordCloudComponent = ({ timeRange }) => {
 
   useEffect(() => {
     const fetchWords = async () => {
+      
       try {
         setLoading(true);
-        let url = "https://lda-iwz8.onrender.com/lda/time/" + timeRange.toLowerCase();
-        const response = await axios.get(url); 
+        let url = "https://lda-iwz8.onrender.com/lda"
+        const response = await axios.post(url, {tweets: combinedTweetsText}); 
         setWords(response.data);
         setLoading(false);
       } catch (error) {

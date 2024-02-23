@@ -949,7 +949,7 @@ export const generateData = async({
       let tweetsData = [{"data": [
         {
           "id": "1234567890123456789",
-          "text": "Just released a new version of my web app! #webdevelopment #javascript",
+          "text": "😁Just released a new version of my web app! #webdevelopment #javascript",
           "created_at": "2024-02-15T12:34:56.000Z",
           "author_id": "1312",
           "retweet_count": "109",
@@ -960,7 +960,7 @@ export const generateData = async({
         },
         {
           "id": "9876543210987654321",
-          "text": "Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
+          "text": "😁Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
           "created_at": "2024-02-20T02:21:43.000Z",
           "author_id": "1991",
           "retweet_count": "19",
@@ -971,7 +971,7 @@ export const generateData = async({
         },
         {
           "id": "98765432109876121554321",
-          "text": "Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
+          "text": "😁😁Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
           "created_at": "2024-02-16T09:21:43.000Z",
           "author_id": "1991",
           "retweet_count": "19",
@@ -982,7 +982,7 @@ export const generateData = async({
       },
         {
           "id": "9876543210987654121321",
-          "text": "Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
+          "text": "🤯🫨🤪Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
           "created_at": "2024-02-19T04:21:43.000Z",
           "author_id": "1991",
           "retweet_count": "19",
@@ -993,7 +993,7 @@ export const generateData = async({
       },
         {
           "id": "98765432109875621654321",
-          "text": "This is such a bad movie",
+          "text": "This is such a bad movie🥵🥵",
           "created_at": "2024-02-20T04:21:43.000Z",
           "author_id": "1991",
           "retweet_count": "19",
@@ -1148,6 +1148,7 @@ export const generateData = async({
 
     return {
       name: name,
+      tweetsText: tweetsText,
       infoText: getTotalResultsFromApi(name), // from Tweets count API
       color: colors[index],
       totalEngagement: {

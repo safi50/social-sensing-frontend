@@ -61,7 +61,7 @@ const WordCloudStyle = styled.div`
 `;
 
 export default function TopThemes({ timeRange }) {
-  const [selectedOption, setSelectedOption] = useState("Bio");
+  const [selectedOption, setSelectedOption] = useState("None");
 
 
   const handleSelectChange = (event) => {
@@ -77,7 +77,7 @@ export default function TopThemes({ timeRange }) {
         </Row>
         <Row>
           <CustomSelect onChange={handleSelectChange} value={selectedOption}>
-            <option>Select theme type</option>
+            <option value="None">Select theme type</option>
             <option value="TopTheme">☆ Top Theme</option>
             <option value="Hashtags"># Hashtags</option>
             <option value="Account">@ Account</option>
