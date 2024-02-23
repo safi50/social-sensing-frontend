@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useContext } from "react";
+import { useState, useContext, useMemo } from "react";
 import ResultCard from "./resultCard";
 import ResultCardCompact from "./resultCardCompact";
 import ResultCardStory from "./resultCardStory";
@@ -237,7 +237,38 @@ const ResultsCard = () => {
 };
 
 
-  const randomTweetsNormal = generateRandomTweetsNormal()
+const convertStringResultsToNumber = (strnum) =>{
+  return parseFloat(isNaN(strnum)? strnum.slice(0,-1): strnum)
+}
+  // const randomTweetsNormal = generateRandomTweetsNormal()
+
+  // Use useMemo to sort the tweets based on the selectedOption
+const sortedTweets = useMemo(() => {
+  const tweets = generateRandomTweetsNormal(); // Generate tweets
+
+  // Sort the tweets based on the selectedOption
+  return tweets.sort((a, b) => {
+    switch (selectedOption) {
+      case 'Engagement':
+        console.log("sorting", b[0], a[0])
+        return convertStringResultsToNumber(b[0].profileData.engagement) - convertStringResultsToNumber(a[0].profileData.engagement)
+      case 'PotentialReach':
+        // Assuming 'reach' is a sortable property in profileData
+        return convertStringResultsToNumber(b[0].profileData.reach) - convertStringResultsToNumber(a[0].profileData.reach)
+      case 'TrendingScore':
+        // Assuming 'trending' is a sortable property in profileData
+        return convertStringResultsToNumber(b[0].profileData.trending) - convertStringResultsToNumber(a[0].profileData.trending)
+      // Add more cases for other sorting options
+      case 'CommentCount':
+        return convertStringResultsToNumber(b[0].additionalMetrics.shares) - convertStringResultsToNumber(a[0].additionalMetrics.shares)
+      default:
+        return 0; // Default case if no sorting is needed
+    }
+  });
+}, [selectedOption]); // Re-run the sorting every time selectedOption changes
+
+
+
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
@@ -308,7 +339,6 @@ const ResultsCard = () => {
               <option value="grid">&nbsp;&nbsp;- Grid</option>
               <option value="treemap">&nbsp;&nbsp;- Tree Map</option>
             </CustomSelect>
-            {/* <ExportButton onClick={handleExportButton}>Export</ExportButton> */}
             <Select
               options={exportOptions}
               styles={customStyles}
@@ -333,13 +363,7 @@ const ResultsCard = () => {
 
       {activeTab === "topResults" && (
         <div>
-         {/* {[...Array(3)].map((_, index) => (
-                <div key={index}>
-                    {selectedLayout === "Normal" && <ResultCard />}
-                    {selectedLayout === "Compact" && <ResultCardCompact />}
-                </div>
-            ))} */}
-          {randomTweetsNormal.map((data, index) => (
+          {sortedTweets.map((data, index) => (
             <div>
               {selectedLayout === "Normal" && 
                   <ResultCard profileData={data[0].profileData} additionalMetrics={data[0].additionalMetrics}/>
@@ -353,7 +377,7 @@ const ResultsCard = () => {
           {selectedLayout === "Stories" && (
 
             <CardRow>
-              {randomTweetsNormal.map((data, index)=>{
+              {sortedTweets.map((data, index)=>{
                  return <ResultCardStory data={data[0].profileData}/>
               })}
             </CardRow>
@@ -361,43 +385,11 @@ const ResultsCard = () => {
 
           {selectedLayout === "grid" && (
             <CardRow>
-              {randomTweetsNormal.map((data, index)=>{
+              {sortedTweets.map((data, index)=>{
                  return <ResultCardGrid data={data[0].profileData}/>
               })}
             </CardRow>
           )}
-
-          {/* {selectedLayout === "Stories" && (
-            <CardRow>
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-              <ResultCardStory />
-            </CardRow>
-          )} */}
-          {/* {selectedLayout === "grid" && (
-            <CardRow>
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-              <ResultCardGrid />
-            </CardRow>
-          )} */}
         </div>
       )}
       {activeTab === "topThemes" && (
