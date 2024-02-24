@@ -812,8 +812,9 @@ import { parse } from "papaparse";
 
 
 
+import axios from 'axios';
 
-
+const TempInitialDate = "2022-03-02T13:05:05"
 
 const getMonthName = (monthIndex) => {
   const months = [
@@ -834,7 +835,7 @@ const getMonthName = (monthIndex) => {
 };
 
 const generateLastDaysArray = () => {
-  const today = new Date();
+  const today = new Date(TempInitialDate);
   const lastDays = [];
 
   for (let i = 6; i >= 0; i--) {
@@ -849,7 +850,7 @@ const generateLastDaysArray = () => {
 };
 
 const generateLast24HoursArray = () => {
-  const now = new Date();
+  const now = new Date(TempInitialDate);
   const last24Hours = [];
 
   for (let i = 0; i < 24; i++) {
@@ -922,6 +923,13 @@ export const generateData = async({
     },
   };
 
+  const cleanPakistanTimezone = (dateString)=>{
+    let dateParts = dateString.split(" Pakistan Standard Time")[0]; // Remove the timezone part
+    dateParts = dateParts.replace(" ", "T")
+    // const date = new Date(dateParts);
+    return dateParts
+  }
+
   let data = await Promise.all(eventNames.map( async (name, index) => {
     const languageUpper = language.reduce(
       (acc, lang) => acc + languageRangeValues[lang].upper,
@@ -944,67 +952,104 @@ export const generateData = async({
 
     let tweetsData = []
 
-    const getTwitterTweets = (myQuery)=>{
+    const getTwitterTweets = async (myQuery)=>{
       // call twitter api
-      let tweetsData = [{"data": [
-        {
-          "id": "1234567890123456789",
-          "text": "😁Just released a new version of my web app! #webdevelopment #javascript",
-          "created_at": "2024-02-15T12:34:56.000Z",
-          "author_id": "1312",
-          "retweet_count": "109",
-          "reply_count": "210",
-          "like_count": "190",
-          "quote_count": "140",
-          "impressions": "190"
-        },
-        {
-          "id": "9876543210987654321",
-          "text": "😁Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
-          "created_at": "2024-02-20T02:21:43.000Z",
-          "author_id": "1991",
-          "retweet_count": "19",
-          "reply_count": "100",
-          "like_count": "150",
-          "quote_count": "223",
-          "impressions": "270"
-        },
-        {
-          "id": "98765432109876121554321",
-          "text": "😁😁Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
-          "created_at": "2024-02-16T09:21:43.000Z",
-          "author_id": "1991",
-          "retweet_count": "19",
-          "reply_count": "100",
-          "like_count": "150",
-          "quote_count": "223",
-          "impressions": "100"
-      },
-        {
-          "id": "9876543210987654121321",
-          "text": "🤯🫨🤪Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
-          "created_at": "2024-02-19T04:21:43.000Z",
-          "author_id": "1991",
-          "retweet_count": "19",
-          "reply_count": "100",
-          "like_count": "150",
-          "quote_count": "223",
-          "impressions": "90"
-      },
-        {
-          "id": "98765432109875621654321",
-          "text": "This is such a bad movie🥵🥵",
-          "created_at": "2024-02-20T04:21:43.000Z",
-          "author_id": "1991",
-          "retweet_count": "19",
-          "reply_count": "100",
-          "like_count": "150",
-          "quote_count": "223",
-          "impressions": "10"
+      
+    const response = await axios.get('https://lda-iwz8.onrender.com/get_random_tweets');
+    response.data.forEach(tweet => {
+      if (tweet.created_at) {
+        tweet.created_at = cleanPakistanTimezone(tweet.created_at)
       }
-    ]}]
+      if (tweet.impressions === undefined) {
+        tweet.impressions = randomData(100, 1000, 1)[0]; // Adjust the range as needed
+      }
+    
+      // Check if 'quote_count' attribute exists, if not, add it with a random value
+      if (tweet.quote_count === undefined) {
+        tweet.quote_count = randomData(100, 1000, 1)[0]; // Adjust the range as needed
+      }
+      if (tweet.hasOwnProperty('replies_count')) {
+        // Rename 'replies_count' key to 'reply_count'
+        tweet.reply_count = tweet.replies_count;
+        delete tweet.replies_count;
+      }
+      if (tweet.hasOwnProperty('retweets_count')) {
+        // Rename 'retweets_count' key to 'retweet_count'
+        tweet.retweet_count = tweet.retweets_count;
+        delete tweet.retweets_count;
+      }
+      if (tweet.hasOwnProperty('likes_count')) {
+        // Rename 'likes_count' key to 'like_count'
+        tweet.like_count = tweet.likes_count;
+        delete tweet.likes_count;
+      }
+      if (tweet.hasOwnProperty('tweet')) {
+        // Rename 'likes_count' key to 'like_count'
+        tweet.text = tweet.tweet;
+        delete tweet.tweet;
+      }
+    })
+    console.log("twitter data form mongodb:", response)
+    return [response]
+    //   let tweetsData = [{"data": [
+    //     {
+    //       "id": "1234567890123456789",
+    //       "text": "😁Just released a new version of my web app! #webdevelopment #javascript",
+    //       "created_at": "2024-02-15T12:34:56.000Z",
+    //       "author_id": "1312",
+    //       "retweet_count": "109",
+    //       "reply_count": "210",
+    //       "like_count": "190",
+    //       "quote_count": "140",
+    //       "impressions": "190"
+    //     },
+    //     {
+    //       "id": "9876543210987654321",
+    //       "text": "😁Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
+    //       "created_at": "2024-02-20T02:21:43.000Z",
+    //       "author_id": "1991",
+    //       "retweet_count": "19",
+    //       "reply_count": "100",
+    //       "like_count": "150",
+    //       "quote_count": "223",
+    //       "impressions": "270"
+    //     },
+    //     {
+    //       "id": "98765432109876121554321",
+    //       "text": "😁😁Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
+    //       "created_at": "2024-02-16T09:21:43.000Z",
+    //       "author_id": "1991",
+    //       "retweet_count": "19",
+    //       "reply_count": "100",
+    //       "like_count": "150",
+    //       "quote_count": "223",
+    //       "impressions": "100"
+    //   },
+    //     {
+    //       "id": "9876543210987654121321",
+    //       "text": "🤯🫨🤪Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
+    //       "created_at": "2024-02-19T04:21:43.000Z",
+    //       "author_id": "1991",
+    //       "retweet_count": "19",
+    //       "reply_count": "100",
+    //       "like_count": "150",
+    //       "quote_count": "223",
+    //       "impressions": "90"
+    //   },
+    //     {
+    //       "id": "98765432109875621654321",
+    //       "text": "This is such a bad movie🥵🥵",
+    //       "created_at": "2024-02-20T04:21:43.000Z",
+    //       "author_id": "1991",
+    //       "retweet_count": "19",
+    //       "reply_count": "100",
+    //       "like_count": "150",
+    //       "quote_count": "223",
+    //       "impressions": "10"
+    //   }
+    // ]}]
 
-    return tweetsData
+    // return tweetsData
     }
 
     const getTotalResultsFromApi = (query)=>{
@@ -1045,7 +1090,7 @@ export const generateData = async({
       return [reach]
     }
 
-    tweetsData = getTwitterTweets(name);
+    tweetsData = await getTwitterTweets(name);
 
     let tweetsSentiments = []
 
@@ -1108,18 +1153,16 @@ export const generateData = async({
       // preprocessing of current tweet data to get last 24 hours of data
       // return [...] // 24 numbers returned
       const hoursCount = Array(24).fill(0); // Initialize counts for each hour
-      const now = new Date();
+      const now = new Date(TempInitialDate);
       
       tweetData[0].data.forEach((tweet, index) => {
         const tweetDate = new Date(tweet.created_at);
         const diffInHours = Math.floor((now - tweetDate) / (1000 * 60 * 60));
-        console.log(`tweetDate:${tweetDate} now:${now} diffInHours:${diffInHours} tweetSentiment:${tweetSentiments[index]} sentimentFilter:${sentimentFilter}`)
         if (diffInHours < 24 && tweetSentiments[index] === sentimentFilter) {
           // Ensure the hour is within the array bounds and increment the count
           hoursCount[23 - diffInHours]++; // Subtract from 23 to get the correct index (0 to 23)
         }
       });
-      console.log("hoursCount:", hoursCount)
       // return randomData(finalLower, finalUpper, 24)
       return hoursCount
     }
@@ -1128,7 +1171,7 @@ export const generateData = async({
       // preprocessing of current tweet data to get last 7 days of data
       // return [...] // 24 numbers returned
       const daysCount = Array(7).fill(0); // Initialize counts for each day
-      const now = new Date();
+      const now = new Date(TempInitialDate);
       now.setHours(0, 0, 0, 0); // Normalize current time to the start of the current day
 
       tweetData[0].data.forEach((tweet, index) => {
@@ -1143,7 +1186,7 @@ export const generateData = async({
       });
 
       return daysCount;
-      return randomData(finalLower, finalUpper, 7)
+      // return randomData(finalLower, finalUpper, 7)
     }
 
     return {
