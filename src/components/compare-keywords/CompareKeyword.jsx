@@ -19,6 +19,33 @@ export const CompareKeyword = () => {
   const mergedResultsOverTime = mergeData(data, "resultsOverTime");
   const mergedSentiments = mergeData(data, "sentiments");
   const mergedNetSentimentOverTime = mergeData(data, "netSentimentsOverTime");
+  console.log("mergedNetSentimentOverTime:",mergedNetSentimentOverTime);
+  console.log("mergedResultsOverTime:", mergedResultsOverTime)
+
+
+  const netSentiments = mergedResultsOverTime.datasets.map((dataset, index) => {
+    // Initialize an array to hold the net sentiment for each day for the current dataset
+    // let netSentimentData = Array(mergedNetSentimentOverTime.labels.length).fill(0);
+
+    let positiveSentimentArray = mergedNetSentimentOverTime.datasets[index*3].data
+    let negativeSentimentArray = mergedNetSentimentOverTime.datasets[(index*3)+1].data
+    
+    let netSentimentResults = positiveSentimentArray.map((value, num) => {
+      return value - negativeSentimentArray[num]
+    })
+
+    // Return a new dataset object for the current label with the calculated net sentiments
+    return {
+        label: dataset.label,
+        data: netSentimentResults,
+        backgroundColor: dataset.backgroundColor,
+        borderColor: dataset.borderColor,
+        borderWidth: 1
+    };
+  });
+
+  mergedNetSentimentOverTime.datasets = netSentiments
+
   const navigate = useNavigate();
   return (
     <CompareKeywordWrapper>
@@ -46,15 +73,10 @@ export const CompareKeyword = () => {
           <VerticalBarChart title="Sentiments" data={mergedSentiments} />
         </div>
         <div>
-          {/* <ChartComponent
-            title="Net Sentiment over time"
-            data={mergedNetSentimentOverTime}
-          /> */}
           <ChartComponent
-          title="Net Sentiment over time"
-          data={mergedResultsOverTime}
-          queryMatches={filters.eventNames}
-        />
+            title="Net Sentiments over time"
+            data={mergedNetSentimentOverTime}
+          />
         </div>
       </ChartsContainer>
     </CompareKeywordWrapper>
