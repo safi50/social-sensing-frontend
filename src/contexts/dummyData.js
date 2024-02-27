@@ -65,12 +65,12 @@ export const getTwitterTweets = async (myQuery) => {
       tweet.created_at = cleanPakistanTimezone(tweet.created_at);
     }
     if (tweet.impressions === undefined) {
-      tweet.impressions = randomData(100, 1000, 1)[0]; // Adjust the range as needed
+      tweet.impressions = randomData(1, 100, 1)[0]; // Adjust the range as needed
     }
 
     // Check if 'quote_count' attribute exists, if not, add it with a random value
     if (tweet.quote_count === undefined) {
-      tweet.quote_count = randomData(100, 1000, 1)[0]; // Adjust the range as needed
+      tweet.quote_count = randomData(1, 10, 1)[0]; // Adjust the range as needed
     }
     if (tweet.hasOwnProperty("replies_count")) {
       // Rename 'replies_count' key to 'reply_count'
@@ -355,11 +355,11 @@ export const generateData = async ({
 
       const getTotalResultsFromApi = (query) => {
         // call TweetCount api on the above query to count the total results
-        return randomData(finalLower, finalUpper, 1)[0];
+        return randomData(100, 1000, 1)[0];
       };
       const getResultsOver24Hours = (query) => {
         // use tweet count api to get tweets count values for each hour
-        return randomData(finalLower, finalUpper, 24);
+        return randomData(1, 100, 24);
       };
 
       const getResultsOver7Days = (query) => {

@@ -185,6 +185,16 @@ const ResultsCard = () => {
   } = useContext(TopResultsFilterContext);
   const { data } = useContext(CompareKeywordContext);
 
+  const generateRandomTime = () => {
+    let randomTime = Math.floor(Math.random() * 24); // Random hour
+        if (randomTime < 10) {
+            randomTime = `0${randomTime}`;
+        }
+    const randomMinutes = Math.floor(Math.random() * 60); // Random minutes
+    const randomHourString = `${randomTime}:${randomMinutes < 10 ? '0' : ''}${randomMinutes}`;
+    return randomHourString
+  }
+
   const generateRandomTweetsNormal = () => {
     const sentiments = ["Positive", "Negative", "Neutral"];
     const profiles = [
@@ -204,15 +214,15 @@ const ResultsCard = () => {
         profileImage: profileImage,
         content: match.text,
         sharedImage: sharedImage,
-        sentiment:
-          topResultSentiment ||
+        sentiment: topResultSentiment != "none"? 
+          topResultSentiment :
           sentiments[Math.floor(Math.random() * sentiments.length)],
         matches: topResultMatch,
         reach: match.impressions,
         engagement: match.quote_count + match.retweet_count,
         trending: match.quote_count,
         timePublished: isNaN(topResultRange)
-          ? "3"
+          ? `${topResultRange} ${generateRandomTime()}`
           : `${topResultRange} hours ago`,
         location: "Pakistan",
         platform: "Twitter.com",
