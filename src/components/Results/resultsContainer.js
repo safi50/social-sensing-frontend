@@ -8,8 +8,9 @@ import WordCloudComponent from "../top-themes/wordcloud";
 import EmojiCloudComponent from "../top-themes/emojicloud";
 import Select from "react-select";
 import { TopResultsFilterContext } from "../../contexts/TopResultsFilter.context";
-import profileImage from '../../assets/profile-pic.jpeg';
-import sharedImage from '../../assets/cool-profile-picture.jpeg';
+import profileImage from "../../assets/profile-pic.jpeg";
+import sharedImage from "../../assets/cool-profile-picture.jpeg";
+import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
@@ -85,7 +86,7 @@ const CardRow = styled.div`
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: flex-start;
-  margin-bottom: 1rem; 
+  margin-bottom: 1rem;
 `;
 
 const ExportButton = styled.button`
@@ -140,13 +141,13 @@ const customStyles = {
     ...defaultStyles,
     "& svg": { display: "none" },
   }),
-  option: (provided, {isFocused}) => ({
+  option: (provided, { isFocused }) => ({
     ...provided,
     backgroundColor: isFocused ? "#F1EBFF" : "white",
     fontSize: "1.25rem",
     fontWeight: "500",
     color: isFocused ? "#6631F7" : "#888888",
-    margin: "0"
+    margin: "0",
   }),
   placeholder: (provided) => ({
     ...provided,
@@ -167,7 +168,6 @@ const exportOptions = [
   { value: "PPT Portrait", label: "PPT Portrait" },
 ];
 
-
 const ResultsCard = () => {
   const [activeTab, setActiveTab] = useState("topResults");
   const [selectedOption, setSelectedOption] = useState("");
@@ -175,112 +175,142 @@ const ResultsCard = () => {
   const [selectedExport, setSelectedExport] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("Bio");
 
-  const {topResultMatch, setTopResultMatch, topResultRange, setTopResultRange, topResultSentiment, setTopResultSentiment} = useContext(TopResultsFilterContext)
+  const {
+    topResultMatch,
+    setTopResultMatch,
+    topResultRange,
+    setTopResultRange,
+    topResultSentiment,
+    setTopResultSentiment,
+  } = useContext(TopResultsFilterContext);
+  const { data } = useContext(CompareKeywordContext);
 
-  
   const generateRandomTweetsNormal = () => {
-    const sentiments = ['Positive', 'Negative', 'Neutral'];
+    const sentiments = ["Positive", "Negative", "Neutral"];
     const profiles = [
-        { name: 'John Doe', handle: '@johndoe'},
-        { name: 'Jane Smith', handle: '@janesmith'},
-        { name: 'Alice Johnson', handle: '@alicejohnson'}
+      { name: "John Doe", handle: "@johndoe" },
+      { name: "Jane Smith", handle: "@janesmith" },
+      { name: "Alice Johnson", handle: "@alicejohnson" },
     ];
 
     const tweets = [];
+    const matchedData = data.filter((match) => match.name === topResultMatch);
+    if (!matchedData.length) return [];
+
+    matchedData[0].tweets[0].data.map((match) => {
+      const profileData = {
+        name: match.name,
+        handle: match.username,
+        profileImage: profileImage,
+        content: match.text,
+        sharedImage: sharedImage,
+        sentiment:
+          topResultSentiment ||
+          sentiments[Math.floor(Math.random() * sentiments.length)],
+        matches: topResultMatch,
+        reach: match.impressions,
+        engagement: match.quote_count + match.retweet_count,
+        trending: match.quote_count,
+        timePublished: isNaN(topResultRange)
+          ? "3"
+          : `${topResultRange} hours ago`,
+        location: "Pakistan",
+        platform: "Twitter.com",
+      };
+      const additionalMetrics = {
+        shares: match.impressions,
+        hearts: match.like_count,
+        users: `${(Math.random() * 10).toFixed(0)}k`,
+      };
+
+      tweets.push([{ profileData, additionalMetrics }]);
+    });
     for (let i = 0; i < 13; i++) {
-        const randomProfile = profiles[Math.floor(Math.random() * profiles.length)];
+      const randomProfile =
+        profiles[Math.floor(Math.random() * profiles.length)];
 
-        let randomTime = Math.floor(Math.random() * 24); // Random hour
-        if (randomTime < 10) {
-            randomTime = `0${randomTime}`;
-        }
-        const randomMinutes = Math.floor(Math.random() * 60); // Random minutes
-        const randomHourString = `${randomTime}:${randomMinutes < 10 ? '0' : ''}${randomMinutes}`;
-        let randomTimePublished = `${topResultRange} ${randomHourString}`;
-        if (!isNaN(topResultRange)){
-          randomTimePublished = `${topResultRange} hours ago`
-        }
-        else if(topResultRange == "none"){
-          randomTimePublished = `${Math.floor(Math.random() * 12)+1} Feb ${randomHourString}`
-        }
+      let randomTime = Math.floor(Math.random() * 24); // Random hour
+      if (randomTime < 10) {
+        randomTime = `0${randomTime}`;
+      }
+      const randomMinutes = Math.floor(Math.random() * 60); // Random minutes
+      const randomHourString = `${randomTime}:${
+        randomMinutes < 10 ? "0" : ""
+      }${randomMinutes}`;
+      let randomTimePublished = `${topResultRange} ${randomHourString}`;
+      if (!isNaN(topResultRange)) {
+        randomTimePublished = `${topResultRange} hours ago`;
+      } else if (topResultRange == "none") {
+        randomTimePublished = `${
+          Math.floor(Math.random() * 12) + 1
+        } Feb ${randomHourString}`;
+      }
 
-        let sentiment = topResultSentiment;
-        if (sentiment === 'none') {
-            sentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
-        }
-
-        const profileData = {
-            name: randomProfile.name,
-            handle: randomProfile.handle,
-            profileImage: profileImage,
-            content: 'Random tweet content here...',
-            sharedImage: sharedImage,
-            sentiment: sentiment,
-            matches: topResultMatch,
-            reach: `${(Math.random()*10).toFixed(1)}k`,
-            engagement: `${(Math.random()*1000).toFixed(0)}k`,
-            trending: `${(Math.random()*10).toFixed(1)}k`,
-            timePublished: isNaN(topResultRange)? randomTimePublished: `${topResultRange} hours ago`,
-            location: 'Pakistan',
-            platform: "Twitter.com"
-        };
-        const additionalMetrics = {
-          shares: `${(Math.random()*1000).toFixed(0)}k`,
-          hearts: `${(Math.random()*1000).toFixed(0)}k`,
-          users: `${(Math.random()*1000).toFixed(0)}k`
-        }
-
-        tweets.push([{profileData, additionalMetrics}]);
+      let sentiment = topResultSentiment;
+      if (sentiment === "none") {
+        sentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
+      }
     }
 
     return tweets;
-};
+  };
 
+  const convertStringResultsToNumber = (strnum) => {
+    return parseFloat(isNaN(strnum) ? strnum.slice(0, -1) : strnum);
+  };
 
-const convertStringResultsToNumber = (strnum) =>{
-  return parseFloat(isNaN(strnum)? strnum.slice(0,-1): strnum)
-}
-
-function convertToDate(timePublished) {
-  const currentYear = new Date().getFullYear(); // Get the current year
-  // Prepend the current year and convert to a Date object
-  const date = new Date(`${timePublished} ${currentYear}`);
-  return date;
-}
+  function convertToDate(timePublished) {
+    const currentYear = new Date().getFullYear(); // Get the current year
+    // Prepend the current year and convert to a Date object
+    const date = new Date(`${timePublished} ${currentYear}`);
+    return date;
+  }
   // const randomTweetsNormal = generateRandomTweetsNormal()
 
   // Use useMemo to sort the tweets based on the selectedOption
-const sortedTweets = useMemo(() => {
-  const tweets = generateRandomTweetsNormal(); // Generate tweets
+  const sortedTweets = useMemo(() => {
+    const tweets = generateRandomTweetsNormal(); // Generate tweets
 
-  // Sort the tweets based on the selectedOption
-  return tweets.sort((a, b) => {
-    switch (selectedOption) {
-      case 'Engagement':
-        console.log("sorting", b[0], a[0])
-        return convertStringResultsToNumber(b[0].profileData.engagement) - convertStringResultsToNumber(a[0].profileData.engagement)
-      case 'PotentialReach':
-        // Assuming 'reach' is a sortable property in profileData
-        return convertStringResultsToNumber(b[0].profileData.reach) - convertStringResultsToNumber(a[0].profileData.reach)
-      case 'TrendingScore':
-        // Assuming 'trending' is a sortable property in profileData
-        return convertStringResultsToNumber(b[0].profileData.trending) - convertStringResultsToNumber(a[0].profileData.trending)
-      // Add more cases for other sorting options
-      case 'CommentCount':
-        return convertStringResultsToNumber(b[0].additionalMetrics.shares) - convertStringResultsToNumber(a[0].additionalMetrics.shares)
-      case 'Published':
-        if (!isNaN(topResultRange)){
-          return 0
-        }
-        return convertToDate(b[0].profileData.timePublished) - convertToDate(a[0].profileData.timePublished)
+    // Sort the tweets based on the selectedOption
+    return tweets.sort((a, b) => {
+      switch (selectedOption) {
+        case "Engagement":
+          console.log("sorting", b[0], a[0]);
+          return (
+            convertStringResultsToNumber(b[0].profileData.engagement) -
+            convertStringResultsToNumber(a[0].profileData.engagement)
+          );
+        case "PotentialReach":
+          // Assuming 'reach' is a sortable property in profileData
+          return (
+            convertStringResultsToNumber(b[0].profileData.reach) -
+            convertStringResultsToNumber(a[0].profileData.reach)
+          );
+        case "TrendingScore":
+          // Assuming 'trending' is a sortable property in profileData
+          return (
+            convertStringResultsToNumber(b[0].profileData.trending) -
+            convertStringResultsToNumber(a[0].profileData.trending)
+          );
+        // Add more cases for other sorting options
+        case "CommentCount":
+          return (
+            convertStringResultsToNumber(b[0].additionalMetrics.shares) -
+            convertStringResultsToNumber(a[0].additionalMetrics.shares)
+          );
+        case "Published":
+          if (!isNaN(topResultRange)) {
+            return 0;
+          }
+          return (
+            convertToDate(b[0].profileData.timePublished) -
+            convertToDate(a[0].profileData.timePublished)
+          );
         default:
-        return 0; // Default case if no sorting is needed
-    }
-  });
-}, [selectedOption]); // Re-run the sorting every time selectedOption changes
-
-
-
+          return 0; // Default case if no sorting is needed
+      }
+    });
+  }, [selectedOption]); // Re-run the sorting every time selectedOption changes
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
@@ -377,28 +407,33 @@ const sortedTweets = useMemo(() => {
         <div>
           {sortedTweets.map((data, index) => (
             <div>
-              {selectedLayout === "Normal" && 
-                  <ResultCard profileData={data[0].profileData} additionalMetrics={data[0].additionalMetrics}/>
-              }
-              {selectedLayout === "Compact" &&
-                  <ResultCardCompact profileData={data[0].profileData} additionalMetrics={data[0].additionalMetrics}/>
-              }
-              </div>
+              {selectedLayout === "Normal" && (
+                <ResultCard
+                  profileData={data[0].profileData}
+                  additionalMetrics={data[0].additionalMetrics}
+                />
+              )}
+              {selectedLayout === "Compact" && (
+                <ResultCardCompact
+                  profileData={data[0].profileData}
+                  additionalMetrics={data[0].additionalMetrics}
+                />
+              )}
+            </div>
           ))}
 
           {selectedLayout === "Stories" && (
-
             <CardRow>
-              {sortedTweets.map((data, index)=>{
-                 return <ResultCardStory data={data[0].profileData}/>
+              {sortedTweets.map((data, index) => {
+                return <ResultCardStory data={data[0].profileData} />;
               })}
             </CardRow>
           )}
 
           {selectedLayout === "grid" && (
             <CardRow>
-              {sortedTweets.map((data, index)=>{
-                 return <ResultCardGrid data={data[0].profileData}/>
+              {sortedTweets.map((data, index) => {
+                return <ResultCardGrid data={data[0].profileData} />;
               })}
             </CardRow>
           )}

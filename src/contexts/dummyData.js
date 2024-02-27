@@ -1,820 +1,6 @@
-// function randomData(min, max, count) {
-//   return Array.from(
-//     { length: count },
-//     () => Math.floor(Math.random() * (max - min + 1)) + min
-//   );
-// }
-// function generateRandomValues(sumTo, count) {
-//   // Generate 'count' random numbers
-//   let randomNumbers = Array.from({ length: count }, Math.random);
+import axios from "axios";
 
-import { parse } from "papaparse";
-
-//   // Calculate their total sum
-//   let total = randomNumbers.reduce((acc, val) => acc + val, 0);
-
-//   // Normalize each number so that their total sum equals 'sumTo'`
-//   let normalizedNumbers = randomNumbers.map((num) => (num / total) * sumTo);
-
-//   return normalizedNumbers;
-// }
-
-// const getMonthName = (monthIndex) => {
-//   const months = [
-//     "Jan",
-//     "Feb",
-//     "Mar",
-//     "Apr",
-//     "May",
-//     "Jun",
-//     "Jul",
-//     "Aug",
-//     "Sep",
-//     "Oct",
-//     "Nov",
-//     "Dec"
-//   ];
-//   return months[monthIndex];
-// };
-
-// const generateLastDaysArray = () => {
-//   const today = new Date();
-//   const lastDays = [];
-
-//   for (let i = 6; i >= 0; i--) {
-//     const date = new Date(today);
-//     date.setDate(today.getDate() - i);
-//     const formattedDate = `${date.getDate()} ${getMonthName(
-//       date.getMonth()
-//     )}`;
-//     lastDays.push(formattedDate);
-//   }
-//   return lastDays
-// };
-
-// const generateLast24HoursArray = () => {
-//   const now = new Date();
-//   const last24Hours = [];
-
-//   for (let i = 0; i < 24; i++) {
-//     const hour = new Date(now);
-//     hour.setHours(now.getHours() - i);
-//     last24Hours.unshift(hour.getHours());
-//   }
-//   return last24Hours
-// };
-
-// export function generateData({
-//   eventNames,
-//   timeRange,
-//   date,
-//   sentimentType,
-//   language,
-// }) {
-//   const timeRangeValues = {
-//     "1d": { upper: 300, lower: 0 },
-//     "7d": { upper: 600, lower: 300 },
-//     "1M": { upper: 1000, lower: 600 },
-//   };
-
-//   const colors = [
-//     "rgba(255, 99, 132)", // Pink
-//     "rgba(54, 162, 235)", // Blue
-//     "rgba(255, 206, 86)", // Yellow
-//     "rgba(75, 192, 192)", // Green
-//     "rgba(153, 102, 255)", // Purple
-//   ];
-
-//   const borderColors = [
-//     "rgba(255, 99, 132, 1)",
-//     "rgba(54, 162, 235, 1)",
-//     "rgba(255, 206, 86, 1)",
-//     "rgba(75, 192, 192, 1)",
-//     "rgba(153, 102, 255, 1)",
-//   ];
-//   let getTotalResults = () =>{
-//     let totalResults = randomData(
-//       timeRangeValues[timeRange].lower,
-//       timeRangeValues[timeRange].upper,
-//       1
-//     )[0];
-//     totalResults =
-//       language.length === 2
-//         ? totalResults
-//         : language.length === 1
-//         ? totalResults * 0.4
-//         : totalResults * 0;
-  
-//     totalResults =
-//       sentimentType.length === 3
-//         ? totalResults
-//         : sentimentType.length === 2
-//         ? totalResults * 0.8
-//         : sentimentType.length === 1
-//         ? totalResults * 0.6
-//         : totalResults * 0;
-  
-//     totalResults = Math.trunc(totalResults);
-//     return totalResults
-//   }
-  
-//   let totalResults = getTotalResults();
-
-//   let resultsOverTime_sevenRandomNumbers = generateRandomValues(1, 7);
-//   let resultsOverTime_twentyFourRandomNumbers = generateRandomValues(1, 24);
-
-//   const sentiments_threeRandomNumbers = generateRandomValues(1, 3);
-
-//   const netPositiveSentimentsOverTime_sevenRandomNumbers = generateRandomValues(
-//     1,
-//     7
-//   );
-//   const netPositiveSentimentsOverTime_twentyFourRandomNumbers =
-//     generateRandomValues(1, 24);
-
-//   const netNegativeSentimentsOverTime_sevenRandomNumbers = generateRandomValues(
-//     1,
-//     7
-//   );
-//   const netNegativeSentimentsOverTime_twentyFourRandomNumbers =
-//     generateRandomValues(1, 24);
-//   const netNeutralSentimentsOverTime_sevenRandomNumbers = generateRandomValues(
-//     1,
-//     7
-//   );
-//   const netNeutralSentimentsOverTime_twentyFourRandomNumbers =
-//     generateRandomValues(1, 24);
-
-
-//   let getSentimentData = ()=>{
-//     const sentimentData = [];
-//     if (sentimentType.includes("positive")) {
-//       sentimentData.push({
-//         label: "Positive",
-//         data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[0])],
-//         backgroundColor: "green",
-//         borderColor: "green",
-//         borderWidth: 1,
-//       });
-//     }
-//     if (sentimentType.includes("negative")) {
-//       sentimentData.push({
-//         label: "Negative",
-//         data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[1])],
-//         backgroundColor: "red",
-//         borderColor: "red",
-//         borderWidth: 1,
-//       });
-//     }
-//     if (sentimentType.includes("neutral")) {
-//       sentimentData.push({
-//         label: "Neutral",
-//         data: [Math.trunc(totalResults * sentiments_threeRandomNumbers[2])],
-//         backgroundColor: "blue",
-//         borderColor: "blue",
-//         borderWidth: 1,
-//       });
-//     }
-//     return sentimentData
-//   }
-
-//   let sentimentData = getSentimentData()
-  
-
-//   const netSentimentsOverTimeData = [];
-//   if (sentimentType.includes("positive")) {
-//     netSentimentsOverTimeData.push({
-//       label: "Positive",
-//       data:
-//         timeRange === "1d"
-//           ? [
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[0]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[1]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[2]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[3]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[4]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[5]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[6]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[7]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[8]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[9]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[10]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[11]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[12]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[13]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[14]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[15]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[16]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[17]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[18]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[19]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[20]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[21]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[22]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_twentyFourRandomNumbers[23]
-//               ),
-//             ]
-//           : [
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_sevenRandomNumbers[0]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_sevenRandomNumbers[1]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_sevenRandomNumbers[2]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_sevenRandomNumbers[3]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_sevenRandomNumbers[4]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_sevenRandomNumbers[5]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netPositiveSentimentsOverTime_sevenRandomNumbers[6]
-//               ),
-//             ],
-//       backgroundColor: "green",
-//       borderColor: "green",
-//       borderWidth: 1,
-//     });
-//   }
-
-//   if (sentimentType.includes("negative")) {
-//     netSentimentsOverTimeData.push({
-//       label: "Negative",
-//       data:
-//         timeRange === "1d"
-//           ? [
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[0]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[1]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[2]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[3]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[4]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[5]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[6]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[7]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[8]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[9]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[10]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[11]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[12]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[13]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[14]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[15]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[16]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[17]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[18]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[19]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[20]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[21]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[22]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_twentyFourRandomNumbers[23]
-//               ),
-//             ]
-//           : [
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_sevenRandomNumbers[0]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_sevenRandomNumbers[1]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_sevenRandomNumbers[2]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_sevenRandomNumbers[3]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_sevenRandomNumbers[4]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_sevenRandomNumbers[5]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNegativeSentimentsOverTime_sevenRandomNumbers[6]
-//               ),
-//             ],
-//       backgroundColor: "red",
-//       borderColor: "red",
-//       borderWidth: 1,
-//     });
-//   }
-//   if (sentimentType.includes("neutral")) {
-//     netSentimentsOverTimeData.push({
-//       label: "Neutral",
-//       data:
-//         timeRange === "1d"
-//           ? [
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[0]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[1]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[2]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[3]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[4]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[5]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[6]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[7]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[8]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[9]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[10]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[11]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[12]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[13]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[14]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[15]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[16]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[17]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[18]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[19]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[20]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[21]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[22]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_twentyFourRandomNumbers[23]
-//               ),
-//             ]
-//           : [
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_sevenRandomNumbers[0]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_sevenRandomNumbers[1]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_sevenRandomNumbers[2]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_sevenRandomNumbers[3]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_sevenRandomNumbers[4]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_sevenRandomNumbers[5]
-//               ),
-//               Math.trunc(
-//                 totalResults *
-//                   netNeutralSentimentsOverTime_sevenRandomNumbers[6]
-//               ),
-//             ],
-//       backgroundColor: "blue",
-//       borderColor: "blue",
-//       borderWidth: 1,
-//     });
-//   }
-
-//   let data = eventNames.map((name, index) => {
-//     resultsOverTime_twentyFourRandomNumbers = generateRandomValues(1, 24);
-//     resultsOverTime_sevenRandomNumbers = generateRandomValues(1, 7);
-//     totalResults = getTotalResults()
-//     return {
-//       name: name,
-//       infoText: totalResults,
-//       color: colors[index],
-//       totalEngagement: {
-//         labels: [name],
-//         datasets: [
-//           {
-//             label: name,
-//             data: [totalResults + 200],
-//             backgroundColor: colors[index],
-//             borderColor: borderColors[index],
-//             borderWidth: 1,
-//           },
-//         ],
-//       },
-//       reach: {
-//         labels: [name],
-//         datasets: [
-//           {
-//             label: name,
-//             data: [totalResults + 500],
-//             backgroundColor: colors[index],
-//             borderColor: borderColors[index],
-//             borderWidth: 1,
-//           },
-//         ],
-//       },
-//       resultsOverTime: {
-//         labels:
-//           timeRange === "1d"
-//             ? generateLast24HoursArray()
-//             : generateLastDaysArray(),
-//         datasets: [
-//           {
-//             label: name,
-//             data:
-//               timeRange === "1d"
-//                 ? [
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[0]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[1]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[2]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[3]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[4]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[5]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[6]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[7]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[8]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[9]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[10]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[11]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[12]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[13]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[14]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[15]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[16]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[17]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[18]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[19]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[20]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[21]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[22]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_twentyFourRandomNumbers[23]
-//                     ),
-//                   ]
-//                 : [
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_sevenRandomNumbers[0]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_sevenRandomNumbers[1]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_sevenRandomNumbers[2]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_sevenRandomNumbers[3]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_sevenRandomNumbers[4]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_sevenRandomNumbers[5]
-//                     ),
-//                     Math.trunc(
-//                       totalResults * resultsOverTime_sevenRandomNumbers[6]
-//                     ),
-//                   ],
-//             backgroundColor: colors[index],
-//             borderColor: borderColors[index],
-//             borderWidth: 1,
-//           },
-//         ],
-//       },
-//       sentiments: {
-//         labels: [name],
-//         datasets: getSentimentData(),
-//       },
-//       netSentimentsOverTime: {
-//         labels:
-//           timeRange === "1d"
-//             ? generateLast24HoursArray()
-//             : generateLastDaysArray(),
-//         datasets: netSentimentsOverTimeData,
-//       },
-//     };
-//   });
-
-//   return data;
-// }
-// // Merge data for visualization
-// export function mergeData(data, key) {
-//   let mergedData = {
-//     labels: [],
-//     datasets: [],
-//   };
-
-//   // First, consolidate all unique labels from all data items
-//   data.forEach((item) => {
-//     item[key].labels.forEach((label) => {
-//       if (!mergedData.labels.includes(label)) {
-//         mergedData.labels.push(label);
-//       }
-//     });
-//   });
-
-//   // Initialize datasets with empty data arrays
-//   data.forEach((item) => {
-//     item[key].datasets.forEach((dataset) => {
-//       // Create a new data array filled with zeros based on the total number of labels
-//       const newDataArray = new Array(mergedData.labels.length).fill(0);
-
-//       // Assign the actual data to the correct position based on the label index
-//       item[key].labels.forEach((label, index) => {
-//         const labelIndex = mergedData.labels.indexOf(label);
-//         newDataArray[labelIndex] = dataset.data[index] || 0;
-//       });
-
-//       // Add the new dataset with the updated data array
-//       mergedData.datasets.push({
-//         label: dataset.label,
-//         data: newDataArray,
-//         backgroundColor: dataset.backgroundColor,
-//         borderColor: dataset.borderColor,
-//         borderWidth: dataset.borderWidth,
-//       });
-//     });
-//   });
-
-//   return mergedData;
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-import axios from 'axios';
-
-const TempInitialDate = "2022-03-02T13:05:05"
+const TempInitialDate = "2022-03-02T13:05:05";
 
 const getMonthName = (monthIndex) => {
   const months = [
@@ -829,7 +15,7 @@ const getMonthName = (monthIndex) => {
     "Sep",
     "Oct",
     "Nov",
-    "Dec"
+    "Dec",
   ];
   return months[monthIndex];
 };
@@ -841,12 +27,10 @@ const generateLastDaysArray = () => {
   for (let i = 6; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(today.getDate() - i);
-    const formattedDate = `${date.getDate()} ${getMonthName(
-      date.getMonth()
-    )}`;
+    const formattedDate = `${date.getDate()} ${getMonthName(date.getMonth())}`;
     lastDays.push(formattedDate);
   }
-  return lastDays
+  return lastDays;
 };
 
 const generateLast24HoursArray = () => {
@@ -858,7 +42,7 @@ const generateLast24HoursArray = () => {
     hour.setHours(now.getHours() - i);
     last24Hours.unshift(hour.getHours());
   }
-  return last24Hours
+  return last24Hours;
 };
 
 // Assuming Chart.js is used for visualization
@@ -870,8 +54,233 @@ function randomData(min, max, count) {
     () => Math.floor(Math.random() * (max - min + 1)) + min
   );
 }
+export const getTwitterTweets = async (myQuery) => {
+  // call twitter api
 
-export const generateData = async({
+  const response = await axios.get(
+    "https://lda-iwz8.onrender.com/get_random_tweets"
+  );
+  response.data.forEach((tweet) => {
+    if (tweet.created_at) {
+      tweet.created_at = cleanPakistanTimezone(tweet.created_at);
+    }
+    if (tweet.impressions === undefined) {
+      tweet.impressions = randomData(100, 1000, 1)[0]; // Adjust the range as needed
+    }
+
+    // Check if 'quote_count' attribute exists, if not, add it with a random value
+    if (tweet.quote_count === undefined) {
+      tweet.quote_count = randomData(100, 1000, 1)[0]; // Adjust the range as needed
+    }
+    if (tweet.hasOwnProperty("replies_count")) {
+      // Rename 'replies_count' key to 'reply_count'
+      tweet.reply_count = tweet.replies_count;
+      delete tweet.replies_count;
+    }
+    if (tweet.hasOwnProperty("retweets_count")) {
+      // Rename 'retweets_count' key to 'retweet_count'
+      tweet.retweet_count = tweet.retweets_count;
+      delete tweet.retweets_count;
+    }
+    if (tweet.hasOwnProperty("likes_count")) {
+      // Rename 'likes_count' key to 'like_count'
+      tweet.like_count = tweet.likes_count;
+      delete tweet.likes_count;
+    }
+    if (tweet.hasOwnProperty("tweet")) {
+      // Rename 'likes_count' key to 'like_count'
+      tweet.text = tweet.tweet;
+      delete tweet.tweet;
+    }
+  });
+  console.log("twitter data form mongodb:", response);
+  return [response];
+  //   let tweetsData = [{"data": [
+  //     {
+  //       "id": "1234567890123456789",
+  //       "text": "😁Just released a new version of my web app! #webdevelopment #javascript",
+  //       "created_at": "2024-02-15T12:34:56.000Z",
+  //       "author_id": "1312",
+  //       "retweet_count": "109",
+  //       "reply_count": "210",
+  //       "like_count": "190",
+  //       "quote_count": "140",
+  //       "impressions": "190"
+  //     },
+  //     {
+  //       "id": "9876543210987654321",
+  //       "text": "😁Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
+  //       "created_at": "2024-02-20T02:21:43.000Z",
+  //       "author_id": "1991",
+  //       "retweet_count": "19",
+  //       "reply_count": "100",
+  //       "like_count": "150",
+  //       "quote_count": "223",
+  //       "impressions": "270"
+  //     },
+  //     {
+  //       "id": "98765432109876121554321",
+  //       "text": "😁😁Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
+  //       "created_at": "2024-02-16T09:21:43.000Z",
+  //       "author_id": "1991",
+  //       "retweet_count": "19",
+  //       "reply_count": "100",
+  //       "like_count": "150",
+  //       "quote_count": "223",
+  //       "impressions": "100"
+  //   },
+  //     {
+  //       "id": "9876543210987654121321",
+  //       "text": "🤯🫨🤪Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
+  //       "created_at": "2024-02-19T04:21:43.000Z",
+  //       "author_id": "1991",
+  //       "retweet_count": "19",
+  //       "reply_count": "100",
+  //       "like_count": "150",
+  //       "quote_count": "223",
+  //       "impressions": "90"
+  //   },
+  //     {
+  //       "id": "98765432109875621654321",
+  //       "text": "This is such a bad movie🥵🥵",
+  //       "created_at": "2024-02-20T04:21:43.000Z",
+  //       "author_id": "1991",
+  //       "retweet_count": "19",
+  //       "reply_count": "100",
+  //       "like_count": "150",
+  //       "quote_count": "223",
+  //       "impressions": "10"
+  //   }
+  // ]}]
+
+  // return tweetsData
+};
+const cleanPakistanTimezone = (dateString) => {
+  let dateParts = dateString.split(" Pakistan Standard Time")[0]; // Remove the timezone part
+  dateParts = dateParts.replace(" ", "T");
+  // const date = new Date(dateParts);
+  return dateParts;
+};
+const getTotalEngagement = (tweetsData) => {
+  // add retweet_count, reply_count, like_count, quote_count in tweetsData
+  let totalRetweets = 0;
+  let totalReplies = 0;
+  let totalLikes = 0;
+  let totalQuotes = 0;
+
+  // Access the tweets array
+  const tweets = tweetsData[0].data;
+
+  // Iterate through each tweet
+  tweets.forEach((tweet) => {
+    totalRetweets += parseInt(tweet.retweet_count, 10);
+    totalReplies += parseInt(tweet.reply_count, 10);
+    totalLikes += parseInt(tweet.like_count, 10);
+    totalQuotes += parseInt(tweet.quote_count, 10);
+  });
+
+  // Calculate the combined total
+  const totalEngagement =
+    totalRetweets + totalReplies + totalLikes + totalQuotes;
+
+  return [totalEngagement];
+};
+
+const getTotalReach = (tweetsData) => {
+  let reach = 0;
+
+  tweetsData[0].data.forEach((tweet) => {
+    reach += parseInt(tweet.impressions, 10);
+  });
+  return [reach];
+};
+const getTweetsTextFromData = (tweetsData) => {
+  // Initialize an array to hold the text of each tweet
+  let tweetsText = [];
+
+  // Check if tweetsData is an array and has at least one element
+  if (Array.isArray(tweetsData) && tweetsData.length > 0) {
+    // Iterate over the 'data' array within the first element of tweetsData
+    tweetsData[0].data.forEach((tweet) => {
+      // Push the 'text' of each tweet into the tweetsText array
+      tweetsText.push(tweet.text);
+    });
+  }
+
+  // Return the array of tweets text
+  return tweetsText;
+};
+const getTweetSentiments = async (tweetsText) => {
+  //call hassan's api
+  const url = "https://deploy-check-azure.vercel.app/api/batch_sentiment";
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tweetsText),
+    });
+
+    if (response.ok) {
+      const sentimentData = await response.json();
+      return sentimentData;
+    } else {
+      throw new Error(`API request failed with status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error in sentiment analysis:", error);
+  }
+};
+
+const SentimentResultsOver24Hours = (
+  tweetData,
+  tweetSentiments,
+  sentimentFilter
+) => {
+  // preprocessing of current tweet data to get last 24 hours of data
+  // return [...] // 24 numbers returned
+  const hoursCount = Array(24).fill(0); // Initialize counts for each hour
+  const now = new Date(TempInitialDate);
+
+  tweetData[0].data.forEach((tweet, index) => {
+    const tweetDate = new Date(tweet.created_at);
+    const diffInHours = Math.floor((now - tweetDate) / (1000 * 60 * 60));
+    if (diffInHours < 24 && tweetSentiments[index] === sentimentFilter) {
+      // Ensure the hour is within the array bounds and increment the count
+      hoursCount[23 - diffInHours]++; // Subtract from 23 to get the correct index (0 to 23)
+    }
+  });
+  // return randomData(finalLower, finalUpper, 24)
+  return hoursCount;
+};
+
+const SentimentResultsOver7Days = (
+  tweetData,
+  tweetSentiments,
+  sentimentFilter
+) => {
+  // preprocessing of current tweet data to get last 7 days of data
+  // return [...] // 24 numbers returned
+  const daysCount = Array(7).fill(0); // Initialize counts for each day
+  const now = new Date(TempInitialDate);
+  now.setHours(0, 0, 0, 0); // Normalize current time to the start of the current day
+
+  tweetData[0].data.forEach((tweet, index) => {
+    const tweetDate = new Date(tweet.created_at);
+    tweetDate.setHours(0, 0, 0, 0); // Normalize tweet time to the start of its day
+    const diffInDays = Math.floor((now - tweetDate) / (1000 * 60 * 60 * 24));
+
+    if (diffInDays < 7 && tweetSentiments[index] === sentimentFilter) {
+      // Ensure the day is within the array bounds and increment the count
+      daysCount[6 - diffInDays]++; // Subtract from 6 to get the correct index (0 to 6)
+    }
+  });
+
+  return daysCount;
+  // return randomData(finalLower, finalUpper, 7)
+};
+export const generateData = async ({
   eventNames,
   timeRange,
   date,
@@ -923,362 +332,159 @@ export const generateData = async({
     },
   };
 
-  const cleanPakistanTimezone = (dateString)=>{
-    let dateParts = dateString.split(" Pakistan Standard Time")[0]; // Remove the timezone part
-    dateParts = dateParts.replace(" ", "T")
-    // const date = new Date(dateParts);
-    return dateParts
-  }
+  let data = await Promise.all(
+    eventNames.map(async (name, index) => {
+      const languageUpper = language.reduce(
+        (acc, lang) => acc + languageRangeValues[lang].upper,
+        0
+      );
+      const languageLower = language.reduce(
+        (acc, lang) => acc + languageRangeValues[lang].lower,
+        0
+      );
 
-  let data = await Promise.all(eventNames.map( async (name, index) => {
-    const languageUpper = language.reduce(
-      (acc, lang) => acc + languageRangeValues[lang].upper,
-      0
-    );
-    const languageLower = language.reduce(
-      (acc, lang) => acc + languageRangeValues[lang].lower,
-      0
-    );
+      // Determine the final upper and lower limits combining time range and language range
+      const finalUpper = Math.min(
+        timeRangeValues[timeRange].upper,
+        languageUpper
+      );
+      const finalLower = Math.max(
+        timeRangeValues[timeRange].lower,
+        languageLower
+      );
 
-    // Determine the final upper and lower limits combining time range and language range
-    const finalUpper = Math.min(
-      timeRangeValues[timeRange].upper,
-      languageUpper
-    );
-    const finalLower = Math.max(
-      timeRangeValues[timeRange].lower,
-      languageLower
-    );
+      const getTotalResultsFromApi = (query) => {
+        // call TweetCount api on the above query to count the total results
+        return randomData(finalLower, finalUpper, 1)[0];
+      };
+      const getResultsOver24Hours = (query) => {
+        // use tweet count api to get tweets count values for each hour
+        return randomData(finalLower, finalUpper, 24);
+      };
 
-    let tweetsData = []
+      const getResultsOver7Days = (query) => {
+        // use tweet count api to get tweets count values for each day
+        return randomData(finalLower, finalUpper, 7);
+      };
 
-    const getTwitterTweets = async (myQuery)=>{
-      // call twitter api
-      
-    const response = await axios.get('https://lda-iwz8.onrender.com/get_random_tweets');
-    response.data.forEach(tweet => {
-      if (tweet.created_at) {
-        tweet.created_at = cleanPakistanTimezone(tweet.created_at)
-      }
-      if (tweet.impressions === undefined) {
-        tweet.impressions = randomData(100, 1000, 1)[0]; // Adjust the range as needed
-      }
-    
-      // Check if 'quote_count' attribute exists, if not, add it with a random value
-      if (tweet.quote_count === undefined) {
-        tweet.quote_count = randomData(100, 1000, 1)[0]; // Adjust the range as needed
-      }
-      if (tweet.hasOwnProperty('replies_count')) {
-        // Rename 'replies_count' key to 'reply_count'
-        tweet.reply_count = tweet.replies_count;
-        delete tweet.replies_count;
-      }
-      if (tweet.hasOwnProperty('retweets_count')) {
-        // Rename 'retweets_count' key to 'retweet_count'
-        tweet.retweet_count = tweet.retweets_count;
-        delete tweet.retweets_count;
-      }
-      if (tweet.hasOwnProperty('likes_count')) {
-        // Rename 'likes_count' key to 'like_count'
-        tweet.like_count = tweet.likes_count;
-        delete tweet.likes_count;
-      }
-      if (tweet.hasOwnProperty('tweet')) {
-        // Rename 'likes_count' key to 'like_count'
-        tweet.text = tweet.tweet;
-        delete tweet.tweet;
-      }
-    })
-    console.log("twitter data form mongodb:", response)
-    return [response]
-    //   let tweetsData = [{"data": [
-    //     {
-    //       "id": "1234567890123456789",
-    //       "text": "😁Just released a new version of my web app! #webdevelopment #javascript",
-    //       "created_at": "2024-02-15T12:34:56.000Z",
-    //       "author_id": "1312",
-    //       "retweet_count": "109",
-    //       "reply_count": "210",
-    //       "like_count": "190",
-    //       "quote_count": "140",
-    //       "impressions": "190"
-    //     },
-    //     {
-    //       "id": "9876543210987654321",
-    //       "text": "😁Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
-    //       "created_at": "2024-02-20T02:21:43.000Z",
-    //       "author_id": "1991",
-    //       "retweet_count": "19",
-    //       "reply_count": "100",
-    //       "like_count": "150",
-    //       "quote_count": "223",
-    //       "impressions": "270"
-    //     },
-    //     {
-    //       "id": "98765432109876121554321",
-    //       "text": "😁😁Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
-    //       "created_at": "2024-02-16T09:21:43.000Z",
-    //       "author_id": "1991",
-    //       "retweet_count": "19",
-    //       "reply_count": "100",
-    //       "like_count": "150",
-    //       "quote_count": "223",
-    //       "impressions": "100"
-    //   },
-    //     {
-    //       "id": "9876543210987654121321",
-    //       "text": "🤯🫨🤪Exploring the wonders of AI in modern software solutions. It's fascinating how far we've come. #AI #innovation",
-    //       "created_at": "2024-02-19T04:21:43.000Z",
-    //       "author_id": "1991",
-    //       "retweet_count": "19",
-    //       "reply_count": "100",
-    //       "like_count": "150",
-    //       "quote_count": "223",
-    //       "impressions": "90"
-    //   },
-    //     {
-    //       "id": "98765432109875621654321",
-    //       "text": "This is such a bad movie🥵🥵",
-    //       "created_at": "2024-02-20T04:21:43.000Z",
-    //       "author_id": "1991",
-    //       "retweet_count": "19",
-    //       "reply_count": "100",
-    //       "like_count": "150",
-    //       "quote_count": "223",
-    //       "impressions": "10"
-    //   }
-    // ]}]
+      let tweetsData = [];
 
-    // return tweetsData
-    }
+      tweetsData = await getTwitterTweets(name);
 
-    const getTotalResultsFromApi = (query)=>{
-      // call TweetCount api on the above query to count the total results
-      return randomData(finalLower, finalUpper, 1)[0]
-    }
+      let tweetsSentiments = [];
 
-    const getTotalEngagement = (tweetsData)=>{
-      // add retweet_count, reply_count, like_count, quote_count in tweetsData
-      let totalRetweets = 0;
-      let totalReplies = 0;
-      let totalLikes = 0;
-      let totalQuotes = 0;
+      let tweetsText = getTweetsTextFromData(tweetsData);
 
-      // Access the tweets array
-      const tweets = tweetsData[0].data;
+      tweetsSentiments = await getTweetSentiments(tweetsText);
 
-      // Iterate through each tweet
-      tweets.forEach(tweet => {
-        totalRetweets += parseInt(tweet.retweet_count, 10);
-        totalReplies += parseInt(tweet.reply_count, 10);
-        totalLikes += parseInt(tweet.like_count, 10);
-        totalQuotes += parseInt(tweet.quote_count, 10);
-      });
+      return {
+        name: name,
+        tweetsText: tweetsText,
+        tweets: tweetsData,
+        infoText: getTotalResultsFromApi(name), // from Tweets count API
+        color: colors[index],
+        totalEngagement: {
+          labels: [name],
+          datasets: [
+            {
+              label: name,
+              data: getTotalEngagement(tweetsData), // retweet_count, reply_count, like_count, quote_count
+              backgroundColor: colors[index],
+              borderColor: borderColors[index],
+              borderWidth: 1,
+            },
+          ],
+        },
+        reach: {
+          labels: [name],
+          datasets: [
+            {
+              label: name,
+              data: getTotalReach(tweetsData), // sum the impressions count of each tweet in SearchTweet endpoint
+              backgroundColor: colors[index],
+              borderColor: borderColors[index],
+              borderWidth: 1,
+            },
+          ],
+        },
+        resultsOverTime: {
+          labels:
+            timeRange === "1d"
+              ? generateLast24HoursArray()
+              : generateLastDaysArray(),
+          datasets: [
+            {
+              label: name,
+              data:
+                timeRange === "1d"
+                  ? getResultsOver24Hours(name) // use TweetCount api for each hour interval
+                  : getResultsOver7Days(name), // use TweetCount api for each day
+              backgroundColor: colors[index],
+              borderColor: borderColors[index],
+              borderWidth: 1,
+            },
+          ],
+        },
+        sentiments: {
+          labels: [name],
+          datasets: [
+            {
+              label: "Positive",
+              data: [
+                tweetsSentiments.filter((sentiment) => sentiment === "Positive")
+                  .length,
+              ], // apply .filter function on tweetsSentiments array
+              backgroundColor: "green",
+              borderColor: "green",
+              borderWidth: 1,
+            },
+            {
+              label: "Negative",
+              data: [
+                tweetsSentiments.filter((sentiment) => sentiment === "Negative")
+                  .length,
+              ], // apply .filter function on tweetsSentiments array
+              backgroundColor: "red",
+              borderColor: "red",
+              borderWidth: 1,
+            },
+            {
+              label: "Neutral",
+              data: [
+                tweetsSentiments.filter((sentiment) => sentiment === "Neutral")
+                  .length,
+              ], // apply .filter function on tweetsSentiments array
+              backgroundColor: "blue",
+              borderColor: "blue",
+              borderWidth: 1,
+            },
+          ],
+        },
+        netSentimentsOverTime: {
+          labels:
+            timeRange === "1d"
+              ? generateLast24HoursArray() // call sentiment result over 24 hours function
+              : generateLastDaysArray(), // call sentiment results over 7 days function
 
-      // Calculate the combined total
-      const totalEngagement = totalRetweets + totalReplies + totalLikes + totalQuotes;
-
-      return [totalEngagement];
-    }
-  
-    const getTotalReach = (tweetsData)=>{
-      let reach = 0
-
-      tweetsData[0].data.forEach(tweet => {
-        reach += parseInt(tweet.impressions, 10);
-      })
-      return [reach]
-    }
-
-    tweetsData = await getTwitterTweets(name);
-
-    let tweetsSentiments = []
-
-    const getTweetsTextFromData = (tweetsData)=>{
-      // Initialize an array to hold the text of each tweet
-      let tweetsText = [];
-
-      // Check if tweetsData is an array and has at least one element
-      if (Array.isArray(tweetsData) && tweetsData.length > 0) {
-          // Iterate over the 'data' array within the first element of tweetsData
-          tweetsData[0].data.forEach(tweet => {
-              // Push the 'text' of each tweet into the tweetsText array
-              tweetsText.push(tweet.text);
-          });
-      }
-
-      // Return the array of tweets text
-      return tweetsText;
-    }
-
-    let tweetsText = getTweetsTextFromData(tweetsData)
-
-    const getTweetSentiments = async (tweetsText) =>{
-      //call hassan's api
-      const url = 'https://deploy-check-azure.vercel.app/api/batch_sentiment';
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(tweetsText) 
-        });
-
-        if (response.ok) {
-          const sentimentData = await response.json();
-          return sentimentData;
-        } else {
-            throw new Error(`API request failed with status: ${response.status}`);
-        }  
-        
-      } catch (error) {
-        console.error('Error in sentiment analysis:', error);
-      }
-    }
-
-    tweetsSentiments = await getTweetSentiments(tweetsText);
-
-    const getResultsOver24Hours = (query) =>{
-      // use tweet count api to get tweets count values for each hour
-      return randomData(finalLower, finalUpper, 24)
-    }
-
-    const getResultsOver7Days = (query) =>{
-      // use tweet count api to get tweets count values for each day
-      return randomData(finalLower, finalUpper, 7)
-    }
-
-    const SentimentResultsOver24Hours = (tweetData, tweetSentiments, sentimentFilter)=>{
-      // preprocessing of current tweet data to get last 24 hours of data
-      // return [...] // 24 numbers returned
-      const hoursCount = Array(24).fill(0); // Initialize counts for each hour
-      const now = new Date(TempInitialDate);
-      
-      tweetData[0].data.forEach((tweet, index) => {
-        const tweetDate = new Date(tweet.created_at);
-        const diffInHours = Math.floor((now - tweetDate) / (1000 * 60 * 60));
-        if (diffInHours < 24 && tweetSentiments[index] === sentimentFilter) {
-          // Ensure the hour is within the array bounds and increment the count
-          hoursCount[23 - diffInHours]++; // Subtract from 23 to get the correct index (0 to 23)
-        }
-      });
-      // return randomData(finalLower, finalUpper, 24)
-      return hoursCount
-    }
-
-    const SentimentResultsOver7Days = (tweetData, tweetSentiments, sentimentFilter) => {
-      // preprocessing of current tweet data to get last 7 days of data
-      // return [...] // 24 numbers returned
-      const daysCount = Array(7).fill(0); // Initialize counts for each day
-      const now = new Date(TempInitialDate);
-      now.setHours(0, 0, 0, 0); // Normalize current time to the start of the current day
-
-      tweetData[0].data.forEach((tweet, index) => {
-        const tweetDate = new Date(tweet.created_at);
-        tweetDate.setHours(0, 0, 0, 0); // Normalize tweet time to the start of its day
-        const diffInDays = Math.floor((now - tweetDate) / (1000 * 60 * 60 * 24));
-        
-        if (diffInDays < 7 && tweetSentiments[index] === sentimentFilter) {
-          // Ensure the day is within the array bounds and increment the count
-          daysCount[6 - diffInDays]++; // Subtract from 6 to get the correct index (0 to 6)
-        }
-      });
-
-      return daysCount;
-      // return randomData(finalLower, finalUpper, 7)
-    }
-
-    return {
-      name: name,
-      tweetsText: tweetsText,
-      infoText: getTotalResultsFromApi(name), // from Tweets count API
-      color: colors[index],
-      totalEngagement: {
-        labels: [name],
-        datasets: [
-          {
-            label: name,
-            data: getTotalEngagement(tweetsData),  // retweet_count, reply_count, like_count, quote_count
-            backgroundColor: colors[index],
-            borderColor: borderColors[index],
-            borderWidth: 1,
-          },
-        ],
-      },
-      reach: {
-        labels: [name],
-        datasets: [
-          {
-            label: name,
-            data: getTotalReach(tweetsData), // sum the impressions count of each tweet in SearchTweet endpoint
-            backgroundColor: colors[index],
-            borderColor: borderColors[index],
-            borderWidth: 1,
-          },
-        ],
-      },
-      resultsOverTime: {
-        labels:
-          timeRange === "1d"
-            ? generateLast24HoursArray()
-            : generateLastDaysArray(),
-        datasets: [
-          {
-            label: name,
+          datasets: sentimentType.map((type) => ({
+            ...sentimentConfig[type],
             data:
               timeRange === "1d"
-                ? getResultsOver24Hours(name) // use TweetCount api for each hour interval
-                : getResultsOver7Days(name), // use TweetCount api for each day
-            backgroundColor: colors[index],
-            borderColor: borderColors[index],
+                ? SentimentResultsOver24Hours(
+                    tweetsData,
+                    tweetsSentiments,
+                    type
+                  )
+                : SentimentResultsOver7Days(tweetsData, tweetsSentiments, type), // call sentiment result over 24 hours or 7 days function
             borderWidth: 1,
-          },
-        ],
-      },
-      sentiments: {
-        labels: [name],
-        datasets: [
-          {
-            label: "Positive",
-            data: [tweetsSentiments.filter(sentiment => sentiment === "Positive").length], // apply .filter function on tweetsSentiments array
-            backgroundColor: "green",
-            borderColor: "green",
-            borderWidth: 1,
-          },
-          {
-            label: "Negative",
-            data: [tweetsSentiments.filter(sentiment => sentiment === "Negative").length], // apply .filter function on tweetsSentiments array
-            backgroundColor: "red",
-            borderColor: "red",
-            borderWidth: 1,
-          },
-          {
-            label: "Neutral",
-            data: [tweetsSentiments.filter(sentiment => sentiment === "Neutral").length], // apply .filter function on tweetsSentiments array
-            backgroundColor: "blue",
-            borderColor: "blue",
-            borderWidth: 1,
-          }
-        ],
-      },
-      netSentimentsOverTime: {
-        labels:
-          timeRange === "1d"
-            ? generateLast24HoursArray() // call sentiment result over 24 hours function
-            : generateLastDaysArray(), // call sentiment results over 7 days function
-
-        datasets: sentimentType.map((type) => ({
-          ...sentimentConfig[type],
-          data: timeRange === "1d" ? SentimentResultsOver24Hours(tweetsData, tweetsSentiments, type): SentimentResultsOver7Days(tweetsData, tweetsSentiments, type),   // call sentiment result over 24 hours or 7 days function
-          borderWidth: 1,
-        })),
-      },
-    };
-  }));
+          })),
+        },
+      };
+    })
+  );
 
   return data;
-}
+};
 // Merge data for visualization
 export function mergeData(data, key) {
   let mergedData = {
