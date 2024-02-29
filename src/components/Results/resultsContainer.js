@@ -11,6 +11,10 @@ import { TopResultsFilterContext } from "../../contexts/TopResultsFilter.context
 import profileImage from "../../assets/profile-pic.jpeg";
 import sharedImage from "../../assets/cool-profile-picture.jpeg";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
+import { CSVLink } from "react-csv";
+import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
@@ -322,6 +326,8 @@ const ResultsCard = () => {
     });
   }, [selectedOption]); // Re-run the sorting every time selectedOption changes
 
+  // console.log(sortedTweets)
+
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -330,12 +336,61 @@ const ResultsCard = () => {
     setSelectedLayout(event.target.value);
   };
 
-  const handleExportChange = (event) => {
-    setSelectedExport(event.target.value);
-  };
-
   const handleThemeChange = (event) => {
     setSelectedTheme(event.target.value);
+  };
+
+  const handleExportChange = (event) => {
+    const selectedExport = event.target.value;
+    setSelectedExport(selectedExport);
+
+    if (selectedExport === "CSV") {
+      exportToCSV(sortedTweets);
+    } else if (selectedExport === "PDF") {
+      exportToPDF(sortedTweets);
+    }
+  };
+
+  const exportToCSV = (data) => {
+    const csvData = data.map((item) => ({
+      Content: item.profileData.content,
+      Sentiment: item.profileData.sentiment,
+      Engagement: item.additionalMetrics.hearts,
+      TimePublished: item.profileData.timePublished,
+    }));
+    const csvHeaders = [
+      { label: "Content", key: "Content" },
+      { label: "Sentiment", key: "Sentiment" },
+      { label: "Engagement", key: "Engagement" },
+      { label: "TimePublished", key: "TimePublished" },
+    ];
+    const csvReport = {
+      data: csvData,
+      headers: csvHeaders,
+    };
+    const csvReportFile = csvReport.data
+      .map((row) => Object.values(row).join(","))
+      .join("\n");
+    const csvBlob = new Blob([csvReportFile], { type: "text/csv;charset=utf-8;" });
+    saveAs(csvBlob, "export.csv");
+  };
+  
+  const exportToPDF = (data) => {
+    const pdfData = data.map((item) => [
+      item.profileData.content,
+      item.profileData.sentiment,
+      item.additionalMetrics.hearts,
+      item.profileData.timePublished,
+    ]);
+    const pdfHeaders = ["Content", "Sentiment", "Engagement", "TimePublished"];
+    const pdfContent = {
+      startY: 20,
+      head: [pdfHeaders],
+      body: pdfData,
+    };
+    const pdf = new jsPDF();
+    pdf.autoTable(pdfContent);
+    pdf.save("export.pdf");
   };
 
   return (
