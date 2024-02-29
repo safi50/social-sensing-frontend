@@ -178,6 +178,7 @@ const ResultsCard = () => {
   const [selectedLayout, setSelectedLayout] = useState("Normal");
   const [selectedExport, setSelectedExport] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("Bio");
+  const [tweets, setTweets] = useState([])
 
   const {
     topResultMatch,
@@ -265,7 +266,7 @@ const ResultsCard = () => {
         sentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
       }
     }
-
+    setTweets(tweets);
     return tweets;
   };
 
@@ -340,14 +341,18 @@ const ResultsCard = () => {
     setSelectedTheme(event.target.value);
   };
 
-  const handleExportChange = (event) => {
-    const selectedExport = event.target.value;
+  const handleExportChange = (selectedOption) => {
+    // Check if selectedOption is null to avoid errors
+    if (!selectedOption) return;
+
+    // Extract the value from the selectedOption
+    const selectedExport = selectedOption.value;
     setSelectedExport(selectedExport);
 
     if (selectedExport === "CSV") {
-      exportToCSV(sortedTweets);
+      exportToCSV(tweets);
     } else if (selectedExport === "PDF") {
-      exportToPDF(sortedTweets);
+      exportToPDF(tweets);
     }
   };
 
