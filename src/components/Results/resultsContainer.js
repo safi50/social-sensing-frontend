@@ -12,9 +12,10 @@ import profileImage from "../../assets/profile-pic.jpeg";
 import sharedImage from "../../assets/cool-profile-picture.jpeg";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 import { CSVLink } from "react-csv";
-import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import { saveAs } from 'file-saver';
 
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
@@ -349,6 +350,8 @@ const ResultsCard = () => {
     const selectedExport = selectedOption.value;
     setSelectedExport(selectedExport);
 
+    console.log(tweets[0])
+
     if (selectedExport === "CSV") {
       exportToCSV(tweets);
     } else if (selectedExport === "PDF") {
@@ -356,46 +359,80 @@ const ResultsCard = () => {
     }
   };
 
-  const exportToCSV = (data) => {
-    const csvData = data.map((item) => ({
-      Content: item.profileData.content,
-      Sentiment: item.profileData.sentiment,
-      Engagement: item.additionalMetrics.hearts,
-      TimePublished: item.profileData.timePublished,
+  const exportToCSV = (tweets) => {
+    // console.log(tweets)
+    const csvData = tweets.map((data, index) => ({
+      Handle: data[0].profileData.handle,
+      Name: data[0].profileData.name,
+      Matches: data[0].profileData.matches,
+      Content: data[0].profileData.content,
+      Sentiment: data[0].profileData.sentiment,
+      TimePublished: data[0].profileData.timePublished,
+      Location: data[0].profileData.location,
+      Platform: data[0].profileData.platform,
+      Engagement: data[0].profileData.engagement,
+      Reach: data[0].profileData.reach,
+      Trending: data[0].profileData.trending,
+    
+      Hearts: data[0].additionalMetrics.hearts,
+      Shares: data[0].additionalMetrics.shares,
+      Users: data[0].additionalMetrics.users
     }));
     const csvHeaders = [
-      { label: "Content", key: "Content" },
-      { label: "Sentiment", key: "Sentiment" },
-      { label: "Engagement", key: "Engagement" },
-      { label: "TimePublished", key: "TimePublished" },
+      "Handle",
+      "Name",
+      "Matches",
+      "Content",
+      "Sentiment",
+      "TimePublished",
+      "Location",
+      "Platform",
+      "Engagement",
+      "Reach",
+      "Trending",
+      "Hearts",
+      "Shares",
+      "Users",
     ];
-    const csvReport = {
-      data: csvData,
-      headers: csvHeaders,
-    };
-    const csvReportFile = csvReport.data
-      .map((row) => Object.values(row).join(","))
-      .join("\n");
+    // const csvHeaders = [
+    //   { label: "Handle", key: "Handle" },
+    //   { label: "Name", key: "Name" },
+    //   { label: "Matches", key: "Matches" },
+    //   { label: "Content", key: "Content" },
+    //   { label: "Sentiment", key: "Sentiment" },
+    //   { label: "TimePublished", key: "TimePublished" },
+    //   { label: "Location", key: "Location" },
+    //   { label: "Platform", key: "Platform" },
+    //   { label: "Engagement", key: "Engagement" },
+    //   { label: "Reach", key: "Reach" },
+    //   { label: "Trending", key: "Trending" },
+    
+    //   { label: "Hearts", key: "Hearts" },
+    //   { label: "Shares", key: "Shares" },
+    //   { label: "Users", key: "Users" },
+    // ];
+    const csvReportFile = [csvHeaders.join(",")].concat(
+      csvData.map((row) => Object.values(row).join(","))
+    ).join("\n");
+    
     const csvBlob = new Blob([csvReportFile], { type: "text/csv;charset=utf-8;" });
     saveAs(csvBlob, "export.csv");
   };
   
-  const exportToPDF = (data) => {
-    const pdfData = data.map((item) => [
-      item.profileData.content,
-      item.profileData.sentiment,
-      item.additionalMetrics.hearts,
-      item.profileData.timePublished,
-    ]);
-    const pdfHeaders = ["Content", "Sentiment", "Engagement", "TimePublished"];
-    const pdfContent = {
-      startY: 20,
-      head: [pdfHeaders],
-      body: pdfData,
-    };
+  const exportToPDF = (tweets) => {
     const pdf = new jsPDF();
-    pdf.autoTable(pdfContent);
-    pdf.save("export.pdf");
+    // console.log(tweets)
+    const tableData = tweets.map((data, index) => [
+      data[0].profileData.content,
+      data[0].profileData.sentiment,
+      data[0].additionalMetrics.hearts,
+      data[0].profileData.timePublished,
+    ]);
+    pdf.autoTable({
+      head: [['Content', 'Sentiment', 'Engagement', 'TimePublished']],
+      body: tableData,
+    });
+    pdf.save('export.pdf');
   };
 
   return (

@@ -274,3 +274,4 @@ const ResultCard = ({profileData, additionalMetrics}) => {
 };
 
 export default ResultCard;
+
