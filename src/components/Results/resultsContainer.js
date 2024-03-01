@@ -1,3 +1,6 @@
+// import XLSX from "xlsx";
+import * as XLSX from "xlsx";
+
 import styled from "styled-components";
 import { useState, useContext, useMemo } from "react";
 import ResultCard from "./resultCard";
@@ -13,9 +16,9 @@ import sharedImage from "../../assets/cool-profile-picture.jpeg";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 import { CSVLink } from "react-csv";
 import html2canvas from "html2canvas";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import { saveAs } from 'file-saver';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { saveAs } from "file-saver";
 
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
@@ -179,7 +182,7 @@ const ResultsCard = () => {
   const [selectedLayout, setSelectedLayout] = useState("Normal");
   const [selectedExport, setSelectedExport] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("Bio");
-  const [tweets, setTweets] = useState([])
+  const [tweets, setTweets] = useState([]);
 
   const {
     topResultMatch,
@@ -193,13 +196,15 @@ const ResultsCard = () => {
 
   const generateRandomTime = () => {
     let randomTime = Math.floor(Math.random() * 24); // Random hour
-        if (randomTime < 10) {
-            randomTime = `0${randomTime}`;
-        }
+    if (randomTime < 10) {
+      randomTime = `0${randomTime}`;
+    }
     const randomMinutes = Math.floor(Math.random() * 60); // Random minutes
-    const randomHourString = `${randomTime}:${randomMinutes < 10 ? '0' : ''}${randomMinutes}`;
-    return randomHourString
-  }
+    const randomHourString = `${randomTime}:${
+      randomMinutes < 10 ? "0" : ""
+    }${randomMinutes}`;
+    return randomHourString;
+  };
 
   const generateRandomTweetsNormal = () => {
     const sentiments = ["Positive", "Negative", "Neutral"];
@@ -220,9 +225,10 @@ const ResultsCard = () => {
         profileImage: profileImage,
         content: match.text,
         sharedImage: sharedImage,
-        sentiment: topResultSentiment != "none"? 
-          topResultSentiment :
-          sentiments[Math.floor(Math.random() * sentiments.length)],
+        sentiment:
+          topResultSentiment != "none"
+            ? topResultSentiment
+            : sentiments[Math.floor(Math.random() * sentiments.length)],
         matches: topResultMatch,
         reach: match.impressions,
         engagement: match.quote_count + match.retweet_count,
@@ -356,6 +362,8 @@ const ResultsCard = () => {
       exportToCSV(tweets);
     } else if (selectedExport === "PDF") {
       exportToPDF(tweets);
+    } else if (selectedExport === "XLS") {
+      exportToXLS(tweets);
     }
   };
 
@@ -373,10 +381,10 @@ const ResultsCard = () => {
       Engagement: data[0].profileData.engagement,
       Reach: data[0].profileData.reach,
       Trending: data[0].profileData.trending,
-    
+
       Hearts: data[0].additionalMetrics.hearts,
       Shares: data[0].additionalMetrics.shares,
-      Users: data[0].additionalMetrics.users
+      Users: data[0].additionalMetrics.users,
     }));
     const csvHeaders = [
       "Handle",
@@ -394,14 +402,16 @@ const ResultsCard = () => {
       "Shares",
       "Users",
     ];
-    const csvReportFile = [csvHeaders.join(",")].concat(
-      csvData.map((row) => Object.values(row).join(","))
-    ).join("\n");
-    
-    const csvBlob = new Blob([csvReportFile], { type: "text/csv;charset=utf-8;" });
+    const csvReportFile = [csvHeaders.join(",")]
+      .concat(csvData.map((row) => Object.values(row).join(",")))
+      .join("\n");
+
+    const csvBlob = new Blob([csvReportFile], {
+      type: "text/csv;charset=utf-8;",
+    });
     saveAs(csvBlob, "export.csv");
   };
-  
+
   const exportToPDF = (tweets) => {
     const pdf = new jsPDF();
     // console.log(tweets)
@@ -415,10 +425,41 @@ const ResultsCard = () => {
       // can add more fields
     ]);
     pdf.autoTable({
-      head: [['Handle', 'Content', 'Sentiment', 'Reach', 'Likes', 'Shares']],
+      head: [["Handle", "Content", "Sentiment", "Reach", "Likes", "Shares"]],
       body: tableData,
     });
-    pdf.save('export.pdf');
+    pdf.save("export.pdf");
+  };
+
+  const exportToXLS = (tweets) => {
+    const formattedData = tweets.map((tweet) => ({
+      Handle: tweet[0].profileData.handle,
+      Name: tweet[0].profileData.name,
+      Matches: tweet[0].profileData.matches,
+      Content: tweet[0].profileData.content,
+      Sentiment: tweet[0].profileData.sentiment,
+      TimePublished: tweet[0].profileData.timePublished,
+      Location: tweet[0].profileData.location,
+      Platform: tweet[0].profileData.platform,
+      Engagement: tweet[0].profileData.engagement,
+      Reach: tweet[0].profileData.reach,
+      Trending: tweet[0].profileData.trending,
+      Hearts: tweet[0].additionalMetrics.hearts,
+      Shares: tweet[0].additionalMetrics.shares,
+      Users: tweet[0].additionalMetrics.users,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Tweets");
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    saveAs(
+      new Blob([excelBuffer], { type: "application/octet-stream" }),
+      "export.xlsx"
+    );
   };
 
   return (

@@ -34,7 +34,8 @@
     "react-world-flags": "^1.6.0",
     "sass": "^1.69.5",
     "styled-components": "^6.1.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",
