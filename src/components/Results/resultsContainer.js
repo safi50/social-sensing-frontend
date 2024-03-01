@@ -406,13 +406,16 @@ const ResultsCard = () => {
     const pdf = new jsPDF();
     // console.log(tweets)
     const tableData = tweets.map((data, index) => [
+      data[0].profileData.handle,
       data[0].profileData.content,
       data[0].profileData.sentiment,
+      data[0].profileData.reach,
       data[0].additionalMetrics.hearts,
-      data[0].profileData.timePublished,
+      data[0].additionalMetrics.shares,
+      // can add more fields
     ]);
     pdf.autoTable({
-      head: [['Content', 'Sentiment', 'Engagement', 'TimePublished']],
+      head: [['Handle', 'Content', 'Sentiment', 'Reach', 'Likes', 'Shares']],
       body: tableData,
     });
     pdf.save('export.pdf');
