@@ -350,7 +350,7 @@ const ResultsCard = () => {
     const selectedExport = selectedOption.value;
     setSelectedExport(selectedExport);
 
-    console.log(tweets[0])
+    // console.log(tweets[0])
 
     if (selectedExport === "CSV") {
       exportToCSV(tweets);
@@ -365,7 +365,7 @@ const ResultsCard = () => {
       Handle: data[0].profileData.handle,
       Name: data[0].profileData.name,
       Matches: data[0].profileData.matches,
-      Content: data[0].profileData.content,
+      Content: `"${data[0].profileData.content.replace(/"/g, '""')}"`,
       Sentiment: data[0].profileData.sentiment,
       TimePublished: data[0].profileData.timePublished,
       Location: data[0].profileData.location,
@@ -394,23 +394,6 @@ const ResultsCard = () => {
       "Shares",
       "Users",
     ];
-    // const csvHeaders = [
-    //   { label: "Handle", key: "Handle" },
-    //   { label: "Name", key: "Name" },
-    //   { label: "Matches", key: "Matches" },
-    //   { label: "Content", key: "Content" },
-    //   { label: "Sentiment", key: "Sentiment" },
-    //   { label: "TimePublished", key: "TimePublished" },
-    //   { label: "Location", key: "Location" },
-    //   { label: "Platform", key: "Platform" },
-    //   { label: "Engagement", key: "Engagement" },
-    //   { label: "Reach", key: "Reach" },
-    //   { label: "Trending", key: "Trending" },
-    
-    //   { label: "Hearts", key: "Hearts" },
-    //   { label: "Shares", key: "Shares" },
-    //   { label: "Users", key: "Users" },
-    // ];
     const csvReportFile = [csvHeaders.join(",")].concat(
       csvData.map((row) => Object.values(row).join(","))
     ).join("\n");
