@@ -168,7 +168,7 @@ const customStyles = {
 };
 
 const exportOptions = [
-  { value: "Normal", label: "Normal" },
+  // { value: "Normal", label: "Normal" },
   { value: "PDF", label: "PDF" },
   { value: "XLS", label: "XLS" },
   { value: "CSV", label: "CSV" },
@@ -358,13 +358,36 @@ const ResultsCard = () => {
 
     // console.log(tweets[0])
 
-    if (selectedExport === "CSV") {
-      exportToCSV(tweets);
-    } else if (selectedExport === "PDF") {
+    if (selectedExport === "PDF") {
       exportToPDF(tweets);
     } else if (selectedExport === "XLS") {
       exportToXLS(tweets);
+    } else if (selectedExport === "CSV") {
+      exportToCSV(tweets);
+    } else if (selectedOption === "PPT Landscape") {
+      exportToPPTL(tweets);
+    } else if (selectedOption === "PPT Portrait") {
+      exportToPPTP(tweets)
     }
+  };
+
+  const exportToPDF = (tweets) => {
+    const pdf = new jsPDF();
+    // console.log(tweets)
+    const tableData = tweets.map((data, index) => [
+      data[0].profileData.handle,
+      data[0].profileData.content,
+      data[0].profileData.sentiment,
+      data[0].profileData.reach,
+      data[0].additionalMetrics.hearts,
+      data[0].additionalMetrics.shares,
+      // can add more fields
+    ]);
+    pdf.autoTable({
+      head: [["Handle", "Content", "Sentiment", "Reach", "Likes", "Shares"]],
+      body: tableData,
+    });
+    pdf.save("export.pdf");
   };
 
   const exportToCSV = (tweets) => {
@@ -412,25 +435,6 @@ const ResultsCard = () => {
     saveAs(csvBlob, "export.csv");
   };
 
-  const exportToPDF = (tweets) => {
-    const pdf = new jsPDF();
-    // console.log(tweets)
-    const tableData = tweets.map((data, index) => [
-      data[0].profileData.handle,
-      data[0].profileData.content,
-      data[0].profileData.sentiment,
-      data[0].profileData.reach,
-      data[0].additionalMetrics.hearts,
-      data[0].additionalMetrics.shares,
-      // can add more fields
-    ]);
-    pdf.autoTable({
-      head: [["Handle", "Content", "Sentiment", "Reach", "Likes", "Shares"]],
-      body: tableData,
-    });
-    pdf.save("export.pdf");
-  };
-
   const exportToXLS = (tweets) => {
     const formattedData = tweets.map((tweet) => ({
       Handle: tweet[0].profileData.handle,
@@ -461,6 +465,14 @@ const ResultsCard = () => {
       "export.xlsx"
     );
   };
+
+  const exportToPPTL = (tweets) => {
+
+  }
+
+  const exportToPPTP = (tweets) => {
+    
+  }
 
   return (
     <Container>
