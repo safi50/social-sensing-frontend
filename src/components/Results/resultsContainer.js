@@ -1,6 +1,5 @@
-// import XLSX from "xlsx";
 import * as XLSX from "xlsx";
-
+import pptxgen from "pptxgenjs";
 import styled from "styled-components";
 import { useState, useContext, useMemo } from "react";
 import ResultCard from "./resultCard";
@@ -168,12 +167,12 @@ const customStyles = {
 };
 
 const exportOptions = [
-  // { value: "Normal", label: "Normal" },
+  { value: "Normal", label: "Normal" },
   { value: "PDF", label: "PDF" },
   { value: "XLS", label: "XLS" },
   { value: "CSV", label: "CSV" },
-  { value: "PPT Landscape", label: "PPT Landscape" },
-  { value: "PPT Portrait", label: "PPT Portrait" },
+  { value: "PPTL", label: "PPT Landscape" },
+  { value: "PPTP", label: "PPT Portrait" },
 ];
 
 const ResultsCard = () => {
@@ -364,10 +363,10 @@ const ResultsCard = () => {
       exportToXLS(tweets);
     } else if (selectedExport === "CSV") {
       exportToCSV(tweets);
-    } else if (selectedOption === "PPT Landscape") {
+    } else if (selectedExport === "PPTL") {
       exportToPPTL(tweets);
-    } else if (selectedOption === "PPT Portrait") {
-      exportToPPTP(tweets)
+    } else if (selectedExport === "PPTP") {
+      exportToPPTP(tweets);
     }
   };
 
@@ -467,12 +466,182 @@ const ResultsCard = () => {
   };
 
   const exportToPPTL = (tweets) => {
+    // console.log(tweets)
+    const ppt = new pptxgen();
 
-  }
+    tweets.forEach((tweet, index) => {
+      const slide = ppt.addSlide();
+      slide.addText(`Tweet: ${index + 1}`, {
+        y: 0.3,
+        x: 1,
+        fontSize: 14,
+        fontWeight: "bold",
+      });
+      slide.addText(`Handle: ${tweet[0].profileData.handle}`, {
+        y: 0.6,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Name: ${tweet[0].profileData.name}`, {
+        y: 0.9,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Matches: ${tweet[0].profileData.matches}`, {
+        y: 1.2,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Sentiment: ${tweet[0].profileData.sentiment}`, {
+        y: 1.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Time Published: ${tweet[0].profileData.timePublished}`, {
+        y: 1.8,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Location: ${tweet[0].profileData.location}`, {
+        y: 2.1,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Platform: ${tweet[0].profileData.platform}`, {
+        y: 2.4,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Engagement: ${tweet[0].profileData.engagement}`, {
+        y: 2.7,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Reach: ${tweet[0].profileData.reach}`, {
+        y: 3,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Trending: ${tweet[0].profileData.trending}`, {
+        y: 3.3,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Hearts: ${tweet[0].additionalMetrics.hearts}`, {
+        y: 3.6,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Shares: ${tweet[0].additionalMetrics.shares}`, {
+        y: 3.9,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Users: ${tweet[0].additionalMetrics.users}`, {
+        y: 4.2,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Content: ${tweet[0].profileData.content}`, {
+        y: 4.5,
+        x: 1,
+        fontSize: 10,
+      });
+    });
+
+    ppt.writeFile("tweets.pptx");
+  };
 
   const exportToPPTP = (tweets) => {
-    
-  }
+    const ppt = new pptxgen();
+
+    ppt.defineLayout({ name: "portrait", width: 6.25, height: 10 });
+
+    ppt.layout = "portrait";
+
+    tweets.forEach((tweet, index) => {
+      const slide = ppt.addSlide();
+
+      slide.addText(`Tweet: ${index + 1}`, {
+        y: 0.5,
+        x: 1,
+        fontSize: 14,
+        fontWeight: "bold",
+      });
+      slide.addText(`Handle: ${tweet[0].profileData.handle}`, {
+        y: 1,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Name: ${tweet[0].profileData.name}`, {
+        y: 1.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Matches: ${tweet[0].profileData.matches}`, {
+        y: 2,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Sentiment: ${tweet[0].profileData.sentiment}`, {
+        y: 2.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Time Published: ${tweet[0].profileData.timePublished}`, {
+        y: 3,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Location: ${tweet[0].profileData.location}`, {
+        y: 3.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Platform: ${tweet[0].profileData.platform}`, {
+        y: 4,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Engagement: ${tweet[0].profileData.engagement}`, {
+        y: 4.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Reach: ${tweet[0].profileData.reach}`, {
+        y: 5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Trending: ${tweet[0].profileData.trending}`, {
+        y: 5.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Hearts: ${tweet[0].additionalMetrics.hearts}`, {
+        y: 6,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Shares: ${tweet[0].additionalMetrics.shares}`, {
+        y: 6.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Users: ${tweet[0].additionalMetrics.users}`, {
+        y: 7,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Content: ${tweet[0].profileData.content}`, {
+        y: 7.5,
+        x: 1,
+        fontSize: 10,
+      });
+    });
+
+    ppt.writeFile("tweets.pptx");
+  };
 
   return (
     <Container>
