@@ -62,36 +62,36 @@ const App = () => {
       <CompareKeywordProvider>
         <SavedSearchesProvider>
           <TopResultsFilterProvider>
-        <Router>
-          <Routes>
-            <Route path="/onboarding" element={<OnboardingCard />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/confirm-email" element={<Confirm />} />
-            <Route path="/reset-password" element={<NewPassword />} />
-            <Route path="/404" element={<Error />} />
-            {/* extra screens of onboarding  */}
-            <Route path="/verifyemail" element={<VerifyEmail />} />
-            <Route path="/emailverified" element={<EmailVerified />} />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
-            <Route path="/checkemail" element={<CheckEmail />} />
-            <Route path="/changepassword" element={<ChangePassword />} />
-            <Route path="/reset" element={<ResetPassword />} />
+            <Router>
+              <Routes>
+                <Route path="/onboarding" element={<OnboardingCard />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/confirm-email" element={<Confirm />} />
+                <Route path="/reset-password" element={<NewPassword />} />
+                <Route path="/404" element={<Error />} />
+                {/* extra screens of onboarding  */}
+                <Route path="/verifyemail" element={<VerifyEmail />} />
+                <Route path="/emailverified" element={<EmailVerified />} />
+                <Route path="/forgotpassword" element={<ForgotPassword />} />
+                <Route path="/checkemail" element={<CheckEmail />} />
+                <Route path="/changepassword" element={<ChangePassword />} />
+                <Route path="/reset" element={<ResetPassword />} />
 
-            <Route path="/searchPage" element={<SearchPage />} />
+                <Route path="/searchPage" element={<SearchPage />} />
 
-            <Route path="/dashboard" element={<Dashboard />}>
-              <Route path="/dashboard" element={<SentimentResults />} />
-              <Route
-                path="/dashboard/compare-keyword"
-                element={<CompareKeyword />}
-              />
-            </Route>
+                <Route path="/dashboard" element={<Dashboard />}>
+                  <Route path="/dashboard" element={<SentimentResults />} />
+                  <Route
+                    path="/dashboard/compare-keyword"
+                    element={<CompareKeyword />}
+                  />
+                </Route>
 
-            <Route path="/topResults" element={<TopResults />} />
-          </Routes>
-        </Router>
-        </TopResultsFilterProvider>
+                <Route path="/topResults" element={<TopResults />} />
+              </Routes>
+            </Router>
+          </TopResultsFilterProvider>
         </SavedSearchesProvider>
       </CompareKeywordProvider>
       {/* <Footer /> */}

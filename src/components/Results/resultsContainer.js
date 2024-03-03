@@ -1,3 +1,5 @@
+import * as XLSX from "xlsx";
+import pptxgen from "pptxgenjs";
 import styled from "styled-components";
 import { useState, useContext, useMemo } from "react";
 import ResultCard from "./resultCard";
@@ -11,6 +13,11 @@ import { TopResultsFilterContext } from "../../contexts/TopResultsFilter.context
 import profileImage from "../../assets/profile-pic.jpeg";
 import sharedImage from "../../assets/cool-profile-picture.jpeg";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
+import { CSVLink } from "react-csv";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { saveAs } from "file-saver";
 
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
@@ -164,8 +171,8 @@ const exportOptions = [
   { value: "PDF", label: "PDF" },
   { value: "XLS", label: "XLS" },
   { value: "CSV", label: "CSV" },
-  { value: "PPT Landscape", label: "PPT Landscape" },
-  { value: "PPT Portrait", label: "PPT Portrait" },
+  { value: "PPTL", label: "PPT Landscape" },
+  { value: "PPTP", label: "PPT Portrait" },
 ];
 
 const ResultsCard = () => {
@@ -174,6 +181,7 @@ const ResultsCard = () => {
   const [selectedLayout, setSelectedLayout] = useState("Normal");
   const [selectedExport, setSelectedExport] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("Bio");
+  const [tweets, setTweets] = useState([]);
 
   const {
     topResultMatch,
@@ -184,6 +192,18 @@ const ResultsCard = () => {
     setTopResultSentiment,
   } = useContext(TopResultsFilterContext);
   const { data } = useContext(CompareKeywordContext);
+
+  const generateRandomTime = () => {
+    let randomTime = Math.floor(Math.random() * 24); // Random hour
+    if (randomTime < 10) {
+      randomTime = `0${randomTime}`;
+    }
+    const randomMinutes = Math.floor(Math.random() * 60); // Random minutes
+    const randomHourString = `${randomTime}:${
+      randomMinutes < 10 ? "0" : ""
+    }${randomMinutes}`;
+    return randomHourString;
+  };
 
   const generateRandomTweetsNormal = () => {
     const sentiments = ["Positive", "Negative", "Neutral"];
@@ -205,14 +225,15 @@ const ResultsCard = () => {
         content: match.text,
         sharedImage: sharedImage,
         sentiment:
-          topResultSentiment ||
-          sentiments[Math.floor(Math.random() * sentiments.length)],
+          topResultSentiment != "none"
+            ? topResultSentiment
+            : sentiments[Math.floor(Math.random() * sentiments.length)],
         matches: topResultMatch,
         reach: match.impressions,
         engagement: match.quote_count + match.retweet_count,
         trending: match.quote_count,
         timePublished: isNaN(topResultRange)
-          ? "3"
+          ? `${topResultRange} ${generateRandomTime()}`
           : `${topResultRange} hours ago`,
         location: "Pakistan",
         platform: "Twitter.com",
@@ -251,7 +272,7 @@ const ResultsCard = () => {
         sentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
       }
     }
-
+    setTweets(tweets);
     return tweets;
   };
 
@@ -312,6 +333,8 @@ const ResultsCard = () => {
     });
   }, [selectedOption]); // Re-run the sorting every time selectedOption changes
 
+  // console.log(sortedTweets)
+
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -320,12 +343,304 @@ const ResultsCard = () => {
     setSelectedLayout(event.target.value);
   };
 
-  const handleExportChange = (event) => {
-    setSelectedExport(event.target.value);
-  };
-
   const handleThemeChange = (event) => {
     setSelectedTheme(event.target.value);
+  };
+
+  const handleExportChange = (selectedOption) => {
+    // Check if selectedOption is null to avoid errors
+    if (!selectedOption) return;
+
+    // Extract the value from the selectedOption
+    const selectedExport = selectedOption.value;
+    setSelectedExport(selectedExport);
+
+    // console.log(tweets[0])
+
+    if (selectedExport === "PDF") {
+      exportToPDF(tweets);
+    } else if (selectedExport === "XLS") {
+      exportToXLS(tweets);
+    } else if (selectedExport === "CSV") {
+      exportToCSV(tweets);
+    } else if (selectedExport === "PPTL") {
+      exportToPPTL(tweets);
+    } else if (selectedExport === "PPTP") {
+      exportToPPTP(tweets);
+    }
+  };
+
+  const exportToPDF = (tweets) => {
+    const pdf = new jsPDF();
+    // console.log(tweets)
+    const tableData = tweets.map((data, index) => [
+      data[0].profileData.handle,
+      data[0].profileData.content,
+      data[0].profileData.sentiment,
+      data[0].profileData.reach,
+      data[0].additionalMetrics.hearts,
+      data[0].additionalMetrics.shares,
+      // can add more fields
+    ]);
+    pdf.autoTable({
+      head: [["Handle", "Content", "Sentiment", "Reach", "Likes", "Shares"]],
+      body: tableData,
+    });
+    pdf.save("export.pdf");
+  };
+
+  const exportToCSV = (tweets) => {
+    // console.log(tweets)
+    const csvData = tweets.map((data, index) => ({
+      Handle: data[0].profileData.handle,
+      Name: data[0].profileData.name,
+      Matches: data[0].profileData.matches,
+      Content: `"${data[0].profileData.content.replace(/"/g, '""')}"`,
+      Sentiment: data[0].profileData.sentiment,
+      TimePublished: data[0].profileData.timePublished,
+      Location: data[0].profileData.location,
+      Platform: data[0].profileData.platform,
+      Engagement: data[0].profileData.engagement,
+      Reach: data[0].profileData.reach,
+      Trending: data[0].profileData.trending,
+
+      Hearts: data[0].additionalMetrics.hearts,
+      Shares: data[0].additionalMetrics.shares,
+      Users: data[0].additionalMetrics.users,
+    }));
+    const csvHeaders = [
+      "Handle",
+      "Name",
+      "Matches",
+      "Content",
+      "Sentiment",
+      "TimePublished",
+      "Location",
+      "Platform",
+      "Engagement",
+      "Reach",
+      "Trending",
+      "Hearts",
+      "Shares",
+      "Users",
+    ];
+    const csvReportFile = [csvHeaders.join(",")]
+      .concat(csvData.map((row) => Object.values(row).join(",")))
+      .join("\n");
+
+    const csvBlob = new Blob([csvReportFile], {
+      type: "text/csv;charset=utf-8;",
+    });
+    saveAs(csvBlob, "export.csv");
+  };
+
+  const exportToXLS = (tweets) => {
+    const formattedData = tweets.map((tweet) => ({
+      Handle: tweet[0].profileData.handle,
+      Name: tweet[0].profileData.name,
+      Matches: tweet[0].profileData.matches,
+      Content: tweet[0].profileData.content,
+      Sentiment: tweet[0].profileData.sentiment,
+      TimePublished: tweet[0].profileData.timePublished,
+      Location: tweet[0].profileData.location,
+      Platform: tweet[0].profileData.platform,
+      Engagement: tweet[0].profileData.engagement,
+      Reach: tweet[0].profileData.reach,
+      Trending: tweet[0].profileData.trending,
+      Hearts: tweet[0].additionalMetrics.hearts,
+      Shares: tweet[0].additionalMetrics.shares,
+      Users: tweet[0].additionalMetrics.users,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Tweets");
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    saveAs(
+      new Blob([excelBuffer], { type: "application/octet-stream" }),
+      "export.xlsx"
+    );
+  };
+
+  const exportToPPTL = (tweets) => {
+    // console.log(tweets)
+    const ppt = new pptxgen();
+
+    tweets.forEach((tweet, index) => {
+      const slide = ppt.addSlide();
+      slide.addText(`Tweet: ${index + 1}`, {
+        y: 0.3,
+        x: 1,
+        fontSize: 14,
+        fontWeight: "bold",
+      });
+      slide.addText(`Handle: ${tweet[0].profileData.handle}`, {
+        y: 0.6,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Name: ${tweet[0].profileData.name}`, {
+        y: 0.9,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Matches: ${tweet[0].profileData.matches}`, {
+        y: 1.2,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Sentiment: ${tweet[0].profileData.sentiment}`, {
+        y: 1.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Time Published: ${tweet[0].profileData.timePublished}`, {
+        y: 1.8,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Location: ${tweet[0].profileData.location}`, {
+        y: 2.1,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Platform: ${tweet[0].profileData.platform}`, {
+        y: 2.4,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Engagement: ${tweet[0].profileData.engagement}`, {
+        y: 2.7,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Reach: ${tweet[0].profileData.reach}`, {
+        y: 3,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Trending: ${tweet[0].profileData.trending}`, {
+        y: 3.3,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Hearts: ${tweet[0].additionalMetrics.hearts}`, {
+        y: 3.6,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Shares: ${tweet[0].additionalMetrics.shares}`, {
+        y: 3.9,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Users: ${tweet[0].additionalMetrics.users}`, {
+        y: 4.2,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Content: ${tweet[0].profileData.content}`, {
+        y: 4.5,
+        x: 1,
+        fontSize: 10,
+      });
+    });
+
+    ppt.writeFile("tweets.pptx");
+  };
+
+  const exportToPPTP = (tweets) => {
+    const ppt = new pptxgen();
+
+    ppt.defineLayout({ name: "portrait", width: 6.25, height: 10 });
+
+    ppt.layout = "portrait";
+
+    tweets.forEach((tweet, index) => {
+      const slide = ppt.addSlide();
+
+      slide.addText(`Tweet: ${index + 1}`, {
+        y: 0.5,
+        x: 1,
+        fontSize: 14,
+        fontWeight: "bold",
+      });
+      slide.addText(`Handle: ${tweet[0].profileData.handle}`, {
+        y: 1,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Name: ${tweet[0].profileData.name}`, {
+        y: 1.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Matches: ${tweet[0].profileData.matches}`, {
+        y: 2,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Sentiment: ${tweet[0].profileData.sentiment}`, {
+        y: 2.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Time Published: ${tweet[0].profileData.timePublished}`, {
+        y: 3,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Location: ${tweet[0].profileData.location}`, {
+        y: 3.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Platform: ${tweet[0].profileData.platform}`, {
+        y: 4,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Engagement: ${tweet[0].profileData.engagement}`, {
+        y: 4.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Reach: ${tweet[0].profileData.reach}`, {
+        y: 5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Trending: ${tweet[0].profileData.trending}`, {
+        y: 5.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Hearts: ${tweet[0].additionalMetrics.hearts}`, {
+        y: 6,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Shares: ${tweet[0].additionalMetrics.shares}`, {
+        y: 6.5,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Users: ${tweet[0].additionalMetrics.users}`, {
+        y: 7,
+        x: 1,
+        fontSize: 10,
+      });
+      slide.addText(`Content: ${tweet[0].profileData.content}`, {
+        y: 7.5,
+        x: 1,
+        fontSize: 10,
+      });
+    });
+
+    ppt.writeFile("tweets.pptx");
   };
 
   return (
