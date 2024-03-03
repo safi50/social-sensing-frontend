@@ -380,6 +380,7 @@ export const generateData = async ({
       return {
         name: name,
         tweetsText: tweetsText,
+        tweetsSentiments: tweetsSentiments,
         tweets: tweetsData,
         infoText: getTotalResultsFromApi(name), // from Tweets count API
         color: colors[index],
