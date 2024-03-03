@@ -214,10 +214,48 @@ const ResultsCard = () => {
     ];
 
     const tweets = [];
+
     const matchedData = data.filter((match) => match.name === topResultMatch);
     if (!matchedData.length) return [];
+    const matchedResult = matchedData[0].tweets[0].data.filter((match, idx) => {
+      // console.log(
+      //   "============================checking============================="
+      // );
+      // console.log(
+      //   matchedData[0].tweetsSentiments[idx].toLowerCase(),
+      //   topResultSentiment.toLowerCase()
+      // );
+      return topResultSentiment.toLowerCase() === "none"
+        ? true
+        : matchedData[0].tweetsSentiments[idx].toLowerCase() ===
+            topResultSentiment.toLowerCase();
+    });
+    console.log("matchedResult=============================:");
+    console.log(matchedResult);
+    const timeMatch = matchedResult.filter((match) => {
+      console.log("timeMatch=============================:");
+      let comparisonDate;
 
-    matchedData[0].tweets[0].data.map((match) => {
+      // Check if topResultRange is a number (hours ago) or a date string ("7 March")
+      if (!isNaN(topResultRange)) {
+        // topResultRange is a number, calculate the date for 'topResultRange' hours ago in 2022
+        const now = new Date(); // Get current date and time
+        now.setFullYear(2022); // Assume the current year is 2022
+        comparisonDate = new Date(
+          now.getTime() - topResultRange * 60 * 60 * 1000
+        );
+      } else {
+        // topResultRange is a date string, create a Date object for that date in 2022
+        comparisonDate = new Date(`2022 ${topResultRange}`);
+      }
+
+      console.log(match.created_at, topResultRange, comparisonDate);
+
+      // Return true if match.created_at is on or after comparisonDate, false otherwise
+      return match.created_at >= comparisonDate;
+    });
+
+    timeMatch.map((match, idx) => {
       const profileData = {
         name: match.name,
         handle: match.username,
@@ -227,7 +265,7 @@ const ResultsCard = () => {
         sentiment:
           topResultSentiment != "none"
             ? topResultSentiment
-            : sentiments[Math.floor(Math.random() * sentiments.length)],
+            : matchedData[0].tweetsSentiments[idx],
         matches: topResultMatch,
         reach: match.impressions,
         engagement: match.quote_count + match.retweet_count,
