@@ -76,12 +76,8 @@ const MySearchModal = ({
     </StyledDropdown>
   );
   useEffect(() => {
-    console.log("================saveSearches==================");
-    console.log(saveSearches);
     setTotalPages(parseInt((saveSearches.length - 1) / rowsPerPage) + 1)
-    
-    console.log("===========================================");
-  }, [saveSearches]);
+      }, [saveSearches]);
 
   useEffect(() => {
     updateSearchView();

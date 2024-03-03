@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const TempInitialDate = "2022-03-02T13:05:05";
+export const TempInitialDate = "2022-03-02T13:05:05";
 
 const getMonthName = (monthIndex) => {
   const months = [

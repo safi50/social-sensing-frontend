@@ -316,13 +316,13 @@ const TopResults = () => {
   }, []);
 
   useEffect(() => {
-    console.log("================================filters=====================");
-    console.log(filters);
-    console.log(
-      "================================filteredPosts====================="
-    );
-    console.log(filteredPosts);
-    console.log("=====================================================");
+    // console.log("================================filters=====================");
+    // console.log(filters);
+    // console.log(
+    //   "================================filteredPosts====================="
+    // );
+    // console.log(filteredPosts);
+    // console.log("=====================================================");
   }, [filters, filteredPosts]);
 
   useEffect(() => {

@@ -18,6 +18,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { saveAs } from "file-saver";
+import { TempInitialDate } from "../../contexts/dummyData";
 
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
@@ -214,17 +215,12 @@ const ResultsCard = () => {
     ];
 
     const tweets = [];
-
+    // applying query filter
     const matchedData = data.filter((match) => match.name === topResultMatch);
     if (!matchedData.length) return [];
+    console.log("matched Data:", matchedData)
     const matchedResult = matchedData[0].tweets[0].data.filter((match, idx) => {
-      // console.log(
-      //   "============================checking============================="
-      // );
-      // console.log(
-      //   matchedData[0].tweetsSentiments[idx].toLowerCase(),
-      //   topResultSentiment.toLowerCase()
-      // );
+
       return topResultSentiment.toLowerCase() === "none"
         ? true
         : matchedData[0].tweetsSentiments[idx].toLowerCase() ===
@@ -235,26 +231,29 @@ const ResultsCard = () => {
     console.log("timeMatch=============================:");
     const timeMatch = matchedResult.filter((match) => {
       if (topResultRange.toLowerCase() === "none") return true;
-
-      let comparisonDate;
+      
+      let comparisonStartDate;
+      let comparisonEndDate;
 
       // Check if topResultRange is a number (hours ago) or a date string ("7 March")
       if (!isNaN(topResultRange)) {
         // topResultRange is a number, calculate the date for 'topResultRange' hours ago in 2022
-        const now = new Date(); // Get current date and time
-        now.setFullYear(2022); // Assume the current year is 2022
-        comparisonDate = new Date(
-          now.getTime() - topResultRange * 60 * 60 * 1000
-        );
+
+        const initialDate = new Date(TempInitialDate);
+        comparisonStartDate = new Date(initialDate.getTime() - topResultRange * 60 * 60 * 1000);
+        comparisonEndDate = new Date(comparisonStartDate.getTime() + 60 * 60 * 1000); // Plus 1 hour
+
       } else {
         // topResultRange is a date string, create a Date object for that date in 2022
-        comparisonDate = new Date(`2022 ${topResultRange}`);
+
+        comparisonStartDate = new Date(`2022 ${topResultRange} 00:00:00`);
+        comparisonEndDate = new Date(`2022 ${topResultRange} 23:59:59`);
       }
+      
+      const matchDate = new Date(match.created_at);
 
-      console.log(match.created_at, "==", topResultRange, "==", comparisonDate);
-
-      // Return true if match.created_at is on or after comparisonDate, false otherwise
-      return match.created_at >= comparisonDate;
+      // Return true if matchDate lies inside start and end date filter
+      return matchDate >= comparisonStartDate && matchDate <= comparisonEndDate
     });
 
     timeMatch.map((match, idx) => {
@@ -326,7 +325,6 @@ const ResultsCard = () => {
     const date = new Date(`${timePublished} ${currentYear}`);
     return date;
   }
-  // const randomTweetsNormal = generateRandomTweetsNormal()
 
   // Use useMemo to sort the tweets based on the selectedOption
   const sortedTweets = useMemo(() => {
@@ -336,7 +334,6 @@ const ResultsCard = () => {
     return tweets.sort((a, b) => {
       switch (selectedOption) {
         case "Engagement":
-          console.log("sorting", b[0], a[0]);
           return (
             convertStringResultsToNumber(b[0].profileData.engagement) -
             convertStringResultsToNumber(a[0].profileData.engagement)
@@ -373,7 +370,6 @@ const ResultsCard = () => {
     });
   }, [selectedOption]); // Re-run the sorting every time selectedOption changes
 
-  // console.log(sortedTweets)
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
@@ -395,8 +391,6 @@ const ResultsCard = () => {
     const selectedExport = selectedOption.value;
     setSelectedExport(selectedExport);
 
-    // console.log(tweets[0])
-
     if (selectedExport === "PDF") {
       exportToPDF(tweets);
     } else if (selectedExport === "XLS") {
@@ -412,7 +406,6 @@ const ResultsCard = () => {
 
   const exportToPDF = (tweets) => {
     const pdf = new jsPDF();
-    // console.log(tweets)
     const tableData = tweets.map((data, index) => [
       data[0].profileData.handle,
       data[0].profileData.content,
@@ -430,7 +423,6 @@ const ResultsCard = () => {
   };
 
   const exportToCSV = (tweets) => {
-    // console.log(tweets)
     const csvData = tweets.map((data, index) => ({
       Handle: data[0].profileData.handle,
       Name: data[0].profileData.name,
@@ -506,7 +498,6 @@ const ResultsCard = () => {
   };
 
   const exportToPPTL = (tweets) => {
-    // console.log(tweets)
     const ppt = new pptxgen();
 
     tweets.forEach((tweet, index) => {
