@@ -232,8 +232,10 @@ const ResultsCard = () => {
     });
     console.log("matchedResult=============================:");
     console.log(matchedResult);
+    console.log("timeMatch=============================:");
     const timeMatch = matchedResult.filter((match) => {
-      console.log("timeMatch=============================:");
+      if (topResultRange.toLowerCase() === "none") return true;
+
       let comparisonDate;
 
       // Check if topResultRange is a number (hours ago) or a date string ("7 March")
@@ -249,7 +251,7 @@ const ResultsCard = () => {
         comparisonDate = new Date(`2022 ${topResultRange}`);
       }
 
-      console.log(match.created_at, topResultRange, comparisonDate);
+      console.log(match.created_at, "==", topResultRange, "==", comparisonDate);
 
       // Return true if match.created_at is on or after comparisonDate, false otherwise
       return match.created_at >= comparisonDate;
