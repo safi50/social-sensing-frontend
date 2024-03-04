@@ -76,6 +76,7 @@ export const CompareKeyword = () => {
           <ChartComponent
             title="Net Sentiments over time"
             data={mergedNetSentimentOverTime}
+            queryMatches={filters.eventNames}
           />
         </div>
       </ChartsContainer>

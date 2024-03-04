@@ -218,7 +218,7 @@ const ResultsCard = () => {
     // applying query filter
     const matchedData = data.filter((match) => match.name === topResultMatch);
     if (!matchedData.length) return [];
-    console.log("matched Data:", matchedData)
+
     const matchedResult = matchedData[0].tweets[0].data.filter((match, idx) => {
 
       return topResultSentiment.toLowerCase() === "none"
@@ -226,9 +226,7 @@ const ResultsCard = () => {
         : matchedData[0].tweetsSentiments[idx].toLowerCase() ===
             topResultSentiment.toLowerCase();
     });
-    console.log("matchedResult=============================:");
-    console.log(matchedResult);
-    console.log("timeMatch=============================:");
+    
     const timeMatch = matchedResult.filter((match) => {
       if (topResultRange.toLowerCase() === "none") return true;
       
