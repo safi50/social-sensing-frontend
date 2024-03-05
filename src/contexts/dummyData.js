@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const TempInitialDate = "2022-03-02T13:05:05";
+export const Operation = process.env.REACT_APP_OPERATION
 
 const getMonthName = (monthIndex) => {
   const months = [
@@ -56,45 +57,51 @@ function randomData(min, max, count) {
 }
 export const getTwitterTweets = async (myQuery) => {
   // call twitter api
-
-  const response = await axios.get(
-    "https://lda-iwz8.onrender.com/get_random_tweets"
-  );
-  response.data.forEach((tweet) => {
-    if (tweet.created_at) {
-      tweet.created_at = cleanPakistanTimezone(tweet.created_at);
-    }
-    if (tweet.impressions === undefined) {
-      tweet.impressions = randomData(1, 100, 1)[0]; // Adjust the range as needed
-    }
-
-    // Check if 'quote_count' attribute exists, if not, add it with a random value
-    if (tweet.quote_count === undefined) {
-      tweet.quote_count = randomData(1, 10, 1)[0]; // Adjust the range as needed
-    }
-    if (tweet.hasOwnProperty("replies_count")) {
-      // Rename 'replies_count' key to 'reply_count'
-      tweet.reply_count = tweet.replies_count;
-      delete tweet.replies_count;
-    }
-    if (tweet.hasOwnProperty("retweets_count")) {
-      // Rename 'retweets_count' key to 'retweet_count'
-      tweet.retweet_count = tweet.retweets_count;
-      delete tweet.retweets_count;
-    }
-    if (tweet.hasOwnProperty("likes_count")) {
-      // Rename 'likes_count' key to 'like_count'
-      tweet.like_count = tweet.likes_count;
-      delete tweet.likes_count;
-    }
-    if (tweet.hasOwnProperty("tweet")) {
-      // Rename 'likes_count' key to 'like_count'
-      tweet.text = tweet.tweet;
-      delete tweet.tweet;
-    }
-  });
-  console.log("twitter data form mongodb:", response);
-  return [response];
+  if (Operation == "Dev"){
+    const response = await axios.get(
+      "https://lda-iwz8.onrender.com/get_random_tweets"
+    );
+    response.data.forEach((tweet) => {
+      if (tweet.created_at) {
+        tweet.created_at = cleanPakistanTimezone(tweet.created_at);
+      }
+      if (tweet.impressions === undefined) {
+        tweet.impressions = randomData(1, 100, 1)[0]; // Adjust the range as needed
+      }
+  
+      // Check if 'quote_count' attribute exists, if not, add it with a random value
+      if (tweet.quote_count === undefined) {
+        tweet.quote_count = randomData(1, 10, 1)[0]; // Adjust the range as needed
+      }
+      if (tweet.hasOwnProperty("replies_count")) {
+        // Rename 'replies_count' key to 'reply_count'
+        tweet.reply_count = tweet.replies_count;
+        delete tweet.replies_count;
+      }
+      if (tweet.hasOwnProperty("retweets_count")) {
+        // Rename 'retweets_count' key to 'retweet_count'
+        tweet.retweet_count = tweet.retweets_count;
+        delete tweet.retweets_count;
+      }
+      if (tweet.hasOwnProperty("likes_count")) {
+        // Rename 'likes_count' key to 'like_count'
+        tweet.like_count = tweet.likes_count;
+        delete tweet.likes_count;
+      }
+      if (tweet.hasOwnProperty("tweet")) {
+        // Rename 'likes_count' key to 'like_count'
+        tweet.text = tweet.tweet;
+        delete tweet.tweet;
+      }
+    });
+    console.log("twitter data form mongodb:", response);
+    return [response];
+  }
+  else if(Operation == "Production"){
+    // get tweets from twitter api
+    return []
+  }
+  
   //   let tweetsData = [{"data": [
   //     {
   //       "id": "1234567890123456789",
@@ -158,7 +165,6 @@ export const getTwitterTweets = async (myQuery) => {
 const cleanPakistanTimezone = (dateString) => {
   let dateParts = dateString.split(" Pakistan Standard Time")[0]; // Remove the timezone part
   dateParts = dateParts.replace(" ", "T");
-  // const date = new Date(dateParts);
   return dateParts;
 };
 const getTotalEngagement = (tweetsData) => {
@@ -299,11 +305,8 @@ const getResultsOver24Hours = (query, tweetData) => {
       hoursCount[23 - diffInHours]++; // Subtract from 23 to get the correct index (0 to 23)
     }
   });
-  // return randomData(finalLower, finalUpper, 24)
   return hoursCount;
-  
-  // return randomData(1, 100, 24);
-};
+  };
 
 const getResultsOver7Days = (query, tweetData) => {
   // use tweet count api to get tweets count values for each day
@@ -323,7 +326,6 @@ const getResultsOver7Days = (query, tweetData) => {
   });
 
   return daysCount;
-  // return randomData(finalLower, finalUpper, 7);
 };
 
 
