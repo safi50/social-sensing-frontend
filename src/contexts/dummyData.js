@@ -280,6 +280,53 @@ const SentimentResultsOver7Days = (
   return daysCount;
   // return randomData(finalLower, finalUpper, 7)
 };
+
+const getTotalResultsFromApi = (query, tweetData) => {
+  // call TweetCount api on the above query to count the total results
+  return tweetData[0].data.length
+};
+
+const getResultsOver24Hours = (query, tweetData) => {
+  // use tweet count api to get tweets count values for each hour
+  const hoursCount = Array(24).fill(0); // Initialize counts for each hour
+  const now = new Date(TempInitialDate);
+
+  tweetData[0].data.forEach((tweet, index) => {
+    const tweetDate = new Date(tweet.created_at);
+    const diffInHours = Math.floor((now - tweetDate) / (1000 * 60 * 60));
+    if (diffInHours < 24) {
+      // Ensure the hour is within the array bounds and increment the count
+      hoursCount[23 - diffInHours]++; // Subtract from 23 to get the correct index (0 to 23)
+    }
+  });
+  // return randomData(finalLower, finalUpper, 24)
+  return hoursCount;
+  
+  // return randomData(1, 100, 24);
+};
+
+const getResultsOver7Days = (query, tweetData) => {
+  // use tweet count api to get tweets count values for each day
+  const daysCount = Array(7).fill(0); // Initialize counts for each day
+  const now = new Date(TempInitialDate);
+  now.setHours(0, 0, 0, 0); // Normalize current time to the start of the current day
+
+  tweetData[0].data.forEach((tweet, index) => {
+    const tweetDate = new Date(tweet.created_at);
+    tweetDate.setHours(0, 0, 0, 0); // Normalize tweet time to the start of its day
+    const diffInDays = Math.floor((now - tweetDate) / (1000 * 60 * 60 * 24));
+
+    if (diffInDays < 7) {
+      // Ensure the day is within the array bounds and increment the count
+      daysCount[6 - diffInDays]++; // Subtract from 6 to get the correct index (0 to 6)
+    }
+  });
+
+  return daysCount;
+  // return randomData(finalLower, finalUpper, 7);
+};
+
+
 export const generateData = async ({
   eventNames,
   timeRange,
@@ -353,19 +400,7 @@ export const generateData = async ({
         languageLower
       );
 
-      const getTotalResultsFromApi = (query) => {
-        // call TweetCount api on the above query to count the total results
-        return randomData(100, 1000, 1)[0];
-      };
-      const getResultsOver24Hours = (query) => {
-        // use tweet count api to get tweets count values for each hour
-        return randomData(1, 100, 24);
-      };
-
-      const getResultsOver7Days = (query) => {
-        // use tweet count api to get tweets count values for each day
-        return randomData(finalLower, finalUpper, 7);
-      };
+      
 
       let tweetsData = [];
 
@@ -382,7 +417,7 @@ export const generateData = async ({
         tweetsText: tweetsText,
         tweetsSentiments: tweetsSentiments,
         tweets: tweetsData,
-        infoText: getTotalResultsFromApi(name), // from Tweets count API
+        infoText: getTotalResultsFromApi(name, tweetsData), // from Tweets count API
         color: colors[index],
         totalEngagement: {
           labels: [name],
@@ -418,8 +453,8 @@ export const generateData = async ({
               label: name,
               data:
                 timeRange === "1d"
-                  ? getResultsOver24Hours(name) // use TweetCount api for each hour interval
-                  : getResultsOver7Days(name), // use TweetCount api for each day
+                  ? getResultsOver24Hours(name, tweetsData) // use TweetCount api for each hour interval
+                  : getResultsOver7Days(name, tweetsData), // use TweetCount api for each day
               backgroundColor: colors[index],
               borderColor: borderColors[index],
               borderWidth: 1,
