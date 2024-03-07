@@ -399,7 +399,37 @@ const ResultsCard = () => {
       exportToPPTL(tweets);
     } else if (selectedExport === "PPTP") {
       exportToPPTP(tweets);
+    } else if (selectedExport === "Normal") {
+      generateNormalExportJson(tweets);
     }
+  };
+
+  const generateNormalExportJson = (tweets) => {
+    const normalExportData = tweets.map((tweet, index) => ({
+      Tweet: index + 1,
+      Handle: tweet[0].profileData.handle,
+      Name: tweet[0].profileData.name,
+      Matches: tweet[0].profileData.matches,
+      Content: tweet[0].profileData.content,
+      Sentiment: tweet[0].profileData.sentiment,
+      TimePublished: tweet[0].profileData.timePublished,
+      Location: tweet[0].profileData.location,
+      Platform: tweet[0].profileData.platform,
+      Engagement: tweet[0].profileData.engagement,
+      Reach: tweet[0].profileData.reach,
+      Trending: tweet[0].profileData.trending,
+      Hearts: tweet[0].additionalMetrics.hearts,
+      Shares: tweet[0].additionalMetrics.shares,
+      Users: tweet[0].additionalMetrics.users,
+    }));
+  
+    const jsonData = JSON.stringify(normalExportData, null, 2);
+    const blob = new Blob([jsonData], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "tweets.json";
+    a.click();
   };
 
   const exportToPDF = (tweets) => {
