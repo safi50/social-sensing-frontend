@@ -255,12 +255,13 @@ const ResultsCard = () => {
     });
 
     timeMatch.map((match, idx) => {
+      console.log("Match:", match)
       const profileData = {
         name: match.name,
         handle: match.username,
         profileImage: profileImage,
         content: match.text,
-        sharedImage: sharedImage,
+        sharedImage: match.thumbnail,
         sentiment:
           topResultSentiment != "none"
             ? topResultSentiment
@@ -327,7 +328,7 @@ const ResultsCard = () => {
   // Use useMemo to sort the tweets based on the selectedOption
   const sortedTweets = useMemo(() => {
     const tweets = generateRandomTweetsNormal(); // Generate tweets
-
+    console.log("Tweets:", tweets)
     // Sort the tweets based on the selectedOption
     return tweets.sort((a, b) => {
       switch (selectedOption) {

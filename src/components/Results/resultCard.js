@@ -209,7 +209,7 @@ const ResultCard = ({profileData, additionalMetrics}) => {
                         <NameHandleWrapper>
                             <Name>{profileData.name} &nbsp;</Name>
                             <Handle>{profileData.handle}</Handle>
-                            <span> &nbsp;&nbsp;&nbsp;shared an image</span>
+                            {profileData.sharedImage && <span> &nbsp;&nbsp;&nbsp;shared an image</span>}
                         </NameHandleWrapper>
                         <ContentSection>{profileData.content}</ContentSection>
                         <MatchesText>Matches: {profileData.matches}</MatchesText>
