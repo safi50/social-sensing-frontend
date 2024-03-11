@@ -97,11 +97,14 @@ const InfoIcon = styled.img`
 `;
 
 const ImageSection = styled.div`
-  width: 130px;
-  height: 100px;
+min-width:100px;
+width: 200px;
+  height: 150px;
     border-radius: 8px;
   background-image: url(${props => props.imgUrl});
-  background-size: cover;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
   margin-left: 1rem;
 `;
 
