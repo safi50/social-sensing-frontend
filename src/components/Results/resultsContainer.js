@@ -168,7 +168,7 @@ const customStyles = {
 };
 
 const exportOptions = [
-  { value: "Normal", label: "Normal" },
+  // { value: "Normal", label: "Normal" },
   { value: "PDF", label: "PDF" },
   { value: "XLS", label: "XLS" },
   { value: "CSV", label: "CSV" },
@@ -220,16 +220,15 @@ const ResultsCard = () => {
     if (!matchedData.length) return [];
 
     const matchedResult = matchedData[0].tweets[0].data.filter((match, idx) => {
-
       return topResultSentiment.toLowerCase() === "none"
         ? true
         : matchedData[0].tweetsSentiments[idx].toLowerCase() ===
             topResultSentiment.toLowerCase();
     });
-    
+
     const timeMatch = matchedResult.filter((match) => {
       if (topResultRange.toLowerCase() === "none") return true;
-      
+
       let comparisonStartDate;
       let comparisonEndDate;
 
@@ -238,24 +237,27 @@ const ResultsCard = () => {
         // topResultRange is a number, calculate the date for 'topResultRange' hours ago in 2022
 
         const initialDate = new Date(TempInitialDate);
-        comparisonStartDate = new Date(initialDate.getTime() - topResultRange * 60 * 60 * 1000);
-        comparisonEndDate = new Date(comparisonStartDate.getTime() + 60 * 60 * 1000); // Plus 1 hour
-
+        comparisonStartDate = new Date(
+          initialDate.getTime() - topResultRange * 60 * 60 * 1000
+        );
+        comparisonEndDate = new Date(
+          comparisonStartDate.getTime() + 60 * 60 * 1000
+        ); // Plus 1 hour
       } else {
         // topResultRange is a date string, create a Date object for that date in 2022
 
         comparisonStartDate = new Date(`2022 ${topResultRange} 00:00:00`);
         comparisonEndDate = new Date(`2022 ${topResultRange} 23:59:59`);
       }
-      
+
       const matchDate = new Date(match.created_at);
 
       // Return true if matchDate lies inside start and end date filter
-      return matchDate >= comparisonStartDate && matchDate <= comparisonEndDate
+      return matchDate >= comparisonStartDate && matchDate <= comparisonEndDate;
     });
 
     timeMatch.map((match, idx) => {
-      console.log("Match:", match)
+      console.log("Match:", match);
       const profileData = {
         name: match.name,
         handle: match.username,
@@ -328,7 +330,7 @@ const ResultsCard = () => {
   // Use useMemo to sort the tweets based on the selectedOption
   const sortedTweets = useMemo(() => {
     const tweets = generateRandomTweetsNormal(); // Generate tweets
-    console.log("Tweets:", tweets)
+    console.log("Tweets:", tweets);
     // Sort the tweets based on the selectedOption
     return tweets.sort((a, b) => {
       switch (selectedOption) {
@@ -369,7 +371,6 @@ const ResultsCard = () => {
     });
   }, [selectedOption]); // Re-run the sorting every time selectedOption changes
 
-
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -400,6 +401,7 @@ const ResultsCard = () => {
       exportToPPTL(tweets);
     } else if (selectedExport === "PPTP") {
       exportToPPTP(tweets);
+    }
     // } else if (selectedExport === "Normal") {
     //   generateNormalExportJson(tweets);
     // }
@@ -423,7 +425,7 @@ const ResultsCard = () => {
   //     Shares: tweet[0].additionalMetrics.shares,
   //     Users: tweet[0].additionalMetrics.users,
   //   }));
-  
+
   //   const jsonData = JSON.stringify(normalExportData, null, 2);
   //   const blob = new Blob([jsonData], { type: "application/json" });
   //   const url = URL.createObjectURL(blob);
@@ -434,19 +436,48 @@ const ResultsCard = () => {
   // };
 
   const exportToPDF = (tweets) => {
-    const pdf = new jsPDF();
-    const tableData = tweets.map((data, index) => [
-      data[0].profileData.handle,
-      data[0].profileData.content,
-      data[0].profileData.sentiment,
-      data[0].profileData.reach,
-      data[0].additionalMetrics.hearts,
-      data[0].additionalMetrics.shares,
-      // can add more fields
+    const pdf = new jsPDF("l", "px", "a4"); // 'l' for landscape mode
+    const tableData = tweets.map((tweet, index) => [
+      tweet[0].profileData.handle,
+      tweet[0].profileData.name,
+      tweet[0].profileData.matches,
+      tweet[0].profileData.content,
+      tweet[0].profileData.sentiment,
+      tweet[0].profileData.timePublished,
+      tweet[0].profileData.location,
+      tweet[0].profileData.platform,
+      tweet[0].profileData.engagement,
+      tweet[0].profileData.reach,
+      tweet[0].profileData.trending,
+      tweet[0].additionalMetrics.hearts,
+      tweet[0].additionalMetrics.shares,
+      tweet[0].additionalMetrics.users,
     ]);
+
+    // Adjust margin
+    const margin = { top: 20, right: 5, bottom: 20, left: 5 };
+
     pdf.autoTable({
-      head: [["Handle", "Content", "Sentiment", "Reach", "Likes", "Shares"]],
+      head: [
+        [
+          "Handle",
+          "Name",
+          "Matches",
+          "Content",
+          "Sentiment",
+          "Time Published",
+          "Location",
+          "Platform",
+          "Engage",
+          "Reach",
+          "Trending",
+          "Hearts",
+          "Shares",
+          "Users",
+        ],
+      ],
       body: tableData,
+      margin: margin 
     });
     pdf.save("export.pdf");
   };
