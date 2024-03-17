@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 import pptxgen from "pptxgenjs";
 import styled from "styled-components";
-import { useState, useContext, useMemo } from "react";
+import { useState, useContext, useMemo, useEffect } from "react";
 import ResultCard from "./resultCard";
 import ResultCardCompact from "./resultCardCompact";
 import ResultCardStory from "./resultCardStory";
@@ -183,6 +183,18 @@ const ResultsCard = () => {
   const [selectedExport, setSelectedExport] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("Bio");
   const [tweets, setTweets] = useState([]);
+  const [normalImage, setNormalImage] = useState(null);
+
+  useEffect(() => {
+    html2canvas(document.body, {
+      y: 450,
+      height: 1840,
+    }).then((canvas) => {
+      // Convert canvas to data URL
+      const imageDataUrl = canvas.toDataURL("image/png");
+      setNormalImage(imageDataUrl);
+    });
+  }, []);
 
   const {
     topResultMatch,
@@ -401,30 +413,42 @@ const ResultsCard = () => {
       exportToPPTL(tweets);
     } else if (selectedExport === "PPTP") {
       exportToPPTP(tweets);
-    }
-     else if (selectedExport === "Normal") {
+    } else if (selectedExport === "Normal") {
       generateNormalExportJson(tweets);
     }
   };
 
   const generateNormalExportJson = (tweets, maxHeight) => {
-    const captureHeight = Math.min(window.innerHeight, maxHeight);
-    // Capture the page content
-    html2canvas(document.body, {
-      y: 370,
-      height: 1840
-    }).then((canvas) => {
-      // Convert canvas to data URL
-      const dataUrl = canvas.toDataURL("image/png");
-
+    if (normalImage) {
       // Create a download link
       const link = document.createElement("a");
-      link.href = dataUrl;
+      link.href = normalImage;
       link.download = "export.png";
 
       // Click the link to trigger the download
       link.click();
-    });
+
+      console.log("from useEffect")
+    } else {
+      console.log("Image is still being processed. Please wait.");
+      const captureHeight = Math.min(window.innerHeight, maxHeight);
+      // Capture the page content
+      html2canvas(document.body, {
+        y: 350,
+        height: 1840,
+      }).then((canvas) => {
+        // Convert canvas to data URL
+        const dataUrl = canvas.toDataURL("image/png");
+
+        // Create a download link
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "export.png";
+
+        // Click the link to trigger the download
+        link.click();
+      });
+    }
   };
 
   const exportToPDF = (tweets) => {
@@ -469,7 +493,7 @@ const ResultsCard = () => {
         ],
       ],
       body: tableData,
-      margin: margin
+      margin: margin,
     });
     pdf.save("export.pdf");
   };
