@@ -168,7 +168,7 @@ const customStyles = {
 };
 
 const exportOptions = [
-  // { value: "Normal", label: "Normal" },
+  { value: "Normal", label: "Normal" },
   { value: "PDF", label: "PDF" },
   { value: "XLS", label: "XLS" },
   { value: "CSV", label: "CSV" },
@@ -392,7 +392,7 @@ const ResultsCard = () => {
     setSelectedExport(selectedExport);
 
     if (selectedExport === "PDF") {
-      exportToPDF(tweets);
+      exportToPDF(tweets, 2500);
     } else if (selectedExport === "XLS") {
       exportToXLS(tweets);
     } else if (selectedExport === "CSV") {
@@ -402,38 +402,30 @@ const ResultsCard = () => {
     } else if (selectedExport === "PPTP") {
       exportToPPTP(tweets);
     }
-    // } else if (selectedExport === "Normal") {
-    //   generateNormalExportJson(tweets);
-    // }
+     else if (selectedExport === "Normal") {
+      generateNormalExportJson(tweets);
+    }
   };
 
-  // const generateNormalExportJson = (tweets) => {
-  //   const normalExportData = tweets.map((tweet, index) => ({
-  //     Tweet: index + 1,
-  //     Handle: tweet[0].profileData.handle,
-  //     Name: tweet[0].profileData.name,
-  //     Matches: tweet[0].profileData.matches,
-  //     Content: tweet[0].profileData.content,
-  //     Sentiment: tweet[0].profileData.sentiment,
-  //     TimePublished: tweet[0].profileData.timePublished,
-  //     Location: tweet[0].profileData.location,
-  //     Platform: tweet[0].profileData.platform,
-  //     Engagement: tweet[0].profileData.engagement,
-  //     Reach: tweet[0].profileData.reach,
-  //     Trending: tweet[0].profileData.trending,
-  //     Hearts: tweet[0].additionalMetrics.hearts,
-  //     Shares: tweet[0].additionalMetrics.shares,
-  //     Users: tweet[0].additionalMetrics.users,
-  //   }));
+  const generateNormalExportJson = (tweets, maxHeight) => {
+    const captureHeight = Math.min(window.innerHeight, maxHeight);
+    // Capture the page content
+    html2canvas(document.body, {
+      y: 370,
+      height: 1840
+    }).then((canvas) => {
+      // Convert canvas to data URL
+      const dataUrl = canvas.toDataURL("image/png");
 
-  //   const jsonData = JSON.stringify(normalExportData, null, 2);
-  //   const blob = new Blob([jsonData], { type: "application/json" });
-  //   const url = URL.createObjectURL(blob);
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = "tweets.json";
-  //   a.click();
-  // };
+      // Create a download link
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "export.png";
+
+      // Click the link to trigger the download
+      link.click();
+    });
+  };
 
   const exportToPDF = (tweets) => {
     const pdf = new jsPDF("l", "px", "a4"); // 'l' for landscape mode
@@ -477,7 +469,7 @@ const ResultsCard = () => {
         ],
       ],
       body: tableData,
-      margin: margin 
+      margin: margin
     });
     pdf.save("export.pdf");
   };
