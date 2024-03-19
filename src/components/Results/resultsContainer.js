@@ -185,16 +185,6 @@ const ResultsCard = () => {
   const [tweets, setTweets] = useState([]);
   const [normalImage, setNormalImage] = useState(null);
 
-  // useEffect(() => {
-  //   html2canvas(document.body, {
-  //     y: 370,
-  //     height: 1800,
-  //   }).then((canvas) => {
-  //     const imageDataUrl = canvas.toDataURL("image/png");
-  //     setNormalImage(imageDataUrl);
-  //   });
-  // }, []);
-
   useEffect(() => {
     const delay = 1000; 
     const timeoutId = setTimeout(() => {
@@ -448,11 +438,11 @@ const ResultsCard = () => {
       });
       
     } else {
+      console.log("from useEffect");
       const link = document.createElement("a");
       link.href = normalImage;
       link.download = "export.png";
       link.click();
-      console.log("from useEffect");
     }
   };
 
