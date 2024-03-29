@@ -408,6 +408,7 @@ const ResultsCard = () => {
     const selectedExport = selectedOption.value;
     setSelectedExport(selectedExport);
 
+    
     if (selectedExport === "PDF") {
       exportToPDF(tweets, 2500);
     } else if (selectedExport === "XLS") {
