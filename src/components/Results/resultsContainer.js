@@ -19,6 +19,15 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { saveAs } from "file-saver";
 import { TempInitialDate } from "../../contexts/dummyData";
+import {
+  PDFViewer,
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFDownloadLink,
+} from "@react-pdf/renderer";
 
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
@@ -183,23 +192,6 @@ const ResultsCard = () => {
   const [selectedExport, setSelectedExport] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("Bio");
   const [tweets, setTweets] = useState([]);
-  const [normalImage, setNormalImage] = useState(null);
-
-  useEffect(() => {
-    const delay = 1000; 
-    const timeoutId = setTimeout(() => {
-      html2canvas(document.body, {
-        y: 370,
-        height: 1860,
-      }).then((canvas) => {
-        const imageDataUrl = canvas.toDataURL("image/png");
-        setNormalImage(imageDataUrl);
-      });
-    }, delay);
-  
-    return () => clearTimeout(timeoutId); 
-  }, []);
-  
 
   const {
     topResultMatch,
@@ -408,9 +400,8 @@ const ResultsCard = () => {
     const selectedExport = selectedOption.value;
     setSelectedExport(selectedExport);
 
-    
     if (selectedExport === "PDF") {
-      exportToPDF(tweets, 2500);
+      exportToPDF(tweets);
     } else if (selectedExport === "XLS") {
       exportToXLS(tweets);
     } else if (selectedExport === "CSV") {
@@ -420,79 +411,153 @@ const ResultsCard = () => {
     } else if (selectedExport === "PPTP") {
       exportToPPTP(tweets);
     } else if (selectedExport === "Normal") {
-      exportNormal();
+      exportNormal(tweets);
     }
   };
 
-  const exportNormal = () => {
-    if (!normalImage) {
-      console.log("Image is still being processed. Please wait.");
-      html2canvas(document.body, {
-        y: 370,
-        height: 1860,
-      }).then((canvas) => {
-        const dataUrl = canvas.toDataURL("image/png");
-        const link = document.createElement("a");
-        link.href = dataUrl;
-        link.download = "export.png";
-        link.click();
-      });
-      
-    } else {
-      console.log("from useEffect");
-      const link = document.createElement("a");
-      link.href = normalImage;
-      link.download = "export.png";
-      link.click();
-    }
+  const exportNormal = (tweets) => {
+    // Convert tweet data to a string
+    const tweetDataString = tweets
+      .map((tweet, index) => {
+        const profileData = tweet[0].profileData;
+        const additionalMetrics = tweet[0].additionalMetrics;
+        return (
+          `${index + 1}) ` +
+          `${profileData.handle || ""},` +
+          `${profileData.name || ""},` +
+          `${profileData.matches || ""},` +
+          `${profileData.content || ""},` +
+          `${profileData.sentiment || ""},` +
+          `${profileData.timePublished || ""},` +
+          `${profileData.location || ""},` +
+          `${profileData.platform || ""},` +
+          `${profileData.engagement || ""},` +
+          `${profileData.reach || ""},` +
+          `${profileData.trending || ""},` +
+          `${additionalMetrics.hearts || ""},` +
+          `${additionalMetrics.shares || ""},` +
+          `${additionalMetrics.users || ""}`
+        );
+      })
+      .join("\n");
+
+    const blob = new Blob([tweetDataString], { type: "text/plain" });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "export.txt";
+
+    link.click();
   };
 
-  const exportToPDF = (tweets) => {
-    const pdf = new jsPDF("l", "px", "a4"); // 'l' for landscape mode
-    const tableData = tweets.map((tweet, index) => [
-      tweet[0].profileData.handle,
-      tweet[0].profileData.name,
-      tweet[0].profileData.matches,
-      tweet[0].profileData.content,
-      tweet[0].profileData.sentiment,
-      tweet[0].profileData.timePublished,
-      tweet[0].profileData.location,
-      tweet[0].profileData.platform,
-      tweet[0].profileData.engagement,
-      tweet[0].profileData.reach,
-      tweet[0].profileData.trending,
-      tweet[0].additionalMetrics.hearts,
-      tweet[0].additionalMetrics.shares,
-      tweet[0].additionalMetrics.users,
-    ]);
+  const MyPdf = ({ tweets }) => (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {tweets.map((tweet, index) => (
+          <View key={index} style={styles.tweetContainer}>
+            <View style={styles.column}>
+              <Text style={styles.smallText}>Tweeted</Text>
+              <Text style={styles.text}>{tweet[0].profileData.content}</Text>
+              <Text style={styles.smallText}>
+                Published on {tweet[0].profileData.timePublished} |{" "}
+                {tweet[0].profileData.platform} |{" "}
+                {tweet[0].profileData.location} | {tweet[0].profileData.name}
+              </Text>
+            </View>
+            <View style={styles.secondColumn}>
+              <Text style={[styles.smallText, styles.smallerText]}>
+                Matches: {tweet[0].profileData.matches}
+              </Text>
+              <Text
+                style={[
+                  styles.smallText,
+                  styles.yellowText,
+                  styles.smallerText,
+                ]}
+              >
+                Sentiment: {tweet[0].profileData.sentiment}
+              </Text>
+              <Text
+                style={[styles.smallText, styles.boldText, styles.smallerText]}
+              >
+                Engagement: {tweet[0].profileData.engagement}
+              </Text>
+              <Text style={[styles.smallText, styles.smallerText]}>
+                Potential Reach: {tweet[0].profileData.reach}
+              </Text>
+              <Text style={[styles.smallText, styles.smallerText]}>
+                Retweets: {tweet[0].additionalMetrics.shares}
+              </Text>
+              <Text style={[styles.smallText, styles.smallerText]}>
+                Twitter Likes: {tweet[0].additionalMetrics.hearts}
+              </Text>
+              <Text style={[styles.smallText, styles.smallerText]}>
+                Users: {tweet[0].additionalMetrics.users}
+              </Text>
+              <Text style={[styles.smallText, styles.smallerText]}>
+                Trending Post: {tweet[0].profileData.trending}
+              </Text>
+            </View>
+          </View>
+        ))}
+      </Page>
+    </Document>
+  );
 
-    // Adjust margin
-    const margin = { top: 20, right: 5, bottom: 20, left: 5 };
+  const styles = StyleSheet.create({
+    page: {
+      flexDirection: "column",
+      padding: 20,
+    },
+    tweetContainer: {
+      marginBottom: 20,
+      borderWidth: 1,
+      borderColor: "#000",
+      padding: 10,
+      flexDirection: "row",
+      alignItems: "flex-start",
+      justifyContent: "space-between",
+    },
+    column: {
+      width: "70%",
+      marginRight: "5%",
+    },
+    secondColumn: {
+      width: "25%",
+      marginRight: 0,
+    },
+    heading: {
+      fontSize: 16,
+      fontWeight: "bold",
+      marginBottom: 5,
+    },
+    text: {
+      fontSize: 12,
+      marginBottom: 5,
+    },
+    smallText: {
+      fontSize: 10,
+      color: "#999",
+    },
+    boldText: {
+      fontWeight: "bold",
+      color: "#000",
+    },
+    yellowText: {
+      color: "#FFD700",
+    },
+    smallerText: {
+      fontSize: 8,
+    },
+  });
 
-    pdf.autoTable({
-      head: [
-        [
-          "Handle",
-          "Name",
-          "Matches",
-          "Content",
-          "Sentiment",
-          "Time Published",
-          "Location",
-          "Platform",
-          "Engage",
-          "Reach",
-          "Trending",
-          "Hearts",
-          "Shares",
-          "Users",
-        ],
-      ],
-      body: tableData,
-      margin: margin,
-    });
-    pdf.save("export.pdf");
-  };
+  const exportToPDF = ({ tweets }) => (
+    <PDFDownloadLink document={<MyPdf tweets={tweets} />} fileName="export.pdf">
+      {({ blob, url, loading, error }) =>
+        loading ? "Loading document..." : "Download now!"
+      }
+    </PDFDownloadLink>
+  );
 
   const exportToCSV = (tweets) => {
     const csvData = tweets.map((data, index) => ({
@@ -507,7 +572,6 @@ const ResultsCard = () => {
       Engagement: data[0].profileData.engagement,
       Reach: data[0].profileData.reach,
       Trending: data[0].profileData.trending,
-
       Hearts: data[0].additionalMetrics.hearts,
       Shares: data[0].additionalMetrics.shares,
       Users: data[0].additionalMetrics.users,
@@ -806,6 +870,16 @@ const ResultsCard = () => {
               onChange={handleExportChange}
               value={selectedExport}
             />
+            {selectedExport === "PDF" && (
+              <PDFDownloadLink
+                document={<MyPdf tweets={tweets} />}
+                fileName="tweets.pdf"
+              >
+                {({ loading }) =>
+                  loading ? "Loading document..." : "Download now!"
+                }
+              </PDFDownloadLink>
+            )}
           </Row>
         ) : (
           <Row>
