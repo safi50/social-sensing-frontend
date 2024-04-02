@@ -71,7 +71,7 @@ const MySearchesItem = ({ item, handleEditSearch, handleDeleteSearch }) => {
           <UpdateContainer>
             <RenameButton
               onClick={() => {
-                handleEditSearch(item.id, newName);
+                handleEditSearch(item._id, newName);
                 setIsEditing(false);
               }}
             >
@@ -89,7 +89,7 @@ const MySearchesItem = ({ item, handleEditSearch, handleDeleteSearch }) => {
             </CancelButton>
             <DeleteButton
               onClick={() => {
-                handleDeleteSearch(item.id);
+                handleDeleteSearch(item._id);
                 setIsDeleting(false);
               }}
             >

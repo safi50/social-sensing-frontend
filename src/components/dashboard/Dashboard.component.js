@@ -66,6 +66,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { DateRange } from "../date-range/DateRange.component";
+import { API_URL } from "../../utils/api";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import {jwtDecode} from "jwt-decode";
+import { toast } from "react-toastify";
+
 
 export const savedSearches = [
   // {
@@ -281,6 +287,8 @@ const Dashboard = () => {
     date: "",
   });
 
+  const [cookies] = useCookies(["token"]);
+
   const handleSentimentChange = (sentiment, isChecked) => {
     const newSentimentType = isChecked
       ? [...contextFilters.sentimentType, sentiment] // Add sentiment if checked
@@ -395,23 +403,102 @@ const Dashboard = () => {
     setShowGenderCheckboxes(!showGenderCheckboxes);
   };
 
-  const handleEditSearch = (id, name) => {
-    setMySavedSearches(
-      mySavedSearches.map((search) => {
-        if (search.id === id) {
-          return {
-            ...search,
-            name: name,
-          };
-        }
-        return search;
-      })
-    );
+  const handleEditSearch = async (id, name) => {
+    try {
+      const token = cookies.token;
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.id;
+
+      const data = {
+        userId: userId,
+        searchId: id,
+        name: name, 
+      };
+  
+      const response = await axios.put(`${API_URL}/search/updateSearch`, data, {
+        withCredentials: true,
+      });
+  
+      if (response.status === 200) {
+        console.log("Saved Search Updated Successfully");
+  
+        // Update the name of the search in the local state
+        const updatedSearches = mySavedSearches.map((search) =>
+          search.id === id ? { ...search, name: name } : search
+        );
+        setMySavedSearches(updatedSearches);
+      }
+    } catch (error) {
+      console.error("Error Updating search:", error);
+      toast.error("Saved Search could not be Updated", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        style: { fontSize: "1.3rem" },
+      });
+    }
+
   };
 
-  const handleDeleteSearch = (id) => {
-    setMySavedSearches(mySavedSearches.filter((search) => search.id !== id));
-  };
+    
+
+
+
+    // setMySavedSearches(
+    //   mySavedSearches.map((search) => {
+    //     if (search.id === id) {
+    //       return {
+    //         ...search,
+    //         name: name,
+    //       };
+    //     }
+    //     return search;
+    //   })
+    // );
+  // };
+
+  const handleDeleteSearch = async (id) => {
+    try {
+      const token = cookies.token;
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.id;
+      console.log("userId", userId);
+      console.log("SearchId", id);
+      const data = {
+        userId: userId,
+        searchId: id,
+      };
+  
+      const response = await axios.delete(`${API_URL}/search/deleteSearch`, {
+        data: data, // Pass data as the 'data' property
+        withCredentials: true,
+        
+      });
+  
+      if (response.status === 200) {
+        console.log("Search Deleted Successfully");
+
+        const updatedSearches = mySavedSearches.filter(
+          (search) => search.id !== id
+        );
+        setMySavedSearches(updatedSearches);
+      }
+    } catch (error) {
+      console.error("Error deleting search:", error);
+      toast.error("Search could not be deleted", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        style: { fontSize: "1.3rem" },
+      });    }  };
 
   const handleDeleteCompareSearch = (searchName) => {
     const indexToRemove = contextFilters.eventNames.findIndex(

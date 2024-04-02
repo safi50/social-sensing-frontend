@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Route, Routes, Navigate, Outlet } from 'react-router-dom'; // Import Navigate
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { ToastContainer } from "react-toastify";
+import { useCookies } from "react-cookie";
+import {jwtDecode} from "jwt-decode";
 import Navbar from "./components/navbar/Navbar.component";
 import Footer from "./components/footer/Footer.component";
 import SearchBar from "./components/searchBar/SearchBar.component";
 import SavedSearches from "./components/savedsearches/SavedSearches.component";
-import styled from "styled-components";
 import TrendingTable from "./components/trending_table/trending_table.component";
 import OnboardingCard from "./components/onBoardingCard/onBoardingCard.component";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Switch,
-} from "react-router-dom";
 import SignUp from "./components/SignUp/signUp.component";
 import SignIn from "./components/SignIn/signIn.component";
 import SearchPage from "./components/SearchPage/SearchPage.component";
@@ -23,7 +24,6 @@ import ChangePassword from "./components/ChangePassword/ChangePassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import EmailVerified from "./components/EmailVerified/EmailVerified";
 import TopResults from "./components/Results/topResults.component";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { SentimentResults } from "./components/sentiment-results/SentimentResults";
 import { CompareKeyword } from "./components/compare-keywords/CompareKeyword";
 import { CompareKeywordProvider } from "./contexts/CompareKeyword.context";
@@ -32,6 +32,7 @@ import { TopResultsFilterProvider } from "./contexts/TopResultsFilter.context";
 import { Confirm } from "./components/confirm/confirm";
 import { NewPassword } from "./components/confirm/resetPassword";
 import { Error } from "./components/error-404/Error";
+import "react-toastify/dist/ReactToastify.css";
 
 const Content = styled.div`
   display: flex;
@@ -56,44 +57,61 @@ const SecondaryHeading = styled.h2`
   color: #fff;
 `;
 
+const PrivateRoutes = () => {
+  const [cookies] = useCookies(["token"]); // Get the token from cookies
+  const token = cookies.token;
+  console.log(token);
+  // const decodedToken = jwtDecode(token);
+  // console.log("Decoded Token is:", JSON.stringify(decodedToken));
+  
+  // return token ? <Outlet /> : <Navigate to="/signin" />;
+};
+
+
 const App = () => {
   return (
     <>
       <CompareKeywordProvider>
         <SavedSearchesProvider>
           <TopResultsFilterProvider>
-            <Router>
-              <Routes>
-                <Route path="/onboarding" element={<OnboardingCard />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/confirm-email" element={<Confirm />} />
-                <Route path="/reset-password" element={<NewPassword />} />
-                <Route path="/404" element={<Error />} />
-                {/* extra screens of onboarding  */}
-                <Route path="/verifyemail" element={<VerifyEmail />} />
-                <Route path="/emailverified" element={<EmailVerified />} />
-                <Route path="/forgotpassword" element={<ForgotPassword />} />
-                <Route path="/checkemail" element={<CheckEmail />} />
-                <Route path="/changepassword" element={<ChangePassword />} />
-                <Route path="/reset" element={<ResetPassword />} />
+            <Routes>
+           
+              {/* Protected Routes */}
+              {/* <Route element={<PrivateRoutes />}> */}
+                  <Route path="/onboarding" element={<OnboardingCard />} />
+                  <Route path="/confirmEmail" element={<Confirm />} />
+                  <Route path="/404" element={<Error />} />
+                  <Route path="/verifyemail" element={<VerifyEmail />} />
+                  <Route path="/emailverified" element={<EmailVerified />} />
+                  <Route path="/searchPage" element={<SearchPage />} />
+                  <Route path="/dashboard" element={<Dashboard />}>
+                    <Route
+                      path="/dashboard"
+                      element={<SentimentResults />}
+                    />
+                    <Route
+                      path="/dashboard/compare-keyword"
+                      element={<CompareKeyword />}
+                    />
+                  </Route>
+                  <Route path="/topResults" element={<TopResults />} />
+                  {/* </Route> */}
 
-                <Route path="/searchPage" element={<SearchPage />} />
+                     {/* Unprotected Routes */}
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+              <Route path="/resetPassword" element={<NewPassword />} />
+              <Route path="/changePassword" element={<ChangePassword />} />
+              <Route path="/checkemail" element={<CheckEmail />} />
+              <Route path="/reset" element={<ResetPassword />} />
 
-                <Route path="/dashboard" element={<Dashboard />}>
-                  <Route path="/dashboard" element={<SentimentResults />} />
-                  <Route
-                    path="/dashboard/compare-keyword"
-                    element={<CompareKeyword />}
-                  />
-                </Route>
-
-                <Route path="/topResults" element={<TopResults />} />
-              </Routes>
-            </Router>
+              
+            </Routes>
           </TopResultsFilterProvider>
         </SavedSearchesProvider>
       </CompareKeywordProvider>
+      <ToastContainer />
       {/* <Footer /> */}
       {/* <Navbar />
       <Content>
@@ -113,3 +131,10 @@ const App = () => {
 };
 
 export default App;
+
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById("root")
+);
