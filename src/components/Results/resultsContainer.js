@@ -182,7 +182,7 @@ const exportOptions = [
   { value: "XLS", label: "XLS" },
   { value: "CSV", label: "CSV" },
   { value: "PPTL", label: "PPT Landscape" },
-  { value: "PPTP", label: "PPT Portrait" },
+  // { value: "PPTP", label: "PPT Portrait" },
 ];
 
 const ResultsCard = () => {
@@ -192,6 +192,7 @@ const ResultsCard = () => {
   const [selectedExport, setSelectedExport] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("Bio");
   const [tweets, setTweets] = useState([]);
+  const [isClickedPDF, setIsClickedPDF] = useState(false);
 
   const {
     topResultMatch,
@@ -450,59 +451,91 @@ const ResultsCard = () => {
     link.click();
   };
 
-  const MyPdf = ({ tweets }) => (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        {tweets.map((tweet, index) => (
-          <View key={index} style={styles.tweetContainer}>
-            <View style={styles.column}>
-              <Text style={styles.smallText}>Tweeted</Text>
-              <Text style={styles.text}>{tweet[0].profileData.content}</Text>
-              <Text style={styles.smallText}>
-                Published on {tweet[0].profileData.timePublished} |{" "}
-                {tweet[0].profileData.platform} |{" "}
-                {tweet[0].profileData.location} | {tweet[0].profileData.name}
-              </Text>
+  const MyPdf = ({ tweets }) => {
+    const pages = [];
+
+    for (let i = 0; i < tweets.length; i += 7) {
+      const pageTweets = tweets.slice(i, i + 7);
+      pages.push(
+        <Page key={i} size="A4" style={styles.page}>
+          {pageTweets.map((tweet, index) => (
+            <View key={index} style={styles.tweetContainer}>
+              <View style={styles.column}>
+                <Text style={styles.smallText}>Tweeted</Text>
+                <Text style={styles.text}>{tweet[0].profileData.content}</Text>
+                <Text style={styles.smallText}>
+                  Published on {tweet[0].profileData.timePublished} |{" "}
+                  {tweet[0].profileData.platform} |{" "}
+                  {tweet[0].profileData.location} | {tweet[0].profileData.name}
+                </Text>
+              </View>
+              <View style={styles.secondColumn}>
+                <Text style={[styles.smallText, styles.smallerText]}>
+                  Matches: {tweet[0].profileData.matches}
+                </Text>
+                <Text
+                  style={[
+                    styles.smallText,
+                    styles.smallerText,
+                    sentimentColor(tweet[0].profileData.sentiment),
+                  ]}
+                >
+                  Sentiment: {tweet[0].profileData.sentiment}
+                </Text>
+                <Text
+                  style={[
+                    styles.smallText,
+                    styles.boldText,
+                    styles.smallerText,
+                  ]}
+                >
+                  Engagement: {tweet[0].profileData.engagement}
+                </Text>
+                <Text style={[styles.smallText, styles.smallerText]}>
+                  Potential Reach: {tweet[0].profileData.reach}
+                </Text>
+                <Text style={[styles.smallText, styles.smallerText]}>
+                  Retweets: {tweet[0].additionalMetrics.shares}
+                </Text>
+                <Text style={[styles.smallText, styles.smallerText]}>
+                  Twitter Likes: {tweet[0].additionalMetrics.hearts}
+                </Text>
+                <Text style={[styles.smallText, styles.smallerText]}>
+                  Users: {tweet[0].additionalMetrics.users}
+                </Text>
+                <Text style={[styles.smallText, styles.smallerText]}>
+                  Trending Post: {tweet[0].profileData.trending}
+                </Text>
+              </View>
             </View>
-            <View style={styles.secondColumn}>
-              <Text style={[styles.smallText, styles.smallerText]}>
-                Matches: {tweet[0].profileData.matches}
-              </Text>
-              <Text
-                style={[
-                  styles.smallText,
-                  styles.yellowText,
-                  styles.smallerText,
-                ]}
-              >
-                Sentiment: {tweet[0].profileData.sentiment}
-              </Text>
-              <Text
-                style={[styles.smallText, styles.boldText, styles.smallerText]}
-              >
-                Engagement: {tweet[0].profileData.engagement}
-              </Text>
-              <Text style={[styles.smallText, styles.smallerText]}>
-                Potential Reach: {tweet[0].profileData.reach}
-              </Text>
-              <Text style={[styles.smallText, styles.smallerText]}>
-                Retweets: {tweet[0].additionalMetrics.shares}
-              </Text>
-              <Text style={[styles.smallText, styles.smallerText]}>
-                Twitter Likes: {tweet[0].additionalMetrics.hearts}
-              </Text>
-              <Text style={[styles.smallText, styles.smallerText]}>
-                Users: {tweet[0].additionalMetrics.users}
-              </Text>
-              <Text style={[styles.smallText, styles.smallerText]}>
-                Trending Post: {tweet[0].profileData.trending}
-              </Text>
-            </View>
-          </View>
-        ))}
-      </Page>
-    </Document>
-  );
+          ))}
+          {renderFooter(i / 7 + 1)}
+        </Page>
+      );
+    }
+
+    return <Document>{pages}</Document>;
+  };
+
+  const renderFooter = (pageNumber) => {
+    return (
+      <View style={styles.footer}>
+        <Text style={styles.footerTextLeft}>WALEE-SOCIAL SENSING </Text>
+        <Text style={styles.footerTextRight}>Page {pageNumber}</Text>
+      </View>
+    );
+  };
+
+  const sentimentColor = (sentiment) => {
+    switch (sentiment) {
+      case "Positive":
+        return styles.greenText;
+      case "Negative":
+        return styles.redText;
+      default:
+        return styles.blueText;
+    }
+  };
 
   const styles = StyleSheet.create({
     page: {
@@ -510,9 +543,9 @@ const ResultsCard = () => {
       padding: 20,
     },
     tweetContainer: {
-      marginBottom: 20,
+      marginBottom: 17,
       borderWidth: 1,
-      borderColor: "#000",
+      borderColor: "#1B95E0",
       padding: 10,
       flexDirection: "row",
       alignItems: "flex-start",
@@ -532,22 +565,53 @@ const ResultsCard = () => {
       marginBottom: 5,
     },
     text: {
-      fontSize: 12,
+      fontSize: 10,
       marginBottom: 5,
     },
     smallText: {
       fontSize: 10,
-      color: "#999",
+      color: "#777",
     },
     boldText: {
       fontWeight: "bold",
       color: "#000",
     },
-    yellowText: {
-      color: "#FFD700",
+    greenText: {
+      color: "green",
+    },
+    redText: {
+      color: "red",
+    },
+    blueText: {
+      color: "blue",
     },
     smallerText: {
       fontSize: 8,
+    },
+    footer: {
+      position: "absolute",
+      marginLeft: 40,
+      marginRight: 40,
+      bottom: 15,
+      left: 0,
+      right: 0,
+      backgroundColor: "#1B95E0",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      borderTopWidth: 1,
+      borderTopColor: "#999",
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+    },
+    footerTextLeft: {
+      fontSize: 10,
+      color: "#fff",
+      fontWeight: "bold",
+    },
+    footerTextRight: {
+      fontSize: 10,
+      color: "#fff",
     },
   });
 
@@ -558,6 +622,10 @@ const ResultsCard = () => {
       }
     </PDFDownloadLink>
   );
+
+  // const handleDownloadClick = () => {
+  //   setIsClickedPDF(true);
+  // };
 
   const exportToCSV = (tweets) => {
     const csvData = tweets.map((data, index) => ({
@@ -870,10 +938,12 @@ const ResultsCard = () => {
               onChange={handleExportChange}
               value={selectedExport}
             />
+            {/* && !isClickedPDF  */}
             {selectedExport === "PDF" && (
               <PDFDownloadLink
                 document={<MyPdf tweets={tweets} />}
                 fileName="tweets.pdf"
+                // onClick={handleDownloadClick}
               >
                 {({ loading }) =>
                   loading ? "Loading document..." : "Download now!"
