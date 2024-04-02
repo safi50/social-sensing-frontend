@@ -1,10 +1,15 @@
-import { useState, React } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom"; // Import useLocation hook to access URL parameters
 import styles from "./changepassword.module.css";
 import CustomButton from "../customButton/customButtom.component";
 import HideIcon from "../../assets/hidePassword.svg";
 import ViewIcon from "../../assets/showPassword.svg";
 import changepasswordlogo from "../../assets/change-password.svg";
 import waleeLogo from "../../assets/walee-logo.png";
+import axios from 'axios'; // Import Axios to make HTTP requests
+import {API_URL} from "../../utils/api"; 
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({
@@ -14,9 +19,19 @@ const ChangePassword = () => {
   const [formErrors, setFormErrors] = useState({});
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  const [userToken, setUserToken] = useState(""); // Declare userToken state variable
+  const location = useLocation(); // Access location object to get URL parameters
+  const navigate = useNavigate(); 
+
+  // Extract token from URL parameter when component mounts
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    setUserToken(token); // Store the token in state
+  }, [location]);
 
   // Validating Fields of Sign In Form
-  const ValidateForm = (name, value) => {
+  const validateForm = (name, value) => {
     let errors = { ...formErrors };
 
     if (name === "password") {
@@ -44,7 +59,7 @@ const ChangePassword = () => {
       ...prevFormData,
       [name]: value,
     }));
-    ValidateForm(name, value);
+    validateForm(name, value);
   };
 
   // Toggling Password Visibility
@@ -56,9 +71,58 @@ const ChangePassword = () => {
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
   };
 
+  const handleResetPassword = async () => {
+  
+    try {
+      const response = await axios.post(API_URL + "/user/updatePassword", {
+        newPassword: formData.password,
+        token: userToken,
+      });
+  
+      console.log(response.data); 
+      if (response.status === 200) {
+        navigate("/signin"); 
+        toast.success("Password updated Successfully.", {
+          position: "top-center",
+          autoClose: 3000,
+          style: { fontSize: "1.3rem" },
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+        }); 
+      }
+     
+
+    } catch (error) {
+      if (error.response.status === 401) {
+        toast.error("Invalid or expired token. Try Again!", {
+          position: "top-center",
+          autoClose: 3000,
+          style: { fontSize: "1.3rem" },
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+        });
+      } else {
+      toast.error("An error occurred. Please try again later.", 
+      {
+        position: "top-center",
+        autoClose: 3000,
+        style: { fontSize: "1.3rem" },
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+      });
+    }
+    }
+  }
+
   return (
     <>
-      <div  className={styles.changepass_div}>
+      <div className={styles.changepass_div}>
         <img
           src={waleeLogo}
           alt="walee logo"
@@ -141,10 +205,10 @@ const ChangePassword = () => {
         </div>
 
         <div className={styles.bottom_container}></div>
-        <CustomButton className="customButton" text="Change Password" />
+        <CustomButton className="customButton" text="Change Password" onClick={handleResetPassword} />
         <div className={styles.bottomText} style={{ marginTop: "120px" }}>
           Back to
-          <span className={styles.textButton}>Sign in</span>
+          <span className={styles.textButton} onClick={() => navigate('/signin')}>Sign in</span>
         </div>
       </div>
     </>

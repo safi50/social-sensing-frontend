@@ -8,6 +8,9 @@ import CrossIcon from "../../assets/cross.svg";
 import HideIcon from "../../assets/hidePassword.svg";
 import ViewIcon from "../../assets/showPassword.svg";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {API_URL} from '../../utils/api';
+
 
 const SignUp = () => (
   <OnboardingCard>
@@ -21,7 +24,7 @@ const SignUpContent = () => {
     firstname: "",
     lastname: "",
     email: "",
-    company: "",
+    companyName: "",
     password: "",
     confirmPassword: "",
   });
@@ -114,20 +117,47 @@ const SignUpContent = () => {
 
   useEffect(() => {
     const handleCapsLock = (e) => {
-      const isCapsLockOn = e.getModifierState("CapsLock");
-      setIsCapsLock(isCapsLockOn);
+      if (e instanceof KeyboardEvent) {
+        const isCapsLockOn = e.getModifierState("CapsLock");
+        setIsCapsLock(isCapsLockOn);
+      }
     };
-
+  
     // Add event listeners for keydown and keyup
     document.addEventListener("keydown", handleCapsLock);
     document.addEventListener("keyup", handleCapsLock);
-
+  
     // Remove the event listeners when the component unmounts
     return () => {
       document.removeEventListener("keydown", handleCapsLock);
       document.removeEventListener("keyup", handleCapsLock);
     };
   }, []);
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log(formData);
+      const response = await axios.post( API_URL + '/user/register', {
+      firstName: formData.firstname,
+      lastName: formData.lastname,
+      companyName: formData.companyName,
+      email: formData.email,
+      password: formData.password
+    });
+    if (response.status === 200) {
+      // Registration successful, redirect to another page
+      navigate('/searchPage');
+    } else {
+      // Handle other response statuses or errors
+      console.error('Registration failed:', response.statusText);
+    }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
 
   return (
     <>
@@ -185,11 +215,11 @@ const SignUpContent = () => {
         <div className="form-field">
           <label htmlFor="company">Company Name(Optional)</label>
           <input
-            name="company"
-            id="company"
+            name="companyName"
+            id="companyName"
             type="text"
             placeholder="Walee"
-            value={formData.company}
+            value={formData.companyName}
             onChange={handleChange}
           />
         </div>
@@ -236,6 +266,9 @@ const SignUpContent = () => {
               ))}
             </div>
           )}
+           {iscapslock && ( passwordFocused) && (
+            <span className="capslock-message">Caps lock is on</span>
+          )}
         </div>
         <div className="form-field">
           <label htmlFor="confirm-password">Confirm Password</label>
@@ -260,7 +293,7 @@ const SignUpContent = () => {
             />
           </div>
 
-          {iscapslock && (confirmPasswordFocused || passwordFocused) && (
+          {iscapslock && (confirmPasswordFocused) && (
             <span className="capslock-message">Caps lock is on</span>
           )}
 
@@ -269,7 +302,7 @@ const SignUpContent = () => {
           )}
         </div>
       </div>
-      <CustomButton text="Sign Up" onClick={() => {navigate('/searchPage')}}/>
+      <CustomButton text="Sign Up" onClick={handleSubmit} />
       <div className="bottomText">
         Already have an account?
         <span className="textButton" onClick={() => {navigate('/signin')}}>Sign In</span>

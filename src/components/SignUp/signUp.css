@@ -40,6 +40,9 @@ h1 {
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 10px;
+    font-size: 1.3rem;
+    font-weight: 300;
+
   }
   
   /* Styles for the side-by-side input fields */

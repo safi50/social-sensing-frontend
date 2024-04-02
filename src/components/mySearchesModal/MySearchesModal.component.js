@@ -14,45 +14,54 @@ import { Pagination } from "@mui/material";
 import MySearchesItem from "../MySearchesItem/MySearchesItem.component";
 import { DropdownIcon } from "../worldwideDropdown/worldwideDropdown.styles";
 import { SavedSearchesContext } from "../../contexts/SavedSearches.context";
+import axios from 'axios';
+import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode";
+import { API_URL } from "../../utils/api";
 
 const MySearchModal = ({
   show,
   handleClose,
-  saveSearches,
   handleEditSearch,
   handleDeleteSearch,
 }) => {
   const { mySavedSearches, setMySavedSearches } = useContext(SavedSearchesContext)
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(
-    parseInt((saveSearches.length - 1) / rowsPerPage) + 1
-  );
+  const [totalPages, setTotalPages] = useState(1);
+  const [cookies] = useCookies(["token"]);
+  const [searchView, setSearchView] = useState([]);
+  
 
-  const [searchView, setSearchView] = useState(
-    saveSearches.slice(0, rowsPerPage)
-  );
+  useEffect(() => {
+    const fetchSavedSearches = async () => {
+      try {
+        const token = cookies.token;
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.id;
+        const response = await axios.get(`${API_URL}/search/getSearches?userId=${userId}`, {
+          withCredentials: true,
+        });
+      
+        setMySavedSearches(response.data.searches);
+        setTotalPages(Math.ceil(response.data.searches.length / rowsPerPage));
+      } catch (error) {
+        console.error("Error fetching saved searches:", error);
+      }
+    };
+    fetchSavedSearches();
+  }, [cookies.token, rowsPerPage, mySavedSearches, setMySavedSearches]);
 
-  const updateSearchView = () => {
-    setSearchView(
-      saveSearches.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-      )
-    );
-  };
+  useEffect(() => {
+  }, [currentPage, mySavedSearches, rowsPerPage]);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
-    setSearchView(
-      saveSearches.slice((newPage - 1) * rowsPerPage, newPage * rowsPerPage)
-    );
   };
 
   const handleRowsPerPageChange = (number) => {
     setRowsPerPage(number);
-    setTotalPages(parseInt((saveSearches.length - 1) / number) + 1);
-    setSearchView(saveSearches.slice(0, number));
+    setCurrentPage(1);
   };
 
   const RowsPerPageDropdown = () => (
@@ -75,14 +84,7 @@ const MySearchModal = ({
       ))}
     </StyledDropdown>
   );
-  useEffect(() => {
-    setTotalPages(parseInt((saveSearches.length - 1) / rowsPerPage) + 1)
-      }, [saveSearches]);
 
-  useEffect(() => {
-    updateSearchView();
-  }, [saveSearches, rowsPerPage]);
-  
   return (
     <>
       <Modal
@@ -97,12 +99,12 @@ const MySearchModal = ({
             </Modal.Title>
           </ModalHeader>
           <ModalBody>
-            {searchView.map((item) => (
+            {mySavedSearches.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage).map((item) => (
               <MySearchesItem
-                key={item.id}
+                key={item._id}
                 item={item}
                 handleEditSearch={handleEditSearch}
-                handleDeleteSearch={handleDeleteSearch}
+                handleDeleteSearch={() => handleDeleteSearch(item._id)} 
               />
             ))}
             <FooterContainer>
