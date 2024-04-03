@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { API_URL } from "../../utils/api";
 import axios from 'axios';
 
+
 const SignIn = () => (
   <OnboardingCard>
     <SignInContent />
@@ -30,6 +31,7 @@ const SignInContent = () => {
 
   const navigate = useNavigate();
 
+
   useEffect(() => {
     const handleCapsLock = (e) => {
       if (e instanceof KeyboardEvent) {
@@ -37,7 +39,7 @@ const SignInContent = () => {
         setIsCapsLock(isCapsLockOn);
       }
     };
-  
+
     // Add event listeners for keydown and keyup
     document.addEventListener("keydown", handleCapsLock);
     document.addEventListener("keyup", handleCapsLock);
@@ -106,12 +108,16 @@ const SignInContent = () => {
         console.error("Form is invalid");
         return;
       }
-  
       // Proceed with login if no errors
       const response = await axios.post( API_URL + '/user/login', formData, {
-        withCredentials: true
+        withCredentials: true,
     });
           if (response.status === 200) {
+      const { token } = response.data;
+      
+      // Storing token in cookies
+      document.cookie = `token=${token}; max-age=86400; path=/;`;
+
         console.log('Login successful');
         navigate('/searchPage');
       }
