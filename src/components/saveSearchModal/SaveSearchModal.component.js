@@ -23,14 +23,10 @@ const SaveSearchModal = ({show, handleClose, addToDataset})=>{
 
     const handleSaveSearch = async (name)=>{ 
         try {
- 
 
-       const token = cookies;
-        console.log("Token is : " , token);
+       const token = cookies['token'];
         const decodedToken = jwtDecode(token);
-        console.log("Decoded Token is : " , decodedToken);
         const userId = decodedToken.id;
-        console.log("ID Is : " , userId);
         const data = {
             userId: userId,
             name: name,
