@@ -23,10 +23,14 @@ const SaveSearchModal = ({show, handleClose, addToDataset})=>{
 
     const handleSaveSearch = async (name)=>{ 
         try {
-        // addToDataset(name, contextFilters.eventNames, contextFilters.eventQueries)
-        const token = cookies.token;
+ 
+
+       const token = cookies;
+        console.log("Token is : " , token);
         const decodedToken = jwtDecode(token);
+        console.log("Decoded Token is : " , decodedToken);
         const userId = decodedToken.id;
+        console.log("ID Is : " , userId);
         const data = {
             userId: userId,
             name: name,
@@ -34,6 +38,7 @@ const SaveSearchModal = ({show, handleClose, addToDataset})=>{
             hashtags: contextFilters.eventQueries,
             region: "None",
         }
+        console.log(data);
         const response = await axios.post(`${API_URL}/search/saveSearch`, data, {
             withCredentials: true,
         });
@@ -54,7 +59,7 @@ const SaveSearchModal = ({show, handleClose, addToDataset})=>{
         handleClose();
     }
     catch (error){
-        toast.error("Search could not be saved",
+        toast.error(error.response.data.message || "An error occurred while saving search",
         {
             position: "top-right",
             autoClose: 3000,

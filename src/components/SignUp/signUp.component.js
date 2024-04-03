@@ -147,6 +147,10 @@ const SignUpContent = () => {
       password: formData.password
     });
     if (response.status === 200) {
+      const { token } = response.data;
+      
+      // Storing token in cookies
+      document.cookie = `token=${token}; max-age=86400; path=/;`;
       // Registration successful, redirect to another page
       navigate('/searchPage');
     } else {
