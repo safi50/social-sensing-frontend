@@ -3,6 +3,11 @@ import { ModalTitle, ModalHeader, ModalBody, SaveSearchBarContainer, SaveSearchI
 import Modal from 'react-bootstrap/Modal';
 import { DownloadButton } from "../dashboard/Dashboard.styles";
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
+import { API_URL } from "../../utils/api";
+import axios from 'axios';
+import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
+import {jwtDecode} from "jwt-decode";
 
 
 const SaveSearchModal = ({show, handleClose, addToDataset})=>{
@@ -13,9 +18,58 @@ const SaveSearchModal = ({show, handleClose, addToDataset})=>{
         filters: contextFilters,
         setFilters: setContextFilters,
       } = useContext(CompareKeywordContext);
+      const [cookies] = useCookies(["token"]);
 
-    const handleSaveSearch = (name)=>{
-        addToDataset(name, contextFilters.eventNames, contextFilters.eventQueries)
+
+    const handleSaveSearch = async (name)=>{ 
+        try {
+
+       const token = cookies['token'];
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.id;
+        const data = {
+            userId: userId,
+            name: name,
+            labels: contextFilters.eventNames,
+            hashtags: contextFilters.eventQueries,
+            region: "None",
+        }
+        console.log(data);
+        const response = await axios.post(`${API_URL}/search/saveSearch`, data, {
+            withCredentials: true,
+        });
+
+        if(response.status === 200){
+            toast.success("Search Saved Successfully",
+            {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                style: {fontSize: '1.3rem'}
+            })
+        }
+        handleClose();
+    }
+    catch (error){
+        toast.error(error.response.data.message || "An error occurred while saving search",
+        {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            style: {fontSize: '1.3rem'}
+
+        })
+    }
+
+
     }
 
     return (

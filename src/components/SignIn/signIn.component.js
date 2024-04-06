@@ -1,10 +1,14 @@
 import { useState, React } from "react";
+import { useEffect } from "react";
 import OnboardingCard from "../onBoardingCard/onBoardingCard.component";
 import "./signIn.css";
 import CustomButton from "../customButton/customButtom.component";
 import HideIcon from "../../assets/hidePassword.svg";
 import ViewIcon from "../../assets/showPassword.svg";
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from "../../utils/api";
+import axios from 'axios';
+
 
 const SignIn = () => (
   <OnboardingCard>
@@ -21,8 +25,32 @@ const SignInContent = () => {
   });
   const [formErrors, setFormErrors] = useState({});
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [iscapslock, setIsCapsLock] = useState(false);
+    const [passwordFocused, setPasswordFocused] = useState(false);
+
 
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const handleCapsLock = (e) => {
+      if (e instanceof KeyboardEvent) {
+        const isCapsLockOn = e.getModifierState("CapsLock");
+        setIsCapsLock(isCapsLockOn);
+      }
+    };
+
+    // Add event listeners for keydown and keyup
+    document.addEventListener("keydown", handleCapsLock);
+    document.addEventListener("keyup", handleCapsLock);
+  
+    // Remove the event listeners when the component unmounts
+    return () => {
+      document.removeEventListener("keydown", handleCapsLock);
+      document.removeEventListener("keyup", handleCapsLock);
+    };
+  }, []);
+  
 
   // Validating Fields of Sign In Form
   const ValidateForm = (name, value) => {
@@ -60,6 +88,46 @@ const SignInContent = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const errors = {};
+      // Check for form errors
+      if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+        errors.email = "Please enter a valid email address";
+      }
+      if (!formData.password) {
+        errors.password = "Password field cannot be empty.";
+      }
+  
+      // Set form errors
+      setFormErrors(errors);
+  
+      // If there are errors, stop form submission
+      if (Object.keys(errors).length > 0) {
+        console.error("Form is invalid");
+        return;
+      }
+      // Proceed with login if no errors
+      const response = await axios.post( API_URL + '/user/login', formData, {
+        withCredentials: true,
+    });
+          if (response.status === 200) {
+      const { token } = response.data;
+      
+      // Storing token in cookies
+      document.cookie = `token=${token}; max-age=86400; path=/;`;
+
+        console.log('Login successful');
+        navigate('/searchPage');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setFormErrors({ server: error.response.data });
+    }
+  };
+  
+  
   return (
     <>
       <h1>Sign In</h1>
@@ -95,6 +163,8 @@ const SignInContent = () => {
               type={isPasswordVisible ? "text" : "password"}
               placeholder="********"
               value={formData.password}
+              onFocus={() => setPasswordFocused(true)}
+              onBlur={() => setPasswordFocused(false)}
               onChange={handleChange}
               className={formErrors.password ? "input-warning" : ""}
             />
@@ -107,6 +177,12 @@ const SignInContent = () => {
           </div>
           {formErrors.password && (
             <small className="warning-text">{formErrors.password}</small>
+          )}
+          {iscapslock && ( passwordFocused) && (
+            <span className="capslock-message">Caps lock is on</span>
+          )}
+          {formErrors.server && (
+            <small className="warning-text">{formErrors.server}</small>
           )}
         </div>
       </div>
@@ -121,7 +197,8 @@ const SignInContent = () => {
           Forgot Password?
         </a>
       </div>
-      <CustomButton className="customButton" text="Sign In" onClick={() => {navigate('/searchPage')}}/>
+      <CustomButton className="customButton" text="Sign In" onClick={handleSubmit} />
+
       <div className="bottomText">
         Need a new account?
         <span className="textButton" onClick={()=>{navigate('/signup')}}>Sign Up</span>

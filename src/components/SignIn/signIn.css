@@ -34,7 +34,6 @@ h1 {
     flex-direction: column;
     width: 100%;
     margin-bottom: 1rem;
-    /* Space between each form field */
 }
 
 /* Styles for individual labels */
@@ -54,6 +53,10 @@ h1 {
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 10px;
+    font-size: 1.3rem;
+    font-weight: 300;
+
+
 }
 
 .input-with-icon {

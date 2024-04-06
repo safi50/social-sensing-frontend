@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 import pptxgen from "pptxgenjs";
 import styled from "styled-components";
-import { useState, useContext, useMemo, useEffect } from "react";
+import { useState, useContext, useMemo } from "react";
 import ResultCard from "./resultCard";
 import ResultCardCompact from "./resultCardCompact";
 import ResultCardStory from "./resultCardStory";
@@ -28,8 +28,6 @@ import {
   StyleSheet,
   PDFDownloadLink,
 } from "@react-pdf/renderer";
-import FirstPage from "./firstPagePDF";
-// import { color } from "html2canvas/dist/types/css/types/color";
 
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
@@ -179,12 +177,12 @@ const customStyles = {
 };
 
 const exportOptions = [
-  { value: "Normal", label: "Normal" },
+  // { value: "Normal", label: "Normal" },
   { value: "PDF", label: "PDF" },
   { value: "XLS", label: "XLS" },
   { value: "CSV", label: "CSV" },
-  // { value: "PPTL", label: "PPT Landscape" },
-  { value: "PPTP", label: "PPT" },
+  { value: "PPTL", label: "PPT Landscape" },
+  // { value: "PPTP", label: "PPT Portrait" },
 ];
 
 const ResultsCard = () => {
@@ -194,7 +192,6 @@ const ResultsCard = () => {
   const [selectedExport, setSelectedExport] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("Bio");
   const [tweets, setTweets] = useState([]);
-  const [isClickedPDF, setIsClickedPDF] = useState(false);
 
   const {
     topResultMatch,
@@ -410,45 +407,39 @@ const ResultsCard = () => {
       exportToCSV(tweets);
     } else if (selectedExport === "PPTP") {
       exportToPPTP(tweets);
-    } else if (selectedExport === "Normal") {
-      exportNormal(tweets);
     }
+    // } else if (selectedExport === "Normal") {
+    //   generateNormalExportJson(tweets);
+    // }
   };
 
-  const exportNormal = (tweets) => {
-    // Convert tweet data to a string
-    const tweetDataString = tweets
-      .map((tweet, index) => {
-        const profileData = tweet[0].profileData;
-        const additionalMetrics = tweet[0].additionalMetrics;
-        return (
-          `${index + 1}) ` +
-          `${profileData.handle || ""},` +
-          `${profileData.name || ""},` +
-          `${profileData.matches || ""},` +
-          `${profileData.content || ""},` +
-          `${profileData.sentiment || ""},` +
-          `${profileData.timePublished || ""},` +
-          `${profileData.location || ""},` +
-          `${profileData.platform || ""},` +
-          `${profileData.engagement || ""},` +
-          `${profileData.reach || ""},` +
-          `${profileData.trending || ""},` +
-          `${additionalMetrics.hearts || ""},` +
-          `${additionalMetrics.shares || ""},` +
-          `${additionalMetrics.users || ""}`
-        );
-      })
-      .join("\n");
+  // const generateNormalExportJson = (tweets) => {
+  //   const normalExportData = tweets.map((tweet, index) => ({
+  //     Tweet: index + 1,
+  //     Handle: tweet[0].profileData.handle,
+  //     Name: tweet[0].profileData.name,
+  //     Matches: tweet[0].profileData.matches,
+  //     Content: tweet[0].profileData.content,
+  //     Sentiment: tweet[0].profileData.sentiment,
+  //     TimePublished: tweet[0].profileData.timePublished,
+  //     Location: tweet[0].profileData.location,
+  //     Platform: tweet[0].profileData.platform,
+  //     Engagement: tweet[0].profileData.engagement,
+  //     Reach: tweet[0].profileData.reach,
+  //     Trending: tweet[0].profileData.trending,
+  //     Hearts: tweet[0].additionalMetrics.hearts,
+  //     Shares: tweet[0].additionalMetrics.shares,
+  //     Users: tweet[0].additionalMetrics.users,
+  //   }));
 
-    const blob = new Blob([tweetDataString], { type: "text/plain" });
-
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "export.txt";
-
-    link.click();
-  };
+  //   const jsonData = JSON.stringify(normalExportData, null, 2);
+  //   const blob = new Blob([jsonData], { type: "application/json" });
+  //   const url = URL.createObjectURL(blob);
+  //   const a = document.createElement("a");
+  //   a.href = url;
+  //   a.download = "tweets.json";
+  //   a.click();
+  // };
 
   const MyPdf = ({ tweets }) => {
     const pages = [];
@@ -622,12 +613,9 @@ const ResultsCard = () => {
     </PDFDownloadLink>
   );
 
-  const handleDownloadClick = () => {
-    setTimeout(() => {
-      setSelectedExport("");
-      setIsClickedPDF(true);
-    }, 5000);
-  };
+  // const handleDownloadClick = () => {
+  //   setIsClickedPDF(true);
+  // };
 
   const exportToCSV = (tweets) => {
     const csvData = tweets.map((data, index) => ({
@@ -642,6 +630,7 @@ const ResultsCard = () => {
       Engagement: data[0].profileData.engagement,
       Reach: data[0].profileData.reach,
       Trending: data[0].profileData.trending,
+
       Hearts: data[0].additionalMetrics.hearts,
       Shares: data[0].additionalMetrics.shares,
       Users: data[0].additionalMetrics.users,
@@ -808,11 +797,12 @@ const ResultsCard = () => {
               onChange={handleExportChange}
               value={selectedExport}
             />
-            {selectedExport === "PDF" && !isClickedPDF && (
+            {/* && !isClickedPDF  */}
+            {selectedExport === "PDF" && (
               <PDFDownloadLink
                 document={<MyPdf tweets={tweets} />}
                 fileName="tweets.pdf"
-                onClick={handleDownloadClick}
+                // onClick={handleDownloadClick}
               >
                 {({ loading }) =>
                   loading ? "Loading document..." : "Download now!"
