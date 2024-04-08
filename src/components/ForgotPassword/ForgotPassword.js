@@ -1,9 +1,15 @@
-import { useState, React } from "react";
+import React, { useState } from "react";
 import OnboardingCard from "../onBoardingCard/onBoardingCard.component";
 import CustomButton from "../customButton/customButtom.component";
 import ForgotPasswordIcon from "../../assets/forgot-password.svg";
+import CheckEmail from "../CheckEmail/CheckEmail";
 import styles from "./forgotpassword.module.css";
 import { useNavigate } from 'react-router-dom';
+
+import axios from 'axios';
+import { toast } from "react-toastify";
+import {API_URL} from "../../utils/api";
+
 
 const ForgotPassword = () => (
   <OnboardingCard>
@@ -17,11 +23,11 @@ const ForgotPasswordContent = () => {
   const [formData, setFormData] = useState({
     email: "",
   });
-  const [formErrors, setFormErrors] = useState({});
-
+  const [formErrors, setFormErrors] = useState({});  
   const navigate = useNavigate();
+
   // Validating Fields of Sign In Form
-  const ValidateForm = (name, value) => {
+  const validateForm = (name, value) => {
     let errors = { ...formErrors };
 
     if (name === "email") {
@@ -40,7 +46,29 @@ const ForgotPasswordContent = () => {
       ...prevFormData,
       [name]: value,
     }));
-    ValidateForm(name, value);
+    validateForm(name, value);
+  };
+
+  const handleResetPassword = async () => {
+    try {
+      // Send email to backend for password reset
+      const response = await axios.post( API_URL + '/auth/sendEmail', { email: formData.email });
+      if (response.status === 200) {
+        navigate("/checkEmail", { state: { email: formData.email } });
+      
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred. Please try again later.", {
+        position: "top-center",
+        autoClose: 3000,
+        style: { fontSize: "1.3rem" },
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+      });
+    }
   };
 
   return (
@@ -75,10 +103,10 @@ const ForgotPasswordContent = () => {
         </div>
       </div>
 
-      <CustomButton className="customButton" text="Reset Password" onClick={() => {navigate('/reset')}}/>
+      <CustomButton className="customButton" text="Reset Password" onClick={handleResetPassword}/>
       <div className={styles.bottomText}>
         Back to
-        <span className={styles.textButton} onClick={() => {navigate('/signin')}}>Sign in</span>
+        <span className={styles.textButton} onClick={() => navigate('/signin')}>Sign in</span>
       </div>
     </>
   );
