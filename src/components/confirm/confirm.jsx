@@ -8,6 +8,8 @@ import {
   ImagesContainer,
 } from "./comfirm.styles";
 
+
+// user verifies their email from this page
 export const Confirm = () => {
   return (
     <ConfirmContainer>

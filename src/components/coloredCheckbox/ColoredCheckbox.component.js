@@ -1,6 +1,7 @@
 import React from "react";
 import {CheckboxContainer, HiddenCheckbox, StyledCheckbox, CheckboxIcon} from './ColoredCheckbox.styles'
 
+// custome checkbox with purple background and white tick
 const ColoredCheckbox = ({ className, checked, ...props }) => (
     <CheckboxContainer className={className}>
       <HiddenCheckbox checked={checked} {...props} />

@@ -51,7 +51,7 @@ const InfoText = styled.p`
   color: #6631f7;
 `;
 
-// The actual Card component
+// Card showing variou inforamtion on dashboard like "Sentiments", "Reach", etc.
 const Card = ({ image, title, infoText, percentage }) => {
   return (
     <CardContainer>
