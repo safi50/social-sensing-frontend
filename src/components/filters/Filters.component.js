@@ -12,7 +12,7 @@ const FilterSearchBar = () =>{
 }
 
 
-
+// Sidebar showing all the filters
 const Filters = () => {
     const [sentimentOpen, setSentimentOpen] = useState(true)
     const [mediaOpen, setMediaOpen] = useState(true)

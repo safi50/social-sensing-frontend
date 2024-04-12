@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import {API_URL} from "../../utils/api";
 
 
+// componenet to ask user of the email inorder to change password
 const ForgotPassword = () => (
   <OnboardingCard>
     <ForgotPasswordContent />
@@ -49,9 +50,9 @@ const ForgotPasswordContent = () => {
     validateForm(name, value);
   };
 
+  // Send email to backend for password reset
   const handleResetPassword = async () => {
     try {
-      // Send email to backend for password reset
       const response = await axios.post( API_URL + '/auth/sendEmail', { email: formData.email });
       if (response.status === 200) {
         navigate("/checkEmail", { state: { email: formData.email } });

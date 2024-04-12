@@ -138,6 +138,8 @@ const Icon = styled.img`
 //   reach: "2.1K",
 // };
 
+
+// display tweets results in "story" design
 const ResultCardStory = ({data}) => {
   return (
     <StoryContainer>

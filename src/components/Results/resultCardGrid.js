@@ -94,6 +94,8 @@ const ImageSection = styled.div`
 //   reach: "2.1K",
 // };
 
+
+// display tweets result in Grid form
 const ResultCardGrid = ({ data }) => {
   return (
     <StoryContainer>

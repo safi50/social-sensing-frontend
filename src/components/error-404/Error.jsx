@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+
+// page not found componenet
 export const Error = () => {
   const Container = styled.div`
     display: flex;

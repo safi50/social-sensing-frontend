@@ -3,6 +3,7 @@ import { generateData } from "./dummyData";
 
 export const CompareKeywordContext = createContext();
 
+// React Context for storing data for all the keywords
 export const CompareKeywordProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({

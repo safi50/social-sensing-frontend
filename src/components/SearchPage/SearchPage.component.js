@@ -7,6 +7,8 @@ import Navbar from "../navbar/Navbar.component";
 import { CompareKeywordContext } from '../../contexts/CompareKeyword.context';
 import { useNavigate } from 'react-router-dom';
 
+
+// componenet to show search page for user to enter theri keyword search
 const SearchPage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");

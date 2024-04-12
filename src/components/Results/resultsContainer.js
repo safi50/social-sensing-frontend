@@ -205,6 +205,7 @@ const ResultsCard = () => {
   } = useContext(TopResultsFilterContext);
   const { data } = useContext(CompareKeywordContext);
 
+  // get random time value
   const generateRandomTime = () => {
     let randomTime = Math.floor(Math.random() * 24); // Random hour
     if (randomTime < 10) {
@@ -217,6 +218,8 @@ const ResultsCard = () => {
     return randomHourString;
   };
 
+
+  // generate tweets with random names and time
   const generateRandomTweetsNormal = () => {
     const sentiments = ["Positive", "Negative", "Neutral"];
     const profiles = [
@@ -226,17 +229,19 @@ const ResultsCard = () => {
     ];
 
     const tweets = [];
-    // applying query filter
+    // applying keyword filter
     const matchedData = data.filter((match) => match.name === topResultMatch);
     if (!matchedData.length) return [];
 
+    // filter tweets based on sentiment
     const matchedResult = matchedData[0].tweets[0].data.filter((match, idx) => {
-      return topResultSentiment.toLowerCase() === "none"
+      return topResultSentiment.toLowerCase() === "none" // select all sentiment tweets
         ? true
         : matchedData[0].tweetsSentiments[idx].toLowerCase() ===
             topResultSentiment.toLowerCase();
     });
 
+    // selecting tweets in the time range specified
     const timeMatch = matchedResult.filter((match) => {
       if (topResultRange.toLowerCase() === "none") return true;
 
@@ -351,18 +356,15 @@ const ResultsCard = () => {
             convertStringResultsToNumber(a[0].profileData.engagement)
           );
         case "PotentialReach":
-          // Assuming 'reach' is a sortable property in profileData
           return (
             convertStringResultsToNumber(b[0].profileData.reach) -
             convertStringResultsToNumber(a[0].profileData.reach)
           );
         case "TrendingScore":
-          // Assuming 'trending' is a sortable property in profileData
           return (
             convertStringResultsToNumber(b[0].profileData.trending) -
             convertStringResultsToNumber(a[0].profileData.trending)
           );
-        // Add more cases for other sorting options
         case "CommentCount":
           return (
             convertStringResultsToNumber(b[0].additionalMetrics.shares) -
@@ -394,6 +396,7 @@ const ResultsCard = () => {
     setSelectedTheme(event.target.value);
   };
 
+  // export the results into a specific file format
   const handleExportChange = (selectedOption) => {
     if (!selectedOption) return;
 
@@ -756,6 +759,8 @@ const ResultsCard = () => {
       totalReach += tweet[0].profileData.reach;
     });
 
+
+    // make presentation slides for the resutls page
     let pres = new pptxgen();
     let slide = pres.addSlide();
 
@@ -968,6 +973,7 @@ const ResultsCard = () => {
         )}
       </OuterRow>
 
+      {/* Display the results in various designs */}
       {activeTab === "topResults" && (
         <div>
           {sortedTweets.map((data, index) => (

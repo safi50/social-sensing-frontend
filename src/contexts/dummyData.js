@@ -21,6 +21,7 @@ const getMonthName = (monthIndex) => {
   return months[monthIndex];
 };
 
+// makes an array that contains the last 7 days date
 const generateLastDaysArray = () => {
   const today = new Date(TempInitialDate);
   const lastDays = [];
@@ -34,6 +35,7 @@ const generateLastDaysArray = () => {
   return lastDays;
 };
 
+// makes an array that contains the last 24 hours
 const generateLast24HoursArray = () => {
   const now = new Date(TempInitialDate);
   const last24Hours = [];
@@ -55,8 +57,9 @@ function randomData(min, max, count) {
     () => Math.floor(Math.random() * (max - min + 1)) + min
   );
 }
+
 export const getTwitterTweets = async (myQuery) => {
-  // call twitter api
+  // Get data from mongodDB in "Dev" mode
   if (Operation == "Dev"){
     const response = await axios.get(
       "https://lda-iwz8.onrender.com/get_random_tweets"
@@ -245,7 +248,6 @@ const SentimentResultsOver24Hours = (
   sentimentFilter
 ) => {
   // preprocessing of current tweet data to get last 24 hours of data
-  // return [...] // 24 numbers returned
   const hoursCount = Array(24).fill(0); // Initialize counts for each hour
   const now = new Date(TempInitialDate);
 
@@ -257,7 +259,6 @@ const SentimentResultsOver24Hours = (
       hoursCount[23 - diffInHours]++; // Subtract from 23 to get the correct index (0 to 23)
     }
   });
-  // return randomData(finalLower, finalUpper, 24)
   return hoursCount;
 };
 
@@ -267,7 +268,6 @@ const SentimentResultsOver7Days = (
   sentimentFilter
 ) => {
   // preprocessing of current tweet data to get last 7 days of data
-  // return [...] // 24 numbers returned
   const daysCount = Array(7).fill(0); // Initialize counts for each day
   const now = new Date(TempInitialDate);
   now.setHours(0, 0, 0, 0); // Normalize current time to the start of the current day
@@ -284,7 +284,6 @@ const SentimentResultsOver7Days = (
   });
 
   return daysCount;
-  // return randomData(finalLower, finalUpper, 7)
 };
 
 const getTotalResultsFromApi = (query, tweetData) => {

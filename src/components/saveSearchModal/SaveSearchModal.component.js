@@ -10,6 +10,7 @@ import { useCookies } from "react-cookie";
 import {jwtDecode} from "jwt-decode";
 
 
+// save the current keyword searches 
 const SaveSearchModal = ({show, handleClose, addToDataset})=>{
     const [name, setName] = useState("")
     const {
@@ -23,7 +24,6 @@ const SaveSearchModal = ({show, handleClose, addToDataset})=>{
 
     const handleSaveSearch = async (name)=>{ 
         try {
-
        const token = cookies['token'];
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;

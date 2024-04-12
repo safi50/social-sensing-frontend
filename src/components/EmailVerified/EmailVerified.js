@@ -5,6 +5,8 @@ import emailverifiedlogo from "../../assets/email-verified.svg";
 import waleeLogo from "../../assets/walee-logo.png";
 import { useNavigate } from 'react-router-dom';
 
+
+// Component to show confirmation that email has been verified 
 const EmailVerified = () => {
   const navigate = useNavigate();
   return (

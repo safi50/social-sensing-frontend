@@ -29,11 +29,13 @@ const Navbar = () => {
     filters: contextFilters,
   } = useContext(CompareKeywordContext);
 
+  // hide and show filters
   const toggleFilters = () => {
     setShowNotifications(false)
     setShowFilters(prevShowFilters => !prevShowFilters);
   };
 
+  // hide and show notifications
   const toggleNotifications = () => {
     setShowFilters(false)
     setShowNotifications(prevShowNotifications => !prevShowNotifications);
