@@ -73,149 +73,9 @@ import {jwtDecode} from "jwt-decode";
 import { toast } from "react-toastify";
 
 
-export const savedSearches = [
-  // {
-  //   id: "0",
-  //   name: "car show",
-  //   date: "Jan 02, 2022",
-  //   region: "Islamabad",
-  //   hashtags: ["#Islamabad", "#Lahore"],
-  // },
-  // {
-  //   id: "1",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-  // {
-  //   id: "2",
-  //   name: "car show",
-  //   date: "Jan 02, 2022",
-  //   region: "Islamabad",
-  //   hashtags: ["#Islamabad", "#Lahore"],
-  // },
-  // {
-  //   id: "3",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-  // {
-  //   id: "4",
-  //   name: "car show",
-  //   date: "Jan 02, 2022",
-  //   region: "Islamabad",
-  //   hashtags: ["#Islamabad", "#Lahore"],
-  // },
-  // {
-  //   id: "5",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-  // {
-  //   id: "6",
-  //   name: "car show",
-  //   date: "Jan 02, 2022",
-  //   region: "Islamabad",
-  //   hashtags: ["#Islamabad", "#Lahore"],
-  // },
-  // {
-  //   id: "7",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-  // {
-  //   id: "8",
-  //   name: "car show",
-  //   date: "Jan 02, 2022",
-  //   region: "Islamabad",
-  //   hashtags: ["#Islamabad", "#Lahore"],
-  // },
-  // {
-  //   id: "9",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-  // {
-  //   id: "10",
-  //   name: "car show",
-  //   date: "Jan 02, 2022",
-  //   region: "Islamabad",
-  //   hashtags: ["#Islamabad", "#Lahore"],
-  // },
-  // {
-  //   id: "11",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-  // {
-  //   id: "12",
-  //   name: "car show",
-  //   date: "Jan 02, 2022",
-  //   region: "Islamabad",
-  //   hashtags: ["#Islamabad", "#Lahore"],
-  // },
-  // {
-  //   id: "13",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-  // {
-  //   id: "14",
-  //   name: "car show",
-  //   date: "Jan 02, 2022",
-  //   region: "Islamabad",
-  //   hashtags: ["#Islamabad", "#Lahore"],
-  // },
-  // {
-  //   id: "15",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-  // {
-  //   id: "16",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-  // {
-  //   id: "17",
-  //   name: "car show",
-  //   date: "Jan 02, 2022",
-  //   region: "Islamabad",
-  //   hashtags: ["#Islamabad", "#Lahore"],
-  // },
-  // {
-  //   id: "18",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-  // {
-  //   id: "19",
-  //   name: "fast food",
-  //   date: "Jan 09, 2022",
-  //   region: "Lahore",
-  //   hashtags: ["#Islamabad"],
-  // },
-];
+export const savedSearches = [];
 
+// generate random posts
 const generateMockData = (numberOfPosts) => {
   const mockData = [];
   for (let i = 0; i < numberOfPosts; i++) {
@@ -236,7 +96,10 @@ const generateMockData = (numberOfPosts) => {
   return mockData;
 };
 
+// Component to show the data analytics of one keyword
 const Dashboard = () => {
+
+  // displaying filters clicked by the user
   const FilterApplicationFooter = ({ filterType }) => {
     let togglefnc = null;
     if (filterType == "sentiment") togglefnc = toggleSentimentCheckboxes;
@@ -262,7 +125,7 @@ const Dashboard = () => {
     clearFilters,
   } = useContext(CompareKeywordContext);
 
-  const [timeRange, setTimeRange] = useState("1d");
+  const [timeRange, setTimeRange] = useState("1d"); // default time range of last 24 hours
 
   const { mySavedSearches, setMySavedSearches } =
     useContext(SavedSearchesContext);
@@ -289,6 +152,7 @@ const Dashboard = () => {
 
   const [cookies] = useCookies(["token"]);
 
+  // Reflect the results of updated filter values 
   const handleSentimentChange = (sentiment, isChecked) => {
     const newSentimentType = isChecked
       ? [...contextFilters.sentimentType, sentiment] // Add sentiment if checked
@@ -296,7 +160,6 @@ const Dashboard = () => {
 
     setContextFilters({ ...contextFilters, sentimentType: newSentimentType });
   };
-
   const handleLanguageChange = (language, isChecked) => {
     const newLanguage = isChecked
       ? [...contextFilters.language, language] // Add language if checked
@@ -304,7 +167,6 @@ const Dashboard = () => {
 
     setContextFilters({ ...contextFilters, language: newLanguage });
   };
-
   const handleDeviceChange = (device, isChecked) => {
     const newDevice = isChecked
       ? [...contextFilters.devices, device] // Add language if checked
@@ -312,7 +174,6 @@ const Dashboard = () => {
 
     setContextFilters({ ...contextFilters, devices: newDevice });
   };
-
   const handleGenderChange = (gender, isChecked) => {
     const newGender = isChecked
       ? [...contextFilters.genders, gender] // Add language if checked
@@ -320,7 +181,6 @@ const Dashboard = () => {
 
     setContextFilters({ ...contextFilters, genders: newGender });
   };
-
   const handleAgeChange = (age, isChecked) => {
     const newAge = isChecked
       ? [...contextFilters.age, age] // Add age if checked
@@ -328,6 +188,8 @@ const Dashboard = () => {
 
     setContextFilters({ ...contextFilters, age: newAge });
   };
+
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -338,6 +200,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    // apply filters on posts
     const filtered = posts.filter((post) => {
       return (
         (filters.sentiment ? post.sentiment === filters.sentiment : true) &&
@@ -368,11 +231,12 @@ const Dashboard = () => {
       hashtags: eventQueries,
       labels: eventNames,
     };
-    // setSaveSearches([...saveSearches, newEntry]); // Adds the new entry to the dataset
+
     setMySavedSearches([...mySavedSearches, newEntry]);
     handleSaveSearchClose(); // Closes the modal
   }
 
+  // visiblilty handling of new keyword entry 
   const handleCompareKeywordEditClose = () =>
     setShowCompareKeywordEditModal(false);
   const handleCompareKeywordEditShow = (currentSearchName) => {
@@ -380,16 +244,18 @@ const Dashboard = () => {
     setCurrentEditingSearch(currentSearchName);
   };
 
+  // show or hide the save search modal
   const handleSaveSearchClose = () => setShowSaveSearchModal(false);
   const handleSaveSearchShow = () => setShowSaveSearchModal(true);
 
+  // show or hide user's searches modal
   const handleMySearchesClose = () => setShowMySearchesModal(false);
   const handleMySearchesShow = () => setShowMySearchesModal(true);
 
+  // update visiblility of filters
   const toggleSentimentCheckboxes = () => {
     setShowSentimentCheckboxes(!showSentimentCheckboxes);
   };
-
   const toggleLanguageCheckboxes = () => {
     setShowLanguageCheckboxes(!showLanguageCheckboxes);
   };
@@ -403,6 +269,7 @@ const Dashboard = () => {
     setShowGenderCheckboxes(!showGenderCheckboxes);
   };
 
+  // Edit a user's saved search
   const handleEditSearch = async (id, name) => {
     try {
       const token = cookies.token;
@@ -444,23 +311,7 @@ const Dashboard = () => {
 
   };
 
-    
-
-
-
-    // setMySavedSearches(
-    //   mySavedSearches.map((search) => {
-    //     if (search.id === id) {
-    //       return {
-    //         ...search,
-    //         name: name,
-    //       };
-    //     }
-    //     return search;
-    //   })
-    // );
-  // };
-
+  // delete a user's saved search
   const handleDeleteSearch = async (id) => {
     try {
       const token = cookies.token;
@@ -499,7 +350,8 @@ const Dashboard = () => {
         progress: undefined,
         style: { fontSize: "1.3rem" },
       });    }  };
-
+  
+  // remove a keyword's analytics from dashboard
   const handleDeleteCompareSearch = (searchName) => {
     const indexToRemove = contextFilters.eventNames.findIndex(
       (item) => item === searchName
@@ -534,13 +386,12 @@ const Dashboard = () => {
   const [compareEditMode, setCompareEditMode] = useState(false);
   const [compareInputValue, setCompareInputValue] = useState("");
 
-  // Handle submission (Enter key)
+  // enter another keyword to show its analytics
   const handleCompareInputSubmit = (e) => {
     let zeroSearches = false;
     if (contextFilters.eventNames.length == 0) zeroSearches = true;
     if (e.key === "Enter") {
       console.log("Event names:", typeof contextFilters.eventNames);
-      // Call your handler function here with inputValue
       console.log("Submitted value:", compareInputValue);
       // You can also toggle editMode off if needed
       setCompareEditMode(false);

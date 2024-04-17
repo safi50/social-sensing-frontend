@@ -19,6 +19,8 @@ import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { API_URL } from "../../utils/api";
 
+
+// sidebar modal to show the list of user's saved searches
 const MySearchModal = ({
   show,
   handleClose,
@@ -34,6 +36,7 @@ const MySearchModal = ({
   
 
   useEffect(() => {
+    // get all the saved searches of the user
     const fetchSavedSearches = async () => {
       try {
         const token = cookies.token;
@@ -55,15 +58,16 @@ const MySearchModal = ({
   useEffect(() => {
   }, [currentPage, mySavedSearches, rowsPerPage]);
 
+  // handle pagination
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
-
   const handleRowsPerPageChange = (number) => {
     setRowsPerPage(number);
     setCurrentPage(1);
   };
 
+  // dropdown componenet for selecting the number of items to be displaced in one page
   const RowsPerPageDropdown = () => (
     <StyledDropdown
       title={

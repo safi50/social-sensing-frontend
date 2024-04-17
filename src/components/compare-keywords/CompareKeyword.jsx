@@ -11,30 +11,28 @@ import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 import { mergeData } from "../../contexts/dummyData";
 import { useNavigate } from "react-router-dom";
 
+
+// componenet to be displayed instead of dashboard when user selects multiple keywords to be compared
 export const CompareKeyword = () => {
-  const { data, deleteDataByName, filters } = useContext(CompareKeywordContext);
-  console.log(data);
+  const { data, deleteDataByName, filters } = useContext(CompareKeywordContext); // data about each keyword
+  
+  // converting data into a format to be shown in graphs
   const mergedTotalEngagement = mergeData(data, "totalEngagement");
   const mergedReach = mergeData(data, "reach");
   const mergedResultsOverTime = mergeData(data, "resultsOverTime");
   const mergedSentiments = mergeData(data, "sentiments");
   const mergedNetSentimentOverTime = mergeData(data, "netSentimentsOverTime");
-  console.log("mergedNetSentimentOverTime:",mergedNetSentimentOverTime);
-  console.log("mergedResultsOverTime:", mergedResultsOverTime)
 
-
+  // calculate the net sentiments of each keyword over a time period
   const netSentiments = mergedResultsOverTime.datasets.map((dataset, index) => {
-    // Initialize an array to hold the net sentiment for each day for the current dataset
-    // let netSentimentData = Array(mergedNetSentimentOverTime.labels.length).fill(0);
-
     let positiveSentimentArray = mergedNetSentimentOverTime.datasets[index*3].data
     let negativeSentimentArray = mergedNetSentimentOverTime.datasets[(index*3)+1].data
     
+    // net sentiment is positive sentiment - negative sentiment
     let netSentimentResults = positiveSentimentArray.map((value, num) => {
       return value - negativeSentimentArray[num]
     })
 
-    // Return a new dataset object for the current label with the calculated net sentiments
     return {
         label: dataset.label,
         data: netSentimentResults,

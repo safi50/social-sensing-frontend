@@ -8,6 +8,8 @@ import {
   ImagesContainer,
 } from "./comfirm.styles";
 
+
+// user can change their password through this component
 export const NewPassword = () => {
   return (
     <ConfirmContainer>

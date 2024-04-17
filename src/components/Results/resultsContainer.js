@@ -27,6 +27,7 @@ import {
   View,
   StyleSheet,
   PDFDownloadLink,
+  Path,
 } from "@react-pdf/renderer";
 
 const Container = styled.div`
@@ -204,6 +205,7 @@ const ResultsCard = () => {
   } = useContext(TopResultsFilterContext);
   const { data } = useContext(CompareKeywordContext);
 
+  // get random time value
   const generateRandomTime = () => {
     let randomTime = Math.floor(Math.random() * 24); // Random hour
     if (randomTime < 10) {
@@ -216,6 +218,8 @@ const ResultsCard = () => {
     return randomHourString;
   };
 
+
+  // generate tweets with random names and time
   const generateRandomTweetsNormal = () => {
     const sentiments = ["Positive", "Negative", "Neutral"];
     const profiles = [
@@ -225,17 +229,19 @@ const ResultsCard = () => {
     ];
 
     const tweets = [];
-    // applying query filter
+    // applying keyword filter
     const matchedData = data.filter((match) => match.name === topResultMatch);
     if (!matchedData.length) return [];
 
+    // filter tweets based on sentiment
     const matchedResult = matchedData[0].tweets[0].data.filter((match, idx) => {
-      return topResultSentiment.toLowerCase() === "none"
+      return topResultSentiment.toLowerCase() === "none" // select all sentiment tweets
         ? true
         : matchedData[0].tweetsSentiments[idx].toLowerCase() ===
             topResultSentiment.toLowerCase();
     });
 
+    // selecting tweets in the time range specified
     const timeMatch = matchedResult.filter((match) => {
       if (topResultRange.toLowerCase() === "none") return true;
 
@@ -350,18 +356,15 @@ const ResultsCard = () => {
             convertStringResultsToNumber(a[0].profileData.engagement)
           );
         case "PotentialReach":
-          // Assuming 'reach' is a sortable property in profileData
           return (
             convertStringResultsToNumber(b[0].profileData.reach) -
             convertStringResultsToNumber(a[0].profileData.reach)
           );
         case "TrendingScore":
-          // Assuming 'trending' is a sortable property in profileData
           return (
             convertStringResultsToNumber(b[0].profileData.trending) -
             convertStringResultsToNumber(a[0].profileData.trending)
           );
-        // Add more cases for other sorting options
         case "CommentCount":
           return (
             convertStringResultsToNumber(b[0].additionalMetrics.shares) -
@@ -393,6 +396,7 @@ const ResultsCard = () => {
     setSelectedTheme(event.target.value);
   };
 
+  // export the results into a specific file format
   const handleExportChange = (selectedOption) => {
     if (!selectedOption) return;
 
@@ -414,7 +418,6 @@ const ResultsCard = () => {
   };
 
   const exportNormal = (tweets) => {
-    // Convert tweet data to a string
     const tweetDataString = tweets
       .map((tweet, index) => {
         const profileData = tweet[0].profileData;
@@ -446,6 +449,30 @@ const ResultsCard = () => {
   };
 
   const MyPdf = ({ tweets }) => {
+    const data = [5, 8, 12, 10, 7]; // Replace with your data extraction logic
+
+    // Calculate maximum data value for scaling the chart
+    const maxDataValue = Math.max(...data);
+
+    // Define bar width and spacing for customization
+    const barWidth = 20;
+    const barSpacing = 5;
+
+    // Generate bars using Path elements
+    const bars = data.map((value, index) => (
+      <Path
+        key={index}
+        fill="black" // Adjust fill color as needed
+        d={`M ${index * (barWidth + barSpacing)} 0 L ${
+          index * (barWidth + barSpacing)
+        } ${
+          (value / maxDataValue) * 100 // Scale based on max value
+        }  L ${(index + 1) * barWidth + index * barSpacing} ${
+          (value / maxDataValue) * 100
+        } L ${(index + 1) * barWidth + index * barSpacing} 0 Z`}
+      />
+    ));
+    
     const pages = [];
 
     for (let i = 0; i < tweets.length; i += 7) {
@@ -503,6 +530,7 @@ const ResultsCard = () => {
               </View>
             </View>
           ))}
+          {bars}
           {renderFooter(i / 7 + 1)}
         </Page>
       );
@@ -700,9 +728,123 @@ const ResultsCard = () => {
   };
 
   const exportToPPTP = (tweets) => {
-    const pptx = new pptxgen();
+    let positiveCount = 0;
+    let negativeCount = 0;
+    let neutralCount = 0;
 
-    let slide = pptx.addSlide();
+    tweets.forEach((tweet) => {
+      switch (tweet[0].profileData.sentiment) {
+        case "Positive":
+          positiveCount++;
+          break;
+        case "Negative":
+          negativeCount++;
+          break;
+        default:
+          neutralCount++;
+          break;
+      }
+    });
+
+    const totalSentiments = positiveCount + negativeCount + neutralCount;
+
+    const positivePercentage = (positiveCount / totalSentiments) * 100;
+    const negativePercentage = (negativeCount / totalSentiments) * 100;
+    const neutralPercentage = (neutralCount / totalSentiments) * 100;
+    let totalEngagement = 0;
+    let totalReach = 0;
+
+    tweets.forEach((tweet) => {
+      totalEngagement += tweet[0].profileData.engagement;
+      totalReach += tweet[0].profileData.reach;
+    });
+
+
+    // make presentation slides for the resutls page
+    let pres = new pptxgen();
+    let slide = pres.addSlide();
+
+    slide.addText("Walee-Social Sensing Export Results", {
+      x: 2.3,
+      y: 0.5,
+      fontSize: 24,
+      color: "1B95E0",
+      bold: true,
+    });
+
+    slide.addText(`Searched Hashtag: ${topResultMatch}`, {
+      x: 0.8,
+      y: 1.1,
+      fontSize: 14,
+      bold: true,
+    });
+
+    let filterText = "";
+    if (topResultRange !== "none") {
+      filterText += topResultRange;
+    }
+    if (topResultSentiment !== "none") {
+      filterText += ` ${topResultSentiment}`;
+    }
+
+    if (filterText !== "") {
+      slide.addText(`Filter Applied: ${filterText}`, {
+        x: 5.6,
+        y: 1.1,
+        fontSize: 14,
+        bold: true,
+      });
+    }
+
+    slide.addText("Total Engagement and Reach:", {
+      x: 0.8,
+      y: 1.7,
+      fontSize: 18,
+      color: "1B95E0",
+      bold: true,
+    });
+
+    slide.addText("Sentiment Results:", {
+      x: 5.6,
+      y: 1.7,
+      fontSize: 18,
+      color: "1B95E0",
+      bold: true,
+    });
+
+    let dataChartAreaLine = [
+      {
+        name: "Reach and Engagement",
+        labels: ["Total Reach", "Total Engagement"],
+        values: [totalReach, totalEngagement],
+      },
+    ];
+
+    const dataChartPie = [
+      {
+        name: "Sentiments",
+        labels: ["Positive", "Negative", "Neutral"],
+        values: [positivePercentage, negativePercentage, neutralPercentage],
+      },
+    ];
+
+    slide.addChart(pres.ChartType.bar, dataChartAreaLine, {
+      x: 0.8,
+      y: 2,
+      w: 3.5,
+      h: 3,
+      chartColors: ["#FFCC00"],
+    });
+
+    slide.addChart(pres.ChartType.pie, dataChartPie, {
+      x: 4.5,
+      y: 2,
+      w: 5,
+      h: 3,
+      chartColors: ["#95eb34", "#FF0000", "#348feb"],
+    });
+
+    let slide1 = pres.addSlide();
 
     const tableHeader = [
       [
@@ -730,9 +872,9 @@ const ResultsCard = () => {
 
     const table = tableHeader.concat(tableData);
 
-    slide.addTable(table, {
-      x: 0.1,
-      y: 0.1,
+    slide1.addTable(table, {
+      x: 0,
+      y: 0,
       border: { color: "#ffffff", pt: 1, type: "solid" },
       rowH: 0.3,
       colW: [1.0, 0.8, 3.3, 0.9, 0.9, 0.9, 0.9, 0.8],
@@ -741,7 +883,7 @@ const ResultsCard = () => {
       fill: "#efefef",
     });
 
-    pptx.writeFile("tweets.pptx");
+    pres.writeFile("export.pptx");
   };
 
   return (
@@ -808,7 +950,7 @@ const ResultsCard = () => {
             {selectedExport === "PDF" && (
               <PDFDownloadLink
                 document={<MyPdf tweets={tweets} />}
-                fileName="tweets.pdf"
+                fileName="export.pdf"
                 onClick={handleDownloadClick}
               >
                 {({ loading }) =>
@@ -831,6 +973,7 @@ const ResultsCard = () => {
         )}
       </OuterRow>
 
+      {/* Display the results in various designs */}
       {activeTab === "topResults" && (
         <div>
           {sortedTweets.map((data, index) => (

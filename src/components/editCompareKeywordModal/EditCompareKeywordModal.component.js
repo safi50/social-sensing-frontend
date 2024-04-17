@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import { ModalHeader, ModalTitle, ModalBody, SaveSearchBarContainer, SaveSearchInput, SaveBtn, ModalFooter } from './EditCompareKeywordModal.styles';
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 
+// edit the label and query of a keyword
 export default function EditCompareKeywordModal({show, handleClose, currentHashtag}) {
     const [label, setLabel] = useState(currentHashtag)
     const [query, setQuery] = useState(currentHashtag)
@@ -21,12 +22,6 @@ export default function EditCompareKeywordModal({show, handleClose, currentHasht
           return item === currentHashtag ? label : item
         })
         setContextFilters({...contextFilters, eventNames: updatedSearches})
-
-        // let updatedSearches = contextFilters.eventQueries.map(item => {
-        //   return item === query ? updatedQuery : item
-        // })
-        // console.log("updated labels:", updatedSearches)
-        // setContextFilters({...contextFilters, eventQueries: updatedSearches})
         return
       }
 
@@ -36,9 +31,7 @@ export default function EditCompareKeywordModal({show, handleClose, currentHasht
       let updatedQueriesList = contextFilters.eventQueries.map(item => {
           return item === query ? updatedQuery : item
         })
-
       setContextFilters({...contextFilters, eventNames: updatedSearches, eventQueries: updatedQueriesList})
-
     }
 
 
@@ -50,12 +43,7 @@ export default function EditCompareKeywordModal({show, handleClose, currentHasht
       if (index !== -1 && contextFilters.eventQueries[index]) {
         setQuery(contextFilters.eventQueries[index]);
         setUpdatedQuery(contextFilters.eventQueries[index])
-      } 
-      // else {
-        // Reset or set to a default value if no matching label is found
-        // setQuery('');
-        // setUpdatedQuery('')
-      // }
+      }
     }, [label, contextFilters.eventNames, contextFilters.eventQueries]); // Depend on label and contextFilters to update the state when they change
   
   return (

@@ -4,6 +4,7 @@ import ColoredCheckbox from '../coloredCheckbox/ColoredCheckbox.component'
 import {StyledNumberBox,StyledNumberBoxDiv, PrimaryListHeading, CountryListElement,  SecondaryListHeading, ContinentName, CountryList, ContinentListElement,ContinentCheckbox, DropdownIcon, SearchBarContainer, SearchIcon, SearchInput, CountryCheckbox, CountryFlag, DropdownTitle, StyledDropdown } from './worldwideDropdown.styles';
 
 
+// 2 tier dropdown of Regions and Countries
 const WorldwideDropdown = () => {
 
     const [checkedStates, setCheckedStates] = useState({});

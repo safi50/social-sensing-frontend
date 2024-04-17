@@ -19,8 +19,8 @@ const ChangePassword = () => {
   const [formErrors, setFormErrors] = useState({});
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
-  const [userToken, setUserToken] = useState(""); // Declare userToken state variable
-  const location = useLocation(); // Access location object to get URL parameters
+  const [userToken, setUserToken] = useState(""); 
+  const location = useLocation();
   const navigate = useNavigate(); 
 
   // Extract token from URL parameter when component mounts
@@ -53,6 +53,7 @@ const ChangePassword = () => {
     setFormErrors(errors);
   };
 
+  // handle password entries
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({

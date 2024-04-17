@@ -5,6 +5,8 @@ import resetpasswordlogo from "../../assets/reset-password.svg";
 import waleeLogo from "../../assets/walee-logo.png";
 import { useNavigate } from 'react-router-dom';
 
+
+// confirmation message that password has been reset
 const ResetPassword = () => {
   const navigate = useNavigate();
   return (

@@ -68,6 +68,7 @@ const CompareItem = styled.div`
 `;
 const infoTextColors = ["#6631F7", "#F3B03D", "#E60000", "#EE8733"];
 
+// component to display the total result number of each key-word side by side
 export const ComparisonCard = ({ title }) => {
   const { data } = useContext(CompareKeywordContext);
   return (

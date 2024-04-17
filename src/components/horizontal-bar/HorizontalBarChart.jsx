@@ -48,7 +48,7 @@ const TitleText = styled.p`
 `;
 
 
-
+// component displaying horizontal bar char of the provided data
 export const HorizontalBarChartComponent = ({ title, data }) => {
   const {topResultMatch, setTopResultMatch, topResultRange, setTopResultRange, topResultSentiment, setTopResultSentiment} = useContext(TopResultsFilterContext)
   const navigate = useNavigate();
@@ -69,6 +69,7 @@ export const HorizontalBarChartComponent = ({ title, data }) => {
         beginAtZero: true,
       },
     },
+    // when clicked on the graph, redirect to results page after setting the properties of the results that need to be displayed
     onClick: (event, elements) => {
       if (elements.length > 0){
         const clickedElement = elements[0];

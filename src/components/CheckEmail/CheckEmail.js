@@ -10,9 +10,9 @@ import { toast } from "react-toastify";
 import {API_URL} from "../../utils/api";
 
 
+// componenet for sending email and opening email window
 const CheckEmail = () =>  {
   const location = useLocation();
-
   const { email } = location.state || {};
   console.log(email);
   
@@ -32,6 +32,7 @@ const CheckEmailContent = ({email}) => {
     window.open(mailtoLink);
   };
 
+  // sends email to the user
   const handleClickResend = async () => {
     try {
       const response = await axios.post( API_URL + '/auth/sendEmail', { email: email });

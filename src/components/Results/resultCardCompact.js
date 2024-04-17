@@ -148,28 +148,8 @@ const MetricValue = styled.span`
 `;
 
 
+// display tweets result in "Compact" form
 const ResultCardCompact = ({profileData, additionalMetrics}) => {
-    // Placeholder data 
-    // const profileData = {
-    //     name: 'John Doe',
-    //     handle: '@johndoe',
-    //     profileImage: profileImage,
-    //     content: 'Elden Ring wins Game of the Year Award at #TheGameAwards 2021.',
-    //     sharedImage: sharedImage,
-    //     sentiment: 'Neutral',
-    //     matches: '#istanbul',
-    //     reach: '2.1K',
-    //     engagement: '200K',
-    //     trending: '2.1K',
-    //     timePublished: '11 hours ago',
-    //     location: 'Turkey',
-    //     platform: 'Twitter.com'
-    // };
-    // const additionalMetrics = {
-    //     shares: '124K',
-    //     hearts: '31K',
-    //     users: '32K'
-    // };
     return (
         <CardContainer>
             <ProfileSection>

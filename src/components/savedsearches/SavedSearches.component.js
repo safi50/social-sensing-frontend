@@ -18,6 +18,7 @@ const SavedSearches = ({style}) => {
   const handleMySearchesClose = () => setShowMySearchesModal(false);
   const handleMySearchesShow = () => setShowMySearchesModal(true);
 
+  // edit the saved search name
   const handleEditSearch = (id, name) => {
     setSaveSearches(
       saveSearches.map((search) => {
@@ -32,6 +33,7 @@ const SavedSearches = ({style}) => {
     );
   };
 
+  // delete a saved search
   const handleDeleteSearch = (id) => {
     setSaveSearches(saveSearches.filter((search) => search.id !== id));
   };

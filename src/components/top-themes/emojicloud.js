@@ -6,6 +6,7 @@ import Spinner from './spinner';
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 
 
+// component showing word cloud of emojis
 const EmojiCloudComponent = ({ timeRange }) => {
   const [svgWidth, setSvgWidth] = useState(600); 
   const [svgHeight, setSvgHeight] = useState(500); 
@@ -43,6 +44,7 @@ const EmojiCloudComponent = ({ timeRange }) => {
     }
   };
 
+  // get the emoji weights based on the tweets text from API
   useEffect(() => {
     const fetchEmojis = async () => {
       try {

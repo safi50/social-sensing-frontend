@@ -16,6 +16,7 @@ import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 import { useNavigate } from "react-router-dom";
 import { SearchIcon } from "../worldwideDropdown/worldwideDropdown.styles";
 
+// component to display one saved search insode the "saved searches" sidebar
 const MySearchesItem = ({ item, handleEditSearch, handleDeleteSearch }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -29,6 +30,7 @@ const MySearchesItem = ({ item, handleEditSearch, handleDeleteSearch }) => {
 
   const navigate = useNavigate();
 
+  // display the analytics of this saved search keyword
   const handleUseSavedSearch = ()=>{
     console.log("continue with saved search:", item)
     setContextFilters({...contextFilters, eventNames: item.labels, eventQueries: item.hashtags})

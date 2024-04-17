@@ -12,6 +12,7 @@ import {
   TrendIcon,
 } from "./trending_table.styles";
 
+// static table showing the top trends
 const TrendingTable = ({style}) => {
   const hashtags = [
     { tag: "#PakvsBan", percentage: "30%", isNew: true },

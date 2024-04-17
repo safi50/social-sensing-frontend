@@ -4,6 +4,7 @@ import styles from "./verifyEmail.module.css";
 import CustomButton from "../customButton/customButtom.component";
 import EmailIcon from "../../assets/email-logo.svg";
 
+// component asking user to verify their email
 const VerifyEmail = () => (
   <OnboardingCard>
     <VerifyEmailContent />

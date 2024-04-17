@@ -10,6 +10,7 @@ import { API_URL } from "../../utils/api";
 import axios from 'axios';
 
 
+// sign in page component
 const SignIn = () => (
   <OnboardingCard>
     <SignInContent />

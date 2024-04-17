@@ -12,6 +12,8 @@ import { NotificationsContainer,
         NotificationTitleContainer,
         EndNotificationContainer } from './Notifications.styles'
 
+
+// componenet for notifications
 function Notifications() {
     return (
         <NotificationsContainer>

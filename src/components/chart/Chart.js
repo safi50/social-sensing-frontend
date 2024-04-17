@@ -52,6 +52,7 @@ const TitleText = styled.p`
 `;
 
 
+// displays line graph of a data
 const ChartComponent = ({ title, data, queryMatches, sentimentType, timeRange }) => {
   const {topResultMatch, setTopResultMatch, topResultRange, setTopResultRange, topResultSentiment, setTopResultSentiment} = useContext(TopResultsFilterContext)
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ const ChartComponent = ({ title, data, queryMatches, sentimentType, timeRange })
         beginAtZero: true,
       },
     },
-    onClick: (event, elements) => {
+    onClick: (event, elements) => { // identify which place of the line graph was clicked to display appropriate tweets in result page
       if (elements.length > 0) {
         const clickedElement = elements[0];
         console.log("title:", title)

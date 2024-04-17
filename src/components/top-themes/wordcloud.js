@@ -4,32 +4,7 @@ import ResizeDetector from "react-resize-detector";
 import axios from "axios";
 import Spinner from './spinner'; 
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
-//  data
-// const words = [
-//   { text: "Test", value: 500 },
-//   { text: "web", value: 100 },
-//   { text: "Test", value: 10 },
-//   { text: "Walee", value: 500 },
-//   { text: "Inspired", value: 350 },
-//   { text: "visualisation", value: 180 },
-//   { text: "data", value: 200 },
-//   { text: "imagine", value: 100 },
-//   { text: "css", value: 100 },
-//   { text: "html", value: 100 },
-//   { text: "python", value: 100 },
-//   { text: "influence", value: 100 },
-//   { text: "Inspired", value: 350 },
-//   { text: "Data Moderation", value: 200 },
-//   { text: "analytics", value: 100 },
-//   { text: "css", value: 100 },
-//   { text: "html", value: 100 },
-//   { text: "python", value: 100 },
-//   { text: "java", value: 100 },
-//   { text: "innovate", value: 300 },
-//   { text: "go Walee!", value: 200 },
-//   { text: "In-app Currencies", value: 250 },
-//   { text: "Inspired", value: 450 },
-// ];
+
 
 // map the word data
 const getWord = (word) => ({
@@ -49,6 +24,7 @@ const getRandomColor = () => {
   return colors[Math.floor(Math.random() * colors.length)];
 };
 
+// find word cloud of the tweets text
 const WordCloudComponent = ({ timeRange }) => {
   const [svgWidth, setSvgWidth] = useState(800);
   const [svgHeight, setSvgHeight] = useState(500);
@@ -64,6 +40,7 @@ const WordCloudComponent = ({ timeRange }) => {
   } = useContext(CompareKeywordContext);
 
 
+  // convert the tweets object into array of tweets text
   let combinedTweetsText = data.reduce((acc, current) => {
     // Check if the current object has the tweetsText property to avoid errors
     if (current.tweetsText) {
@@ -89,6 +66,7 @@ const WordCloudComponent = ({ timeRange }) => {
     }
   };
 
+  // find word weights for the word-cloud with API
   useEffect(() => {
     const fetchWords = async () => {
       
