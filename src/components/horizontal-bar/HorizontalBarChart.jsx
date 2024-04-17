@@ -24,7 +24,6 @@ ChartJS.register(
 
 const ChartContainer = styled.div`
   margin-top: 2rem;
-  min-width: 300px;
   padding: 2rem;
   flex-grow: 1;
   background-color: #fff;

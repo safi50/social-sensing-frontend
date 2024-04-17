@@ -29,6 +29,7 @@ import {
   PDFDownloadLink,
   Path,
 } from "@react-pdf/renderer";
+import  PdfModel  from "./pdfModel";
 
 const Container = styled.div`
   font-family: "Poppins", sans-serif;
@@ -194,6 +195,15 @@ const ResultsCard = () => {
   const [selectedTheme, setSelectedTheme] = useState("Bio");
   const [tweets, setTweets] = useState([]);
   const [isClickedPDF, setIsClickedPDF] = useState(false);
+  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
+
+  const closePdfModal = () => {
+    setIsPdfModalOpen(false);
+  };
+
+  const openPdfModal = () => {
+    setIsPdfModalOpen(true);
+  };
 
   const {
     topResultMatch,
@@ -404,8 +414,7 @@ const ResultsCard = () => {
     setSelectedExport(selectedExport);
 
     if (selectedExport === "PDF") {
-      setIsClickedPDF(false);
-      exportToPDF(tweets);
+      openPdfModal()
     } else if (selectedExport === "XLS") {
       exportToXLS(tweets);
     } else if (selectedExport === "CSV") {
@@ -637,13 +646,13 @@ const ResultsCard = () => {
     },
   });
 
-  const exportToPDF = ({ tweets }) => (
-    <PDFDownloadLink document={<MyPdf tweets={tweets} />} fileName="export.pdf">
-      {({ blob, url, loading, error }) =>
-        loading ? "Loading document..." : "Download now!"
-      }
-    </PDFDownloadLink>
-  );
+  // const exportToPDF = ({ tweets }) => (
+  //   <PDFDownloadLink document={<MyPdf tweets={tweets} />} fileName="export.pdf">
+  //     {({ blob, url, loading, error }) =>
+  //       loading ? "Loading document..." : "Download now!"
+  //     }
+  //   </PDFDownloadLink>
+  // );
 
   const handleDownloadClick = () => {
     setTimeout(() => {
@@ -887,6 +896,10 @@ const ResultsCard = () => {
   };
 
   return (
+    <>
+    <div>
+      {isPdfModalOpen && <PdfModel tweets={tweets} topResultMatch={topResultMatch} topResultRange={topResultRange} topResultSentiment={topResultSentiment} closePdfModal={closePdfModal} />}
+    </div>
     <Container>
       <OuterRow>
         <Row>
@@ -947,7 +960,7 @@ const ResultsCard = () => {
               value={selectedExport}
             />
             {/* && !isClickedPDF  */}
-            {selectedExport === "PDF" && (
+            {/* {selectedExport === "PDF" && (
               <PDFDownloadLink
                 document={<MyPdf tweets={tweets} />}
                 fileName="export.pdf"
@@ -957,7 +970,7 @@ const ResultsCard = () => {
                   loading ? "Loading document..." : "Download now!"
                 }
               </PDFDownloadLink>
-            )}
+            )} */}
           </Row>
         ) : (
           <Row>
@@ -1017,7 +1030,10 @@ const ResultsCard = () => {
         </WordCloudStyle>
       )}
     </Container>
+    </>
   );
 };
+
+
 
 export default ResultsCard;
