@@ -4,6 +4,7 @@ import ResizeDetector from 'react-resize-detector';
 import axios from 'axios';
 import Spinner from './spinner'; 
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
+import { LDA_URL } from '../../utils/api';
 
 
 // component showing word cloud of emojis
@@ -49,7 +50,7 @@ const EmojiCloudComponent = ({ timeRange }) => {
     const fetchEmojis = async () => {
       try {
         setLoading(true);
-        let url = "https://lda-iwz8.onrender.com/lda/emojis"
+        let url = LDA_URL + "/lda/emojis";
         const response = await axios.post(url, {tweets: combinedTweetsText}); 
         setEmojis(response.data.map(emoji => ({
           text: emoji.emoji, 
