@@ -6,7 +6,7 @@ import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer } from "react-toastify";
 import { useCookies } from "react-cookie";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import Navbar from "./components/navbar/Navbar.component";
 import Footer from "./components/footer/Footer.component";
 import SearchBar from "./components/searchBar/SearchBar.component";
@@ -57,18 +57,30 @@ const SecondaryHeading = styled.h2`
   color: #fff;
 `;
 
-const PrivateRoutes = () => {
-  const [cookies] = useCookies(["token"]); // Get the token from cookies
-  const token = cookies.token;
-  console.log(token);
-  // const decodedToken = jwtDecode(token);
-  // console.log("Decoded Token is:", JSON.stringify(decodedToken));
-  
-  // return token ? <Outlet /> : <Navigate to="/signin" />;
-};
 
 
 const App = () => {
+  // const navigate = useNavigate();
+  // const [authenticate, setAuthenticate] = useState(false);
+  // const [cookies] = useCookies(["token"]);
+
+  // useEffect(() => {
+  //   const authentication = () => {
+  //     const token = cookies.token;
+  //     console.log("Token from cookies:", cookies.token);
+  // console.log("Authenticate state:", authenticate);
+  //     if (token) {
+  //       setAuthenticate(true);
+  //     } else {
+  //       setAuthenticate(false);
+  //       console.log("No token found");
+  //       navigate("/signin");
+  //     }
+  //   };
+
+  //   authentication();
+  // }, [cookies.token, navigate]);
+
   return (
     <>
       <CompareKeywordProvider>
@@ -131,10 +143,3 @@ const App = () => {
 };
 
 export default App;
-
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById("root")
-);

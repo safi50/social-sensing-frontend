@@ -4,6 +4,7 @@ import ResizeDetector from "react-resize-detector";
 import axios from "axios";
 import Spinner from './spinner'; 
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
+import { LDA_URL } from "../../utils/api";
 
 
 // map the word data
@@ -52,19 +53,18 @@ const WordCloudComponent = ({ timeRange }) => {
   
   const updateSvgSize = () => {
     const windowWidth = window.innerWidth;
-    if (windowWidth < 426) {
-      // For smaller screens
+    if (windowWidth < 426 && svgWidth !== 280) {
       setSvgWidth(280);
       setSvgHeight(500);
-    } else if (windowWidth < 767) {
+    } else if (windowWidth >= 426 && windowWidth < 767 && svgWidth !== 380) {
       setSvgWidth(380);
       setSvgHeight(500);
-    } else if (windowWidth < 1024) {
-      // For larger screens
+    } else if (windowWidth >= 767 && windowWidth < 1024 && svgWidth !== 700) {
       setSvgWidth(700);
       setSvgHeight(500);
     }
   };
+  
 
   // find word weights for the word-cloud with API
   useEffect(() => {
@@ -72,7 +72,7 @@ const WordCloudComponent = ({ timeRange }) => {
       
       try {
         setLoading(true);
-        let url = "https://lda-iwz8.onrender.com/lda"
+        let url = LDA_URL + "/lda";
         const response = await axios.post(url, {tweets: combinedTweetsText}); 
         setWords(response.data);
         setLoading(false);
