@@ -1,18 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import {
-  PDFViewer,
   Document,
   Page,
   Text,
   View,
   StyleSheet,
   PDFDownloadLink,
-  Path,
   Image,
 } from "@react-pdf/renderer";
 import { HorizontalBarChartComponent } from "../horizontal-bar/HorizontalBarChart";
 import VerticalBarChart from "../refreshBtn/vertical-bar/VerticalBarChart";
-import html2canvas from "html2canvas";
+import { useScreenshot } from "use-react-screenshot";
 
 const PdfModel = ({
   tweets,
@@ -22,59 +20,45 @@ const PdfModel = ({
   closePdfModal,
 }) => {
   const modalRef = useRef();
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
 
-  const [chart1Image, setChart1Image] = useState(null);
-  const [chart2Image, setChart2Image] = useState(null);
+  const [image1, takeScreenshot1] = useScreenshot();
+  const [image2, takeScreenshot2] = useScreenshot();
+
+  const getImage1 = () => {
+    takeScreenshot1(ref1.current);
+  };
+
+  const getImage2 = () => {
+    takeScreenshot2(ref2.current);
+  };
 
   useEffect(() => {
-    const captureChart1 = async () => {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Adjust the delay time as needed
-      const chart1Canvas = await html2canvas(document.getElementById('chart1-container'));
-      const chart1ImageData = chart1Canvas.toDataURL('image/png');
-      setChart1Image(chart1ImageData);
+    const delay = 1000; 
+    const timerId = setTimeout(() => {
+      getImage1();
+      getImage2();
+    }, delay);
+
+    return () => {
+      clearTimeout(timerId); 
     };
-  
-    const captureChart2 = async () => {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Adjust the delay time as needed
-      const chart2Canvas = await html2canvas(document.getElementById('chart2-container'));
-      const chart2ImageData = chart2Canvas.toDataURL('image/png');
-      setChart2Image(chart2ImageData);
-    };
-  
-    captureChart1();
-    captureChart2();
   }, []);
 
-  // useEffect(() => {
-  //   const captureChart1 = async () => {
-  //     const chart1Canvas = await html2canvas(document.getElementById('chart1-container'));
-  //     const chart1ImageData = chart1Canvas.toDataURL('image/png');
-  //     setChart1Image(chart1ImageData);
-  //   };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closePdfModal();
+      }
+    };
 
-  //   const captureChart2 = async () => {
-  //     const chart2Canvas = await html2canvas(document.getElementById('chart2-container'));
-  //     const chart2ImageData = chart2Canvas.toDataURL('image/png');
-  //     setChart2Image(chart2ImageData);
-  //   };
+    document.addEventListener("mousedown", handleClickOutside);
 
-  //   captureChart1();
-  //   captureChart2();
-  // }, []);
-
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (modalRef.current && !modalRef.current.contains(event.target)) {
-  //       closePdfModal();
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", handleClickOutside);
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [closePdfModal]);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [closePdfModal]);
 
   let totalEngagement = 0;
   let totalReach = 0;
@@ -162,7 +146,7 @@ const PdfModel = ({
     const StartingPage = () => {
       return (
         <Page size="A4" style={styles.pageStart}>
-          <View >
+          <View>
             <Text style={styles.headerStart}>
               Walee-Social Sensing Export Results
             </Text>
@@ -170,19 +154,21 @@ const PdfModel = ({
               <Text style={styles.subtitleStart}>
                 Searched Hashtag: {topResultMatch}
               </Text>
-              <Text style={styles.subtitleStart}>
-                Filter Applied: {topResultRange}
-              </Text>
+              {filterText !== "" && (
+                <Text style={styles.subtitleStart}>
+                  Filter Applied: {filterText}
+                </Text>
+              )}
             </View>
           </View>
-          {chart1Image && (
-            <View >
-              <Image src={chart1Image} style={styles.chartImage} />
+          {image1 && (
+            <View style={styles.chartContainerPDF}>
+              <Image src={image1} style={styles.chartImage} />
             </View>
           )}
-          {chart2Image && (
-            <View >
-              <Image src={chart2Image} style={styles.chartImage} />
+          {image2 && (
+            <View style={styles.chartContainerPDF}>
+              <Image src={image2} style={styles.chartImage} />
             </View>
           )}
           {renderFooter(1)}
@@ -280,10 +266,6 @@ const PdfModel = ({
       flexDirection: "column",
       padding: 30,
     },
-    // border: {
-    //   borderWidth: 1, 
-    //   borderColor: "#000",
-    // },
     headerStart: {
       textAlign: "center",
       fontSize: 24,
@@ -430,24 +412,28 @@ const PdfModel = ({
     chartContainer2: {
       width: "65%",
     },
+    chartContainerPDF: {
+      width: "80%",
+    },
   });
 
-  const buttonHandler = () => {
-    closePdfModal();
-  };
-
   return (
-    <div ref={modalRef} style={styles.modalContainer}>
-      <div style={styles.modalContent}>
+    <div style={styles.modalContainer}>
+      <div ref={modalRef} style={styles.modalContent}>
         <div style={styles.downloadLinkContainer}>
-          <PDFDownloadLink
-            document={<MyPdf tweets={tweets} />}
-            fileName="export.pdf"
-          >
-            {({ loading }) =>
-              loading ? "Loading document..." : "Download PDF"
-            }
-          </PDFDownloadLink>
+          {image1 && image2 && (
+            <PDFDownloadLink
+              document={<MyPdf tweets={tweets} />}
+              fileName="export.pdf"
+              onClick={() => {
+                setTimeout(closePdfModal, 1000);
+              }}
+            >
+              {({ loading }) =>
+                loading ? "Loading document..." : "Download PDF"
+              }
+            </PDFDownloadLink>
+          )}
         </div>
         <div
           style={styles.searchedHashtag}
@@ -458,22 +444,20 @@ const PdfModel = ({
             style={styles.filterApplied}
           >{`Filter Applied: ${filterText}`}</div>
         )}
-
-        <div style={styles.chartContainer1} >
-          <div id="chart1-container">
-          <HorizontalBarChartComponent
-            title="Reach vs Engagement"
-            data={dataGraph}
-          />
+        <div style={styles.chartContainer1}>
+          <div ref={ref1} id="chart1-container">
+            <HorizontalBarChartComponent
+              title="Reach vs Engagement"
+              data={dataGraph}
+            />
           </div>
         </div>
-        <div style={styles.chartContainer2} >
+        <div ref={ref2} style={styles.chartContainer2}>
           <div id="chart2-container">
-          <VerticalBarChart title="Sentiments" data={dataSentiments} />
+            <VerticalBarChart title="Sentiments" data={dataSentiments} />
           </div>
         </div>
       </div>
-      <button onClick={buttonHandler}>close</button>
     </div>
   );
 };
