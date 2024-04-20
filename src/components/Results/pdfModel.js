@@ -12,6 +12,7 @@ import { HorizontalBarChartComponent } from "../horizontal-bar/HorizontalBarChar
 import VerticalBarChart from "../refreshBtn/vertical-bar/VerticalBarChart";
 import { useScreenshot } from "use-react-screenshot";
 
+// component made for PDF export
 const PdfModel = ({
   tweets,
   topResultMatch,
@@ -46,6 +47,7 @@ const PdfModel = ({
     };
   }, []);
 
+  // for closing the modal
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -140,6 +142,7 @@ const PdfModel = ({
     filterText += ` ${topResultSentiment}`;
   }
 
+  // styling pdf file 
   const MyPdf = ({ tweets }) => {
     const pages = [];
 
