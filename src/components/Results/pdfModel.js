@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Document,
   Page,
@@ -11,6 +11,7 @@ import {
 import { HorizontalBarChartComponent } from "../horizontal-bar/HorizontalBarChart";
 import VerticalBarChart from "../refreshBtn/vertical-bar/VerticalBarChart";
 import { useScreenshot } from "use-react-screenshot";
+import { Bar } from "react-chartjs-2";
 
 // component made for PDF export
 const PdfModel = ({
@@ -24,28 +25,50 @@ const PdfModel = ({
   const ref1 = useRef(null);
   const ref2 = useRef(null);
 
-  const [image1, takeScreenshot1] = useScreenshot();
-  const [image2, takeScreenshot2] = useScreenshot();
-
-  const getImage1 = () => {
-    takeScreenshot1(ref1.current);
-  };
-
-  const getImage2 = () => {
-    takeScreenshot2(ref2.current);
-  };
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
 
   useEffect(() => {
-    const delay = 1000; 
+    // Take screenshots after 1 second delay
+    const delay = 1000;
     const timerId = setTimeout(() => {
-      getImage1();
-      getImage2();
+      const chart1 = ref1.current;
+      const base64Image1 = chart1.toBase64Image();
+      setImage1(base64Image1);
+
+      const chart2 = ref2.current;
+      const base64Image2 = chart2.toBase64Image();
+      setImage2(base64Image2);
     }, delay);
 
-    return () => {
-      clearTimeout(timerId); 
-    };
+    return () => clearTimeout(timerId);
   }, []);
+
+  // const [image1, takeScreenshot1] = useScreenshot();
+  // const [image2, takeScreenshot2] = useScreenshot();
+
+  // const getImage1 = () => {
+  //   takeScreenshot1(ref1.current);
+  // };
+
+  // const getImage2 = () => {
+  //   takeScreenshot2(ref2.current);
+  // };
+
+  // useEffect(() => {
+  //   const delay = 1000;
+  //   const timerId = setTimeout(() => {
+  //     getImage1();
+  //     getImage2();
+  //   }, delay);
+
+  //   return () => {
+  //     clearTimeout(timerId);
+  //   };
+  // }, []);
+
+  console.log(image1);
+  console.log(image2);
 
   // for closing the modal
   useEffect(() => {
@@ -68,6 +91,45 @@ const PdfModel = ({
     totalEngagement += tweet[0].profileData.engagement;
     totalReach += tweet[0].profileData.reach;
   });
+
+  const option = {
+    indexAxis: "y",
+    elements: {
+      bar: {
+        borderWidth: 1,
+      },
+    },
+    responsive: true,
+    plugins: {
+      // legend: {
+      //   position: "right",
+      // },
+      title: {
+        display: true,
+        text: "Reach vs Engagement",
+      },
+    },
+  };
+
+  const data = {
+    labels: ["Reach", "Engagement"],
+    datasets: [
+      {
+        label: "Reach",
+        data: [totalReach, 0],
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Engagement",
+        data: [0, totalEngagement],
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
 
   const dataGraph = {
     labels: ["Reach", "Engagement"],
@@ -107,6 +169,17 @@ const PdfModel = ({
     }
   });
 
+  const option1 = {
+    responsive: true,
+    plugins: {
+      // legend: { position: "chartArea" },
+      title: {
+        display: true,
+        text: "Sentiments Results",
+      },
+    },
+  };
+
   const dataSentiments = {
     labels: [topResultMatch],
     datasets: [
@@ -142,7 +215,7 @@ const PdfModel = ({
     filterText += ` ${topResultSentiment}`;
   }
 
-  // styling pdf file 
+  // styling pdf file
   const MyPdf = ({ tweets }) => {
     const pages = [];
 
@@ -384,39 +457,42 @@ const PdfModel = ({
       fontWeight: "bold",
       textAlign: "center",
       color: "#1B95E0",
-      padding: 0,
-      margin: 0,
+      padding: 8,
     },
     downloadLinkContainer: {
       position: "absolute",
-      top: 19,
+      top: 25,
       right: 15,
-      fontSize: 12,
+      fontSize: 14,
       textDecoration: "none",
     },
     searchedHashtag: {
       position: "absolute",
-      top: 50,
+      top: 55,
       left: 20,
       fontSize: 14,
       fontWeight: "bold",
     },
     filterApplied: {
       position: "absolute",
-      top: 50,
+      top: 55,
       right: 20,
       fontSize: 14,
       fontWeight: "bold",
     },
     chartContainer1: {
+      marginTop: 22,
       paddingTop: 14,
-      width: "65%",
+      width: "75%",
     },
     chartContainer2: {
-      width: "65%",
+      marginTop: 22,
+      width: "75%",
     },
     chartContainerPDF: {
-      width: "80%",
+      // width: "80%",
+      marginTop: "3em",
+      marginBottom: "3em"
     },
   });
 
@@ -448,16 +524,18 @@ const PdfModel = ({
           >{`Filter Applied: ${filterText}`}</div>
         )}
         <div style={styles.chartContainer1}>
-          <div ref={ref1} id="chart1-container">
-            <HorizontalBarChartComponent
+          <div id="chart1-container">
+            {/* <HorizontalBarChartComponent
               title="Reach vs Engagement"
               data={dataGraph}
-            />
+            /> */}
+            <Bar ref={ref1} options={option} data={data} />
           </div>
         </div>
-        <div ref={ref2} style={styles.chartContainer2}>
+        <div style={styles.chartContainer2}>
           <div id="chart2-container">
-            <VerticalBarChart title="Sentiments" data={dataSentiments} />
+            {/* <VerticalBarChart title="Sentiments" data={dataSentiments} /> */}
+            <Bar ref={ref2} options={option1} data={dataSentiments} />
           </div>
         </div>
       </div>
