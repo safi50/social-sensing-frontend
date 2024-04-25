@@ -8,9 +8,6 @@ import {
   PDFDownloadLink,
   Image,
 } from "@react-pdf/renderer";
-import { HorizontalBarChartComponent } from "../horizontal-bar/HorizontalBarChart";
-import VerticalBarChart from "../refreshBtn/vertical-bar/VerticalBarChart";
-import { useScreenshot } from "use-react-screenshot";
 import { Bar } from "react-chartjs-2";
 
 // component made for PDF export
@@ -44,32 +41,6 @@ const PdfModel = ({
     return () => clearTimeout(timerId);
   }, []);
 
-  // const [image1, takeScreenshot1] = useScreenshot();
-  // const [image2, takeScreenshot2] = useScreenshot();
-
-  // const getImage1 = () => {
-  //   takeScreenshot1(ref1.current);
-  // };
-
-  // const getImage2 = () => {
-  //   takeScreenshot2(ref2.current);
-  // };
-
-  // useEffect(() => {
-  //   const delay = 1000;
-  //   const timerId = setTimeout(() => {
-  //     getImage1();
-  //     getImage2();
-  //   }, delay);
-
-  //   return () => {
-  //     clearTimeout(timerId);
-  //   };
-  // }, []);
-
-  console.log(image1);
-  console.log(image2);
-
   // for closing the modal
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -101,37 +72,18 @@ const PdfModel = ({
     },
     responsive: true,
     plugins: {
-      // legend: {
-      //   position: "right",
-      // },
       title: {
         display: true,
         text: "Reach vs Engagement",
+        font: {
+          size: 14, 
+          weight: 'bold', 
+        },
       },
     },
   };
 
   const data = {
-    labels: ["Reach", "Engagement"],
-    datasets: [
-      {
-        label: "Reach",
-        data: [totalReach, 0],
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-      },
-      {
-        label: "Engagement",
-        data: [0, totalEngagement],
-        backgroundColor: "rgba(54, 162, 235, 0.5)",
-        borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const dataGraph = {
     labels: ["Reach", "Engagement"],
     datasets: [
       {
@@ -172,10 +124,13 @@ const PdfModel = ({
   const option1 = {
     responsive: true,
     plugins: {
-      // legend: { position: "chartArea" },
       title: {
         display: true,
         text: "Sentiments Results",
+        font: {
+          size: 14, 
+          weight: 'bold', 
+        },
       },
     },
   };
@@ -215,6 +170,14 @@ const PdfModel = ({
     filterText += ` ${topResultSentiment}`;
   }
 
+  const currentDate = new Date();
+
+  const formattedDate = currentDate.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
   // styling pdf file
   const MyPdf = ({ tweets }) => {
     const pages = [];
@@ -226,14 +189,20 @@ const PdfModel = ({
             <Text style={styles.headerStart}>
               Walee-Social Sensing Export Results
             </Text>
+            <Text style={styles.hashtag} >
+                Searched Hashtag: {topResultMatch}
+              </Text>
             <View style={styles.subtitleContainer}>
               <Text style={styles.subtitleStart}>
-                Searched Hashtag: {topResultMatch}
+                Date of Download: {formattedDate}
               </Text>
               {filterText !== "" && (
                 <Text style={styles.subtitleStart}>
                   Filter Applied: {filterText}
                 </Text>
+              )}
+              {filterText === "" && (
+                <Text style={styles.subtitleStart}>Filter Applied: None</Text>
               )}
             </View>
           </View>
@@ -339,9 +308,10 @@ const PdfModel = ({
 
   const styles = StyleSheet.create({
     pageStart: {
+      fontStyle: "bold",
       flexDirection: "column",
       padding: 30,
-    },
+    },  
     headerStart: {
       textAlign: "center",
       fontSize: 24,
@@ -349,10 +319,17 @@ const PdfModel = ({
       marginBottom: 15,
       color: "#1B95E0",
     },
+    hashtag: {
+      textAlign: "center",
+      fontSize: 18,
+      fontWeight: "bold",
+      marginBottom: 15,
+    },
     subtitleContainer: {
       flexDirection: "row",
       justifyContent: "space-between",
       marginBottom: 10,
+      fontWeight: "bold",
     },
     subtitleStart: {
       fontSize: 16,
@@ -481,7 +458,7 @@ const PdfModel = ({
       fontWeight: "bold",
     },
     chartContainer1: {
-      marginTop: 22,
+      marginTop: 18,
       paddingTop: 14,
       width: "75%",
     },
@@ -490,9 +467,8 @@ const PdfModel = ({
       width: "75%",
     },
     chartContainerPDF: {
-      // width: "80%",
+      marginBottom: 15,
       marginTop: "3em",
-      marginBottom: "3em"
     },
   });
 
@@ -523,18 +499,18 @@ const PdfModel = ({
             style={styles.filterApplied}
           >{`Filter Applied: ${filterText}`}</div>
         )}
+        {!filterText && (
+          <div
+            style={styles.filterApplied}
+          >Filter Applied: None</div>
+        )}
         <div style={styles.chartContainer1}>
           <div id="chart1-container">
-            {/* <HorizontalBarChartComponent
-              title="Reach vs Engagement"
-              data={dataGraph}
-            /> */}
             <Bar ref={ref1} options={option} data={data} />
           </div>
         </div>
         <div style={styles.chartContainer2}>
-          <div id="chart2-container">
-            {/* <VerticalBarChart title="Sentiments" data={dataSentiments} /> */}
+          <div id="chart2-container"> 
             <Bar ref={ref2} options={option1} data={dataSentiments} />
           </div>
         </div>
