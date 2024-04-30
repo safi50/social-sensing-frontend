@@ -5,10 +5,9 @@ import "./signIn.css";
 import CustomButton from "../customButton/customButtom.component";
 import HideIcon from "../../assets/hidePassword.svg";
 import ViewIcon from "../../assets/showPassword.svg";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../utils/api";
-import axios from 'axios';
-
+import axios from "axios";
 
 // sign in page component
 const SignIn = () => (
@@ -26,12 +25,10 @@ const SignInContent = () => {
   });
   const [formErrors, setFormErrors] = useState({});
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [iscapslock, setIsCapsLock] = useState(false);
-    const [passwordFocused, setPasswordFocused] = useState(false);
-
+  const [iscapslock, setIsCapsLock] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
 
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const handleCapsLock = (e) => {
@@ -44,14 +41,13 @@ const SignInContent = () => {
     // Add event listeners for keydown and keyup
     document.addEventListener("keydown", handleCapsLock);
     document.addEventListener("keyup", handleCapsLock);
-  
+
     // Remove the event listeners when the component unmounts
     return () => {
       document.removeEventListener("keydown", handleCapsLock);
       document.removeEventListener("keyup", handleCapsLock);
     };
   }, []);
-  
 
   // Validating Fields of Sign In Form
   const ValidateForm = (name, value) => {
@@ -100,35 +96,36 @@ const SignInContent = () => {
       if (!formData.password) {
         errors.password = "Password field cannot be empty.";
       }
-  
+
       // Set form errors
       setFormErrors(errors);
-  
+
       // If there are errors, stop form submission
       if (Object.keys(errors).length > 0) {
         console.error("Form is invalid");
         return;
       }
       // Proceed with login if no errors
-      const response = await axios.post( API_URL + '/user/login', formData, {
+      const response = await axios.post(API_URL + "/user/login", formData, {
         withCredentials: true,
-    });
-          if (response.status === 200) {
-      const { token } = response.data;
-      
-      // Storing token in cookies
-      document.cookie = `token=${token}; max-age=86400; path=/;`;
+      });
+      if (response.status === 200) {
+        const { token, user } = response.data;
 
-        console.log('Login successful');
-        navigate('/searchPage');
+        // Storing token in cookies
+        document.cookie = `token=${token}; max-age=86400; path=/;`;
+
+        document.cookie = `firstName=${user.firstName}; max-age=86400; path=/;`;
+
+        console.log("Login successful");
+        navigate("/searchPage");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       setFormErrors({ server: error.response.data });
     }
   };
-  
-  
+
   return (
     <>
       <h1>Sign In</h1>
@@ -179,7 +176,7 @@ const SignInContent = () => {
           {formErrors.password && (
             <small className="warning-text">{formErrors.password}</small>
           )}
-          {iscapslock && ( passwordFocused) && (
+          {iscapslock && passwordFocused && (
             <span className="capslock-message">Caps lock is on</span>
           )}
           {formErrors.server && (
@@ -198,11 +195,22 @@ const SignInContent = () => {
           Forgot Password?
         </a>
       </div>
-      <CustomButton className="customButton" text="Sign In" onClick={handleSubmit} />
+      <CustomButton
+        className="customButton"
+        text="Sign In"
+        onClick={handleSubmit}
+      />
 
       <div className="bottomText">
         Need a new account?
-        <span className="textButton" onClick={()=>{navigate('/signup')}}>Sign Up</span>
+        <span
+          className="textButton"
+          onClick={() => {
+            navigate("/signup");
+          }}
+        >
+          Sign Up
+        </span>
       </div>
     </>
   );

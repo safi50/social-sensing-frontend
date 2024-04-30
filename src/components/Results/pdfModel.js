@@ -17,6 +17,7 @@ const PdfModel = ({
   topResultRange,
   topResultSentiment,
   closePdfModal,
+  generateFilename
 }) => {
   const modalRef = useRef();
   const ref1 = useRef(null);
@@ -479,7 +480,7 @@ const PdfModel = ({
           {image1 && image2 && (
             <PDFDownloadLink
               document={<MyPdf tweets={tweets} />}
-              fileName="export.pdf"
+              fileName= {`${generateFilename()}.pdf`}
               onClick={() => {
                 setTimeout(closePdfModal, 1000);
               }}

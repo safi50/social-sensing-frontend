@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 import pptxgen from "pptxgenjs";
 import styled from "styled-components";
-import { useState, useContext, useMemo } from "react";
+import { useState, useContext, useMemo, useEffect } from "react";
 import ResultCard from "./resultCard";
 import ResultCardCompact from "./resultCardCompact";
 import ResultCardStory from "./resultCardStory";
@@ -181,6 +181,7 @@ const ResultsCard = () => {
   const [selectedTheme, setSelectedTheme] = useState("Bio");
   const [tweets, setTweets] = useState([]);
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
+  const [firstName, setFirstName] = useState("");
 
   const closePdfModal = () => {
     setIsPdfModalOpen(false);
@@ -199,6 +200,20 @@ const ResultsCard = () => {
     setTopResultSentiment,
   } = useContext(TopResultsFilterContext);
   const { data } = useContext(CompareKeywordContext);
+
+  useEffect(() => {
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    };
+
+    const firstNameFromCookie = getCookie('firstName');
+    
+    if (firstNameFromCookie) {
+      setFirstName(firstNameFromCookie);
+    }
+  }, []); 
 
   // get random time value
   const generateRandomTime = () => {
@@ -390,6 +405,22 @@ const ResultsCard = () => {
     setSelectedTheme(event.target.value);
   };
 
+  const generateFilename = () => {
+    const currentDate = new Date();
+    
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const year = currentDate.getFullYear();
+    const formattedDate = `${month}-${day}-${year}`;
+  
+    const hours = String(currentDate.getHours()).padStart(2, '0');
+    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+    const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+  
+    return `${firstName}_${formattedDate}_${formattedTime}`;
+  };
+
   // export the results into a specific file format
   const handleExportChange = (selectedOption) => {
     if (!selectedOption) return;
@@ -411,6 +442,7 @@ const ResultsCard = () => {
   };
 
   const exportNormal = (tweets) => {
+    const filename = generateFilename();
     const tweetDataString = tweets
       .map((tweet, index) => {
         const profileData = tweet[0].profileData;
@@ -437,11 +469,12 @@ const ResultsCard = () => {
     const blob = new Blob([tweetDataString], { type: "text/plain" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "export.txt";
+    link.download = `${filename}.txt`;
     link.click();
   };
 
   const exportToCSV = (tweets) => {
+    const filename = generateFilename();
     const csvData = tweets.map((data, index) => ({
       Handle: data[0].profileData.handle,
       Name: data[0].profileData.name,
@@ -482,10 +515,11 @@ const ResultsCard = () => {
     const csvBlob = new Blob([csvReportFile], {
       type: "text/csv;charset=utf-8;",
     });
-    saveAs(csvBlob, "export.csv");
+    saveAs(csvBlob,  `${filename}.csv`);
   };
 
   const exportToXLS = (tweets) => {
+    const filename = generateFilename();
     const formattedData = tweets.map((tweet) => ({
       Handle: tweet[0].profileData.handle,
       Name: tweet[0].profileData.name,
@@ -512,11 +546,12 @@ const ResultsCard = () => {
     });
     saveAs(
       new Blob([excelBuffer], { type: "application/octet-stream" }),
-      "export.xlsx"
+      `${filename}.xlsx`
     );
   };
 
   const exportToPPTP = (tweets) => {
+    const filename = generateFilename();
     let positiveCount = 0;
     let negativeCount = 0;
     let neutralCount = 0;
@@ -671,7 +706,7 @@ const ResultsCard = () => {
       fill: "#efefef",
     });
 
-    pres.writeFile("export.pptx");
+    pres.writeFile(`${filename}.pptx`);
   };
 
   return (
@@ -684,6 +719,7 @@ const ResultsCard = () => {
             topResultRange={topResultRange}
             topResultSentiment={topResultSentiment}
             closePdfModal={closePdfModal}
+            generateFilename={generateFilename}
           />
         )}
       </div>
