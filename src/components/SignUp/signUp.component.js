@@ -139,7 +139,7 @@ const SignUpContent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData);
+      // console.log(formData);
       const response = await axios.post( API_URL + '/user/register', {
       firstName: formData.firstname,
       lastName: formData.lastname,
@@ -148,12 +148,12 @@ const SignUpContent = () => {
       password: formData.password
     });
     if (response.status === 200) {
-      const { token, user } = response.data;
+      const { token, firstName } = response.data;
       
       // Storing token in cookies
       document.cookie = `token=${token}; max-age=86400; path=/;`;
 
-      document.cookie = `firstName=${user.firstName}; max-age=86400; path=/;`;
+      document.cookie = `firstName=${firstName}; max-age=86400; path=/;`;
       // Registration successful, redirect to another page
       navigate('/searchPage');
     } else {
