@@ -33,6 +33,7 @@ import { Confirm } from "./components/confirm/confirm";
 import { NewPassword } from "./components/confirm/resetPassword";
 import { Error } from "./components/error-404/Error";
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from "./PrivateRoute";
 
 const Content = styled.div`
   display: flex;
@@ -60,26 +61,6 @@ const SecondaryHeading = styled.h2`
 
 
 const App = () => {
-  // const navigate = useNavigate();
-  // const [authenticate, setAuthenticate] = useState(false);
-  // const [cookies] = useCookies(["token"]);
-
-  // useEffect(() => {
-  //   const authentication = () => {
-  //     const token = cookies.token;
-  //     console.log("Token from cookies:", cookies.token);
-  // console.log("Authenticate state:", authenticate);
-  //     if (token) {
-  //       setAuthenticate(true);
-  //     } else {
-  //       setAuthenticate(false);
-  //       console.log("No token found");
-  //       navigate("/signin");
-  //     }
-  //   };
-
-  //   authentication();
-  // }, [cookies.token, navigate]);
 
   return (
     <>
@@ -89,13 +70,15 @@ const App = () => {
             <Routes>
            
               {/* Protected Routes */}
-              {/* <Route element={<PrivateRoutes />}> */}
+              <Route path='/' element={<PrivateRoute />}>
+              <Route path="/" element={<SearchPage />} />
+
                   <Route path="/onboarding" element={<OnboardingCard />} />
                   <Route path="/confirmEmail" element={<Confirm />} />
                   <Route path="/404" element={<Error />} />
                   <Route path="/verifyemail" element={<VerifyEmail />} />
                   <Route path="/emailverified" element={<EmailVerified />} />
-                  <Route path="/searchPage" element={<SearchPage />} />
+                  
                   <Route path="/dashboard" element={<Dashboard />}>
                     <Route
                       path="/dashboard"
@@ -107,7 +90,7 @@ const App = () => {
                     />
                   </Route>
                   <Route path="/topResults" element={<TopResults />} />
-                  {/* </Route> */}
+                  </Route>
 
                      {/* Unprotected Routes */}
               <Route path="/signup" element={<SignUp />} />
@@ -124,20 +107,6 @@ const App = () => {
         </SavedSearchesProvider>
       </CompareKeywordProvider>
       <ToastContainer />
-      {/* <Footer /> */}
-      {/* <Navbar />
-      <Content>
-        <PrimaryHeading>Ask Walee!</PrimaryHeading>
-        <div></div>
-        <SecondaryHeading>
-          Get a 360 degree holistic view of each Happening, Brand or Event in
-          the world
-        </SecondaryHeading>
-        <SearchBar style={{ marginTop: '30px' }}/>
-        <SavedSearches style={{ marginTop: '40px' }}/>
-        <TrendingTable style={{ marginTop: '40px' }}/> 
-      </Content>
-      <Footer />  */}
     </>
   );
 };

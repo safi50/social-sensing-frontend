@@ -118,7 +118,7 @@ const SignInContent = () => {
         document.cookie = `firstName=${user.firstName}; max-age=86400; path=/;`;
 
         console.log("Login successful");
-        navigate("/searchPage");
+        navigate("/");
       }
     } catch (error) {
       console.error("Error:", error);

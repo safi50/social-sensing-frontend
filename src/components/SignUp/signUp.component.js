@@ -155,7 +155,7 @@ const SignUpContent = () => {
 
       document.cookie = `firstName=${firstName}; max-age=86400; path=/;`;
       // Registration successful, redirect to another page
-      navigate('/searchPage');
+      navigate('/');
     } else {
       // Handle other response statuses or errors
       console.error('Registration failed:', response.statusText);

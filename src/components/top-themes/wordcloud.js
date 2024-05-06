@@ -1,31 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Wordcloud } from "@visx/wordcloud";
-import ResizeDetector from "react-resize-detector";
 import axios from "axios";
 import Spinner from './spinner'; 
 import { CompareKeywordContext } from "../../contexts/CompareKeyword.context";
 import { LDA_URL } from "../../utils/api";
 
+const colors = [
+  "#08268A", "#263F74", "#5B93C7", "#D95738", "#EE8633", "#EF9E5C",
+];
 
-// map the word data
-const getWord = (word) => ({
-  text: word.text,
-  value: word.value,
-});
-
-const getRandomColor = () => {
-  const colors = [
-    "#08268A",
-    "#263F74",
-    "#5B93C7",
-    "#D95738",
-    "#EE8633",
-    "#EF9E5C",
-  ];
-  return colors[Math.floor(Math.random() * colors.length)];
+// Generates a consistent color based on the text of the word
+const getColor = (word) => {
+  let hash = 0;
+  for (let i = 0; i < word.length; i++) {
+    hash = word.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
 };
 
-// find word cloud of the tweets text
 const WordCloudComponent = ({ timeRange }) => {
   const [svgWidth, setSvgWidth] = useState(800);
   const [svgHeight, setSvgHeight] = useState(500);
@@ -50,32 +42,19 @@ const WordCloudComponent = ({ timeRange }) => {
       return acc;
     }
   }, []); // Start with an empty array
-  
-  const updateSvgSize = () => {
-    const windowWidth = window.innerWidth;
-    if (windowWidth < 426 && svgWidth !== 280) {
-      setSvgWidth(280);
-      setSvgHeight(500);
-    } else if (windowWidth >= 426 && windowWidth < 767 && svgWidth !== 380) {
-      setSvgWidth(380);
-      setSvgHeight(500);
-    } else if (windowWidth >= 767 && windowWidth < 1024 && svgWidth !== 700) {
-      setSvgWidth(700);
-      setSvgHeight(500);
-    }
-  };
-  
 
-  // find word weights for the word-cloud with API
   useEffect(() => {
     const fetchWords = async () => {
-      
+      setLoading(true);
       try {
         setLoading(true);
         let url = LDA_URL + "/lda";
         const response = await axios.post(url, {tweets: combinedTweetsText}); 
-        setWords(response.data);
-        setLoading(false);
+        const wordsWithColor = response.data.map(word => ({
+          ...word,
+          color: getColor(word.text)  // Adding color property here
+        }));
+        setWords(wordsWithColor);        setLoading(false);
       } catch (error) {
         console.error("Error fetching word data", error);
         setLoading(false);
@@ -83,52 +62,40 @@ const WordCloudComponent = ({ timeRange }) => {
     };
 
     fetchWords();
-    window.addEventListener("resize", updateSvgSize);
-
-    return () => {
-      window.removeEventListener("resize", updateSvgSize);
-    };
-
-
-  }, [timeRange]);
+  }, [timeRange, data]);
 
   const wordcloudProps = {
     width: svgWidth,
     height: svgHeight,
-    words: words.map(getWord),
+    words,
     fontSize: (word) => Math.sqrt(word.value) * 5,
-    rotate: (word) => word.value % word.value,
+    rotate: () => 0,
     font: "Arial",
     fontWeight: "bold",
     fontStyle: "italic",
     spiral: "archimedean",
-    random: () => Math.random(),
+    random: () => 0.5,
   };
 
-  if (loading) {
-    return <Spinner />; // Show spinner while loading
-  }
+  if (loading) return <Spinner />;
 
   return (
     <div className="responsive-wordcloud-container">
       <Wordcloud {...wordcloudProps}>
-        {(cloudWords) =>
-          cloudWords.map((word, i) => (
-            <text
-              key={i}
-              fontSize={word.size}
-              fontWeight={word.weight}
-              fontFamily={word.font}
-              transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
-              textAnchor="middle"
-              style={{ fill: getRandomColor() }}
-            >
-              {word.text}
-            </text>
-          ))
-        }
+        {cloudWords => cloudWords.map((word, i) => (
+          <text
+            key={i}
+            fontSize={word.size}
+            fontWeight={word.weight}
+            fontFamily={word.font}
+            transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
+            textAnchor="middle"
+            style={{ fill: word.color }}
+          >
+            {word.text}
+          </text>
+        ))}
       </Wordcloud>
-      <ResizeDetector handleWidth handleHeight onResize={updateSvgSize} />
     </div>
   );
 };
