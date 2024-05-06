@@ -49,8 +49,8 @@ const Navbar = () => {
         alt="Walee Logo"
       />
       <NavLinks>
-      <NavLinkContainer to="/dashboard" onClick={() => {navigate('/searchPage')}}>
-      <span style={{ opacity: location.pathname === '/searchPage' ? 1 : 0.5 }}>Home</span>
+      <NavLinkContainer to="/dashboard" onClick={() => {navigate('/')}}>
+      <span style={{ opacity: location.pathname === '/' ? 1 : 0.5 }}>Home</span>
 
         </NavLinkContainer>
         <NavLinkContainer to="/dashboard" onClick={() => {contextFilters.eventNames.length > 1? navigate('/dashboard/compare-keyword'): navigate('/dashboard')}}>

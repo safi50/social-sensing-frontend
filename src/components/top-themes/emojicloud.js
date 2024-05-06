@@ -81,7 +81,7 @@ const EmojiCloudComponent = ({ timeRange }) => {
     fontWeight: 'bold',
     fontStyle: 'italic',
     spiral: 'archimedean',
-    random: () => Math.random(),
+    random: () => 0.5,
   };
 
   if (loading) {

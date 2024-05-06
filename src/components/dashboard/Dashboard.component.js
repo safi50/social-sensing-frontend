@@ -413,8 +413,8 @@ const Dashboard = () => {
 
       <DashboardContainer>
         {/* <BackContainer>
-        <BackIcon src="/back-svgrepo-com.svg" onClick={() => {location.pathname == '/dashboard' ? navigate('/searchPage'): navigate('/dashboard')}}/>
-        <BackText onClick={() => {location.pathname == '/dashboard' ? navigate('/searchPage'): navigate('/dashboard')}}>{location.pathname == '/dashboard' ? "Search": "Dashboard"}</BackText>
+        <BackIcon src="/back-svgrepo-com.svg" onClick={() => {location.pathname == '/dashboard' ? navigate('/'): navigate('/dashboard')}}/>
+        <BackText onClick={() => {location.pathname == '/dashboard' ? navigate('/'): navigate('/dashboard')}}>{location.pathname == '/dashboard' ? "Search": "Dashboard"}</BackText>
         </BackContainer> */}
 
         <HeaderContainer>
