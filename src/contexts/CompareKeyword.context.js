@@ -1,3 +1,12 @@
+/*
+CompareKeywordProvider manages and shares data related to keyword comparison.
+The provider initially sets up default filter values and fetches data using the
+generateData function based on these filters. The fetched data and filter-related
+functions (set, clear) are then passed down to child components, enabling them to
+display, filter, and interact with the keyword comparison data. The deleteDataByName
+function allows for the removal of specific data items based on their name. 
+*/
+
 import React, { createContext, useEffect, useState } from "react";
 import { generateData } from "./dummyData";
 

@@ -1,7 +1,16 @@
+/*
+It defines helper functions to generate dates and get tweets 
+(either from a MongoDB database in development or a Twitter API in production).
+It cleans and transforms tweet data, calculates metrics like engagement and reach,
+and performs sentiment analysis. The core function, generateData, orchestrates these
+functions to create a structured dataset for further analysis or visualization. 
+The code is specific to handling tweet data and analytic
+*/
+
 import axios from "axios";
 
 export const TempInitialDate = "2022-03-02T13:05:05";
-export const Operation = process.env.REACT_APP_OPERATION
+export const Operation = process.env.REACT_APP_OPERATION;
 
 const getMonthName = (monthIndex) => {
   const months = [
@@ -60,7 +69,7 @@ function randomData(min, max, count) {
 
 export const getTwitterTweets = async (myQuery) => {
   // Get data from mongodDB in "Dev" mode
-  if (Operation == "Dev"){
+  if (Operation == "Dev") {
     const response = await axios.get(
       "https://lda-iwz8.onrender.com/get_random_tweets"
     );
@@ -71,7 +80,7 @@ export const getTwitterTweets = async (myQuery) => {
       if (tweet.impressions === undefined) {
         tweet.impressions = randomData(1, 100, 1)[0]; // Adjust the range as needed
       }
-  
+
       // Check if 'quote_count' attribute exists, if not, add it with a random value
       if (tweet.quote_count === undefined) {
         tweet.quote_count = randomData(1, 10, 1)[0]; // Adjust the range as needed
@@ -99,12 +108,11 @@ export const getTwitterTweets = async (myQuery) => {
     });
     console.log("twitter data form mongodb:", response);
     return [response];
-  }
-  else if(Operation == "Production"){
+  } else if (Operation == "Production") {
     // get tweets from twitter api
-    return []
+    return [];
   }
-  
+
   //   let tweetsData = [{"data": [
   //     {
   //       "id": "1234567890123456789",
@@ -288,7 +296,7 @@ const SentimentResultsOver7Days = (
 
 const getTotalResultsFromApi = (query, tweetData) => {
   // call TweetCount api on the above query to count the total results
-  return tweetData[0].data.length
+  return tweetData[0].data.length;
 };
 
 const getResultsOver24Hours = (query, tweetData) => {
@@ -305,7 +313,7 @@ const getResultsOver24Hours = (query, tweetData) => {
     }
   });
   return hoursCount;
-  };
+};
 
 const getResultsOver7Days = (query, tweetData) => {
   // use tweet count api to get tweets count values for each day
@@ -326,7 +334,6 @@ const getResultsOver7Days = (query, tweetData) => {
 
   return daysCount;
 };
-
 
 export const generateData = async ({
   eventNames,
@@ -400,8 +407,6 @@ export const generateData = async ({
         timeRangeValues[timeRange].lower,
         languageLower
       );
-
-      
 
       let tweetsData = [];
 

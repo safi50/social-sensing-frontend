@@ -1,3 +1,10 @@
+/*
+Manage and share filtering options for results within an application.
+It uses the useState hook to initialize and manage filter values for the 
+top result match, range, and sentiment. The TopResultsFilterProvider component wraps child components,
+enabling components to read and modify the filter settings.
+*/
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getTwitterTweets } from "./dummyData";
 import { CompareKeywordContext } from "./CompareKeyword.context";
