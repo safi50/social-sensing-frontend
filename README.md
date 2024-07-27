@@ -1,4 +1,4 @@
-# Getting Started with Social Sensing Project
+# Getting Started with Twitter/X Social Sensing
 
 ## Demo
 
